@@ -12,7 +12,7 @@
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
-[![Skills](https://img.shields.io/badge/skills-40-brightgreen)](#-vibe-skills)
+[![Skills](https://img.shields.io/badge/skills-41-brightgreen)](#-vibe-skills)
 [![Agents](https://img.shields.io/badge/agents-5-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
@@ -30,7 +30,7 @@ Reusable AI instructions in three kinds:
 | 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
 | 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 38 of the 40 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 38 of the 41 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
 
 ---
 
@@ -95,6 +95,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/better-colors`](skills/better-colors/SKILL.md) | Color formats, contrast, palette generation and token naming. | jakubkrehel |
 | [`/better-accessibility`](skills/better-accessibility/SKILL.md) | Keyboard/focus, ARIA, accessible names, forms, hit areas, motion/zoom, screen readers. | jakubkrehel |
 | [`/interface-review`](skills/interface-review/SKILL.md) | Reviews a branch/PR for the interface problems it introduces, scoped to what changed. | jakubkrehel |
+| [`/html-page-review`](skills/html-page-review/SKILL.md) | Reviews a rendered HTML/CSS page: headless-Chrome layout probe at three widths, then brief fit, consistency and copy; writes numbered fix notes to `REVIEW.md`. | Imagewize |
 
 ### Development workflow & quality
 
@@ -144,10 +145,11 @@ The design skills form a pipeline for FSE themes such as Elayne:
 brief → /landing-page + /design-first-ui-prompting   (structure, copy, spec)
       → /frontend-design or /ui-ux-pro-max           (anchored HTML/CSS, token-locked)
       → /no-ai-design-slop                           (quality gate on the output)
+      → /html-page-review                            (rendered review → REVIEW.md → change requests)
       → /html-to-block-theme                         (HTML/CSS/JS → theme + patterns)
 ```
 
-The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. `/ux-writing` covers the on-screen copy. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs this whole pipeline.
+The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. `/ux-writing` covers the on-screen copy. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
 
 ### Install
 
@@ -186,7 +188,7 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 |-------|------|-----------------|
 | [`wp-reviewer`](agents/wp-reviewer.toml) | Reviews WordPress diffs, PRs, plugins and patterns | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
 | [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme |
-| [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, design-first-ui-prompting, no-ai-design-slop |
+| [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
 

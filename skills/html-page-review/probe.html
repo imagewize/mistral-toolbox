@@ -1,0 +1,222 @@
+<!doctype html>
+<!--
+  html-page-review layout probe.
+
+  Loads a target page in an iframe at a given width, measures layout problems
+  that are hard to see in code, and writes the findings as JSON into
+  <pre id="result">. Run it with headless Chrome and --dump-dom (see SKILL.md):
+
+    probe.html?target=file:///abs/path/index.html&w=390&h=844
+
+  Needs --allow-file-access-from-files so the probe can read the iframe.
+  The probe never changes the target page.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>html-page-review probe</title>
+<style>body{margin:0}iframe{border:0;display:block}</style>
+</head>
+<body>
+<pre id="result">pending</pre>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var target = params.get('target');
+  var w = parseInt(params.get('w') || '1440', 10);
+  var h = parseInt(params.get('h') || '900', 10);
+  var out = document.getElementById('result');
+
+  // Leave only the result in the DOM, so --dump-dom prints the JSON and not this script.
+  function done(data) {
+    out.textContent = JSON.stringify(data, null, 1);
+    Array.prototype.forEach.call(document.querySelectorAll('script, iframe, style'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(document.childNodes, function (n) { if (n.nodeType === 8) n.remove(); });
+  }
+
+  if (!target) { done({ error: 'missing ?target=' }); return; }
+
+  var frame = document.createElement('iframe');
+  frame.style.width = w + 'px';
+  frame.style.height = h + 'px';
+  frame.src = target;
+  document.body.appendChild(frame);
+
+  frame.addEventListener('load', function () {
+    // Let entrance animations and fonts settle before measuring.
+    setTimeout(function () {
+      try { done(measure(frame.contentWindow, w, h)); }
+      catch (e) { done({ error: String(e), hint: 'run Chrome with --allow-file-access-from-files' }); }
+    }, 2500);
+  });
+
+  function r(n) { return Math.round(n); }
+  function box(el) { var b = el.getBoundingClientRect(); return { x: r(b.left), y: r(b.top), w: r(b.width), h: r(b.height) }; }
+  function hit(a, b, pad) {
+    pad = pad || 0;
+    return a.left < b.right - pad && b.left < a.right - pad && a.top < b.bottom - pad && b.top < a.bottom - pad;
+  }
+  function label(el) {
+    var s = el.tagName.toLowerCase();
+    if (el.id) s += '#' + el.id;
+    var cls = (el.getAttribute('class') || '').trim().split(/\s+/).filter(Boolean).slice(0, 2);
+    if (cls.length) s += '.' + cls.join('.');
+    var t = (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+    return t ? s + ' "' + t + '"' : s;
+  }
+  function sectionOf(el) {
+    var s = el.closest('section, header, footer, main > *');
+    if (!s) return 'page';
+    var hd = s.querySelector('h1, h2, h3');
+    return label(s).split(' "')[0] + (hd ? ' / ' + hd.textContent.replace(/\s+/g, ' ').trim().slice(0, 30) : '');
+  }
+
+  function measure(win, vw, vh) {
+    var doc = win.document;
+    doc.documentElement.style.scrollBehavior = 'auto';
+    win.scrollTo(0, 0);
+    var res = { viewport: { w: vw, h: vh }, page_height: doc.documentElement.scrollHeight, findings: [] };
+    function add(kind, where, detail) { res.findings.push({ kind: kind, where: where, detail: detail }); }
+
+    // 1. Horizontal overflow.
+    var sw = doc.documentElement.scrollWidth;
+    if (sw > vw + 1) {
+      var wide = Array.prototype.filter.call(doc.body.querySelectorAll('*'), function (el) {
+        return el.getBoundingClientRect().right > vw + 1;
+      }).slice(0, 5).map(label);
+      add('horizontal-overflow', 'page', { scrollWidth: sw, viewport: vw, widest: wide });
+    }
+
+    // 2. Sticky or fixed header share of the viewport.
+    Array.prototype.forEach.call(doc.querySelectorAll('header, nav, [class*="header"]'), function (el) {
+      var pos = win.getComputedStyle(el).position;
+      if ((pos === 'sticky' || pos === 'fixed') && el.offsetHeight / vh > 0.12) {
+        add('tall-sticky-header', label(el).split(' "')[0], { height: el.offsetHeight, share: +(el.offsetHeight / vh).toFixed(2), position: pos });
+      }
+    });
+
+    // 3. Overlapping text: visible text elements whose boxes intersect.
+    var textEls = Array.prototype.filter.call(doc.body.querySelectorAll('*'), function (el) {
+      if (!el.getClientRects().length) return false;
+      var st = win.getComputedStyle(el);
+      if (st.visibility === 'hidden' || st.opacity === '0') return false;
+      return Array.prototype.some.call(el.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
+    });
+    var rects = textEls.map(function (el) { return el.getBoundingClientRect(); });
+    var overlaps = 0;
+    for (var i = 0; i < textEls.length && overlaps < 10; i++) {
+      for (var j = i + 1; j < textEls.length && overlaps < 10; j++) {
+        if (textEls[i].contains(textEls[j]) || textEls[j].contains(textEls[i])) continue;
+        // Inline runs that share a parent sit side by side on one line; their boxes touch by design.
+        if (textEls[i].parentNode === textEls[j].parentNode &&
+            win.getComputedStyle(textEls[i]).display === 'inline' &&
+            win.getComputedStyle(textEls[j]).display === 'inline') continue;
+        if (hit(rects[i], rects[j], 2)) {
+          add('text-overlap', sectionOf(textEls[i]), { a: label(textEls[i]), b: label(textEls[j]) });
+          overlaps++;
+        }
+      }
+    }
+
+    // 4. SVG text crossing other shapes in the same drawing (possible, check visually:
+    //    a diagonal line's box is larger than the line itself).
+    Array.prototype.forEach.call(doc.querySelectorAll('svg text'), function (t) {
+      var tb = t.getBoundingClientRect();
+      var svg = t.ownerSVGElement;
+      var shapes = [];
+      Array.prototype.forEach.call(svg.querySelectorAll('line, path, rect, polyline, polygon, circle'), function (s) {
+        var sb = s.getBoundingClientRect();
+        if (sb.width * sb.height > tb.width * tb.height * 40) return; // skip frames and large backgrounds
+        if (hit(tb, sb, 1)) shapes.push(s.tagName);
+      });
+      if (shapes.length) add('svg-label-crossing', sectionOf(svg), { text: t.textContent.trim().slice(0, 40), shapes: shapes.length, check: 'possible: a diagonal line has a larger box than the line itself' });
+    });
+
+    // 5. Unbalanced multi-column rows: a column whose content fills far less of the row
+    //    than its sibling leaves an empty block.
+    Array.prototype.forEach.call(doc.querySelectorAll('section *'), function (el) {
+      var st = win.getComputedStyle(el);
+      if (st.display !== 'grid' && st.display !== 'flex') return;
+      var kids = Array.prototype.filter.call(el.children, function (k) { return k.getClientRects().length; });
+      if (kids.length < 2 || kids.length > 4 || el.offsetHeight < 240) return;
+      var b = kids.map(function (k) { return k.getBoundingClientRect(); });
+      var sameRow = b.every(function (x) { return Math.abs(x.top - b[0].top) < 40; });
+      if (!sameRow) return;
+      var tallest = Math.max.apply(null, b.map(function (x) { return x.height; }));
+      kids.forEach(function (k, idx) {
+        var content = contentHeight(k);
+        if (tallest > 240 && content / tallest < 0.6) {
+          add('unbalanced-columns', sectionOf(el), { column: label(k), content_height: r(content), row_height: r(tallest), filled: +(content / tallest).toFixed(2) });
+        }
+      });
+    });
+    function contentHeight(k) {
+      var top = Infinity, bottom = -Infinity;
+      Array.prototype.forEach.call(k.querySelectorAll('*'), function (c) {
+        if (!c.getClientRects().length || c.children.length) return;
+        var cb = c.getBoundingClientRect(); top = Math.min(top, cb.top); bottom = Math.max(bottom, cb.bottom);
+      });
+      return bottom > top ? bottom - top : k.getBoundingClientRect().height;
+    }
+
+    // 6a. Empty side: on wide screens, a section whose content stays in the left part
+    //     of its container leaves the other side bare.
+    if (vw >= 1024) {
+      Array.prototype.forEach.call(doc.querySelectorAll('section'), function (sec) {
+        var inner = sec.firstElementChild || sec;
+        var ib = inner.getBoundingClientRect();
+        if (ib.width < 600) return;
+        var left = Infinity, right = -Infinity;
+        Array.prototype.forEach.call(sec.querySelectorAll('*'), function (c) {
+          if (!c.getClientRects().length || c.children.length) return;
+          var cb = c.getBoundingClientRect(); left = Math.min(left, cb.left); right = Math.max(right, cb.right);
+        });
+        if (right < left) return;
+        var used = (right - ib.left) / ib.width;
+        if (used < 0.65 && (left - ib.left) / ib.width < 0.1) {
+          add('empty-side', sectionOf(sec), { content_right_edge: +used.toFixed(2), note: 'content ends at this share of the container width' });
+        }
+      });
+    }
+
+    // 6b. Alignment outliers: centred text blocks on a page that is mostly left-aligned.
+    var blocks = Array.prototype.filter.call(doc.querySelectorAll('h1, h2, h3, p, blockquote, li'), function (el) {
+      return el.getClientRects().length && el.textContent.trim().length > 20;
+    });
+    var centred = blocks.filter(function (el) { return win.getComputedStyle(el).textAlign === 'center'; });
+    if (blocks.length && centred.length && centred.length / blocks.length < 0.25) {
+      centred.slice(0, 5).forEach(function (el) {
+        add('alignment-outlier', sectionOf(el), { element: label(el), centred: centred.length, of_blocks: blocks.length });
+      });
+    }
+
+    // 7. Small text and small tap targets.
+    var small = textEls.filter(function (el) { return parseFloat(win.getComputedStyle(el).fontSize) < 12; });
+    if (small.length) add('small-text', 'page', { count: small.length, examples: small.slice(0, 3).map(label) });
+    Array.prototype.forEach.call(doc.querySelectorAll('a, button, input, select, textarea, summary'), function (el) {
+      if (!el.getClientRects().length) return;
+      var b = el.getBoundingClientRect();
+      if (b.height < 24 || b.width < 24) {
+        var inline = win.getComputedStyle(el).display === 'inline' && el.closest('p, li');
+        if (!inline) add('small-tap-target', sectionOf(el), { element: label(el), w: r(b.width), h: r(b.height) });
+      }
+    });
+
+    // 8. Images and SVG drawings without an accessible name.
+    Array.prototype.forEach.call(doc.querySelectorAll('img:not([alt]), svg:not([aria-hidden="true"])'), function (el) {
+      if (el.tagName.toLowerCase() === 'svg' && (el.getAttribute('aria-label') || el.getAttribute('aria-labelledby') || el.querySelector('title') || el.closest('[aria-hidden="true"]'))) return;
+      if (el.tagName.toLowerCase() === 'svg' && el.getBoundingClientRect().width < 32) return; // icons
+      add('missing-accessible-name', sectionOf(el), { element: label(el).split(' "')[0] });
+    });
+
+    // Section map, so findings can be placed and the review can reason about rhythm.
+    res.sections = Array.prototype.map.call(doc.querySelectorAll('header, section, footer'), function (s) {
+      var hd = s.querySelector('h1, h2, h3');
+      return { section: label(s).split(' "')[0], heading: hd ? hd.textContent.replace(/\s+/g, ' ').trim().slice(0, 50) : null, box: box(s) };
+    });
+    return res;
+  }
+})();
+</script>
+</body>
+</html>

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `html-page-review` skill (Imagewize): reviews a rendered static HTML/CSS page instead of its code. A bundled `probe.html` loads the page in headless Chrome at 390, 768 and 1440px and reports measured layout faults as JSON: horizontal overflow, tall sticky headers, overlapping text, labels crossing drawings, unbalanced columns, empty sides, alignment outliers, small text and tap targets, and drawings without a text alternative. A judgement pass then checks brief fit, consistency with the page's own design system, composition and doubtful facts. The skill writes numbered notes, each with evidence and a fix, to `REVIEW.md` and never edits the page. It uses one plain Chrome command per width, so it fits a command allowlist. Tested on the `architect-demo` run: the probe flagged all four issues of the first build from measurements alone, plus the centred quote introduced by the second round
+- `ux-designer` loads `html-page-review` for built pages. `wp-frontend-builder` treats numbered notes in `REVIEW.md` as change requests. Together they form the loop: the builder builds, the designer reviews, and the builder applies the notes
+
+
 ### Fixed
 
 - 19 of the 40 skills never loaded in Vibe: their unquoted `description` contained `: `, which is invalid YAML, so Vibe skipped them with `Invalid YAML frontmatter: mapping values are not allowed here`. The descriptions are now double-quoted, with wording unchanged, and `metadata.version` is bumped to 1.0.1. Affected: `alerting-oncall`, `better-colors`, `code-review-and-quality`, `frontend-ui-engineering`, `html-to-block-theme`, `incident`, `kubernetes-ops`, `observability-and-instrumentation`, `observability-review`, `performance-optimization`, `pipeline-review`, `release-readiness`, `runbook`, `security-and-hardening`, `security-review`, `systematic-debugging`, `test-driven-development`, `ui-ux-pro-max`, `ux-writing`. All 40 skills now parse. AGENTS.md now says to quote such descriptions and to check frontmatter with a YAML parser
