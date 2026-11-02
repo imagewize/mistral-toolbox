@@ -6,7 +6,7 @@ Instructions for coding agents (Mistral Vibe and others) working in this reposit
 
 Reusable AI instructions for WordPress development, maintained by Imagewize, in three kinds:
 
-- **Le Chat prompts** — `prompts/<agent>/ROLE.md` are system prompts pasted into a Mistral
+- **Le Chat prompts** — `prompts/<name>/ROLE.md` are system prompts pasted into a Mistral
   Le Chat agent. Le Chat has no shell or file access: these prompts work on what the user
   pastes in and must not depend on running commands.
 - **Vibe skills** — `skills/<name>/SKILL.md` are Agent Skills for Mistral Vibe. They run inside
@@ -14,7 +14,7 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 - **Vibe agents** — `agents/*.toml` are Vibe agent profiles, selectable with `vibe --agent NAME`
   once `agents/` is wired in via `agent_paths`. Each loads skills on demand via the `skill` tool.
 
-`prompts/<agent>/<run>/` holds example Le Chat runs: input, raw output and review feedback.
+`prompts/<name>/<run>/` holds example Le Chat runs: input, raw output and review feedback.
 
 ## Layout
 
@@ -23,7 +23,7 @@ mistral-toolbox/
 ├── AGENTS.md          # This file
 ├── .vibe/config.toml  # Vibe project settings for this repo
 ├── agents/            # Vibe agent profiles: agents/<name>.toml (wired via agent_paths)
-├── prompts/           # Le Chat prompts + runs, one dir per agent: prompts/<agent>/ROLE.md + <run>/
+├── prompts/           # Le Chat prompts + runs, one dir per prompt: prompts/<name>/ROLE.md + <run>/
 ├── skills/            # Vibe skills: skills/<name>/SKILL.md
 ├── docs/              # Plans and source notes: docs/<topic>.md
 ├── README.md
@@ -32,14 +32,14 @@ mistral-toolbox/
 
 ## Working on Le Chat prompts
 
-- One directory per agent under `prompts/<agent>/`, containing the system prompt as a single
+- One directory per prompt under `prompts/<name>/`, containing the system prompt as a single
   `ROLE.md` or `ROLE-SPECIALIZATION.md` file (e.g. `prompts/frontend-dev/FRONTEND-DEV.md`)
-  plus its example runs in `prompts/<agent>/<run>/` subdirectories. One prompt per file — the
+  plus its example runs in `prompts/<name>/<run>/` subdirectories. One prompt per file — the
   same convention as Vibe's own prompt dirs (`.vibe/prompts/`, bare filename = prompt id).
 - Structure: role and scope, critical rules, output format, examples of expected output.
 - The WordPress prompts target Imagewize's Elayne (FSE block theme), Nynaeve (Sage 11 hybrid
   theme) and imagewize.com. Project conventions live in the prompts themselves.
-- When a prompt's behaviour changes, add or update an example run under `prompts/<agent>/<run>/`.
+- When a prompt's behaviour changes, add or update an example run under `prompts/<name>/<run>/`.
 
 ## Working on Vibe agent profiles
 

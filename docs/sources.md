@@ -34,7 +34,7 @@ MIT, Apache-2.0, CC0-1.0, BSD-2/3-Clause, Unlicense or public domain may be impo
 | `NotHarshhaa/devops-skills` | MIT | LICENSE fetched | `3605f9452e331d984a2a119e5a00763ecdff23e5` (master) | incident response, K8s, Terraform, CI/CD, observability |
 | `BagelHole/DevOps-Security-Agent-Skills` | MIT | GitHub API | `0365f57a079b1332f95cf26e31dd2d5332a8399f` (main) | 80+ devops/security/compliance skills |
 | `fclairamb/awesome-agentic-devops` | CC0-1.0 | LICENSE fetched | `569ae8ffbd768b69274ddda789b3edbb91b07d13` (main) | index of AI SRE / incident / CI-CD agents |
-| `mthalman/agent-personas` | MIT | LICENSE fetched | `902e306213351ebfdc1de08d11b990e7eadb1473` (main) | personas → Le Chat agents |
+| `mthalman/agent-personas` | MIT | LICENSE fetched | `902e306213351ebfdc1de08d11b990e7eadb1473` (main) | personas → Le Chat prompts |
 | `dontriskit/awesome-ai-system-prompts` | MIT | LICENSE fetched | `74964625038011525ab44c3a673fc605b2c765b3` (main) | system-prompt collections |
 | `jakubkrehel/skills` | MIT | LICENSE fetched | `60bf140e43c98b248e6594487384ec967e89d98a` (main) | interface-building skills |
 | `content-designer/ux-writing-skill` | MIT | LICENSE fetched | `98cacde4ba2dd10ed28df43a8d53eef1e321c539` (main) | UX writing / content design |

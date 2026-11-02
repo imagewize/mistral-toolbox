@@ -12,7 +12,7 @@ Can we improve mistral-toolbox with external collections of skills, agents, plug
 **Yes — from permissively licensed sources only.** This repo is MIT and used commercially by Imagewize, so anything we import must come from an MIT-, Apache-2.0-, CC0-, BSD- or public-domain-licensed source. The SKILL.md-based formats line up well:
 
 - **Skills** (`skills/<name>/SKILL.md` in the Agent Skills open standard) map directly onto our Vibe skills with mechanical adaptation.
-- **Agents / personas** (single-file role markdown) map onto our Le Chat prompts (`prompts/<agent>/ROLE.md`); tool-using agent definitions map onto Vibe agent profiles (`agents/<name>.toml`, wired via `agent_paths`).
+- **Agents / personas** (single-file role markdown) map onto our Le Chat prompts (`prompts/<name>/ROLE.md`); tool-using agent definitions map onto Vibe agent profiles (`agents/<name>.toml`, wired via `agent_paths`).
 - **Plugin marketplaces** (Claude Code format) convert to native Agent Plugins 1.0 under a new `plugins/` dir.
 - **MCP servers** (e.g. Figma) are not vendored into this repo — they belong to the consuming project's Vibe config; we document them as recommended connectors.
 
@@ -86,7 +86,7 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 | Source artifact | mistral-toolbox destination | Conversion needed |
 |---|---|---|
 | `SKILL.md` skill dir (Agent Skills standard) | `skills/<name>/SKILL.md` (Vibe skill) | Mechanical + editorial: rename to Vibe limits (lowercase, hyphens, ≤ 64 chars), trim `description` to ≤ 1024 chars, add `user-invocable` and `allowed-tools`, set `metadata.version` and `metadata.source` (+ license), copy per-skill LICENSE if present, verify WordPress claims (section 7) |
-| Agent / persona markdown (`.agent.md`, role prompts) | `prompts/<agent>/ROLE.md` (Le Chat prompt) | Strip tool/model frontmatter (Le Chat has no shell or file access); restructure to our prompt anatomy: role and scope, critical rules, output format, examples; add example run under `prompts/<agent>/<run>/` |
+| Agent / persona markdown (`.agent.md`, role prompts) | `prompts/<name>/ROLE.md` (Le Chat prompt) | Strip tool/model frontmatter (Le Chat has no shell or file access); restructure to our prompt anatomy: role and scope, critical rules, output format, examples; add example run under `prompts/<name>/<run>/` |
 | Tool-using agent definitions | Vibe plugin subagents (`ai.mistral.vibe/agents/*.toml`) inside a plugin package | Convert frontmatter to TOML (`schemaVersion`, `agentType = "subagent"`, `enabledTools`, `safety`, `instructions`) |
 | Plugin marketplace packages (Claude format) | `plugins/<name>/` (new top-level dir) | Convert to native Agent Plugins 1.0 (`plugin.json` with `$schema: https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`) per the `vibe:create-plugin` skill, or let Vibe auto-adapt `.claude-plugin/plugin.json` |
 | MCP servers (e.g. Figma-Context-MCP) | **Not vendored** — recommended connectors listed in docs for consuming projects to add to their Vibe MCP config | Document name, repo, license, setup command in `docs/sources.md`; MCP servers belong to the project, not this repo |
@@ -107,13 +107,13 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 
 **Design → HTML/CSS → WordPress patterns (`skills/`):** `Ilm-Alan/frontend-design` (aesthetic anchors locked to CSS tokens — the closest permissive-license equivalent of anubhav-vibe's `acd-*-design` style skills), `MengTo/Skills` (web-design + Tailwind v4), `Koomook/claude-frontend-skills`, `xiaopu-ai/web-design`, `rekryt/skill-tailwind`; bridge to WordPress: `siddik-web/wp-block-theme-converter` (HTML/CSS/JS → FSE block theme), `wp-patterns` / `wp-block-themes` guidance from `WordPress/agent-skills` (reference-only — we replicate it in our own skills), and `humanmade/block-runner` as a project-level conversion tool. Acceptance for this area: a skill-generated HTML/CSS design converts to a valid block pattern in Elayne without manual fixes to CSS variable names or markup semantics.
 
-**Personas / Le Chat prompts (`prompts/`):** `mthalman/agent-personas`, `dontriskit/awesome-ai-system-prompts`, `mustafakendiguzel` personas — re-scoped to our prompt anatomy, each with a `prompts/<agent>/<run>/` example.
+**Personas / Le Chat prompts (`prompts/`):** `mthalman/agent-personas`, `dontriskit/awesome-ai-system-prompts`, `mustafakendiguzel` personas — re-scoped to our prompt anatomy, each with a `prompts/<name>/<run>/` example.
 
 **Vibe plugins (`plugins/`, new):** WP-agnostic, client-repo-useful plugin sets from `wshobson/agents` and `alirezarezvani/claude-skills`: PR review, changelog, commit helpers, git flow, code-review assistant.
 
 ## 6. Gaps — what these sources do NOT have
 
-None of them carry Elayne/Nynaeve/Aludra-specific conventions, and most lack Bedrock/WP-CLI/Sage-specific depth (the official `WordPress/agent-skills` would cover core blocks/themes/plugins best practices, but it has no detectable license and is reference-only — we author that guidance ourselves). Those we author ourselves; our existing `code-review` skill, `FRONTEND-DEV` and `REVIEWER` agents already cover part of it. Ready-made design *styles* like anubhav-vibe's `acd-*-design` set exist only in CC BY-NC-SA sources, so we rebuild that capability from the MIT design skills above rather than copying styles. Treat external sources as a force multiplier for the generic layer (WordPress core, review, DevOps, UI/UX, design-to-code), not as a source of Imagewize-specific conventions.
+None of them carry Elayne/Nynaeve/Aludra-specific conventions, and most lack Bedrock/WP-CLI/Sage-specific depth (the official `WordPress/agent-skills` would cover core blocks/themes/plugins best practices, but it has no detectable license and is reference-only — we author that guidance ourselves). Those we author ourselves; our existing `code-review` skill and the `FRONTEND-DEV` / `REVIEWER` prompts already cover part of it. Ready-made design *styles* like anubhav-vibe's `acd-*-design` set exist only in CC BY-NC-SA sources, so we rebuild that capability from the MIT design skills above rather than copying styles. Treat external sources as a force multiplier for the generic layer (WordPress core, review, DevOps, UI/UX, design-to-code), not as a source of Imagewize-specific conventions.
 
 ## 7. Import standards (quality gates from AGENTS.md)
 
@@ -124,7 +124,7 @@ Every imported artifact must pass these before merge:
 2. **Keep skills generic.** Project-specific rules (Elayne, Nynaeve, Aludra) belong in the consuming project's `.agents/code-review.md`, not in this repo.
 3. **Command style:** prescribed commands must be plain single commands that fit an allowlist — no shell loops, no `$(…)`, no `python3` one-liners; read files with `read_file`.
 4. **Frontmatter limits:** `name` lowercase letters/digits/hyphens, ≤ 64 chars; `description` ≤ 1024 chars; set `metadata.version` on every artifact and bump it on every change.
-5. **Le Chat agents:** one role per file (`ROLE.md`), structure = role and scope, critical rules, output format, examples of expected output; add an example run under `prompts/<agent>/<run>/` whenever behavior changes.
+5. **Le Chat prompts:** one role per file (`ROLE.md`), structure = role and scope, critical rules, output format, examples of expected output; add an example run under `prompts/<name>/<run>/` whenever behavior changes.
 6. **Process:** semantic commit messages, no AI attribution trailers, work on a branch, merge via PR, record every change in `CHANGELOG.md` under `[Unreleased]`, and name the projects that need updated copies in the PR description.
 
 ## 8. Proposed repo layout after the first imports
@@ -136,7 +136,7 @@ mistral-toolbox/
 ├── agents/                  # Vibe agent profiles (TOML; existing + wired via agent_paths)
 ├── skills/                  # Vibe skills (existing + imported)
 ├── plugins/                 # NEW — Vibe plugin packages (Agent Plugins 1.0)
-├── prompts/                 # Le Chat prompts + runs, one dir per agent: prompts/<agent>/ROLE.md + <run>/
+├── prompts/                 # Le Chat prompts + runs, one dir per prompt: prompts/<name>/ROLE.md + <run>/
 ├── docs/                    # this plan, sources.md, sync notes
 ├── README.md
 ├── CHANGELOG.md
@@ -152,7 +152,7 @@ README's structure section and AGENTS.md's layout section get updated in the sam
 | **0. Provenance files** | Create `docs/sources.md` and `NOTICE.md`; record licensing policy; verify licenses (LICENSE files + GitHub API) and pin commits; CHANGELOG entry — **done 2026-11-02** | Provenance scaffolding in repo | Policy recorded; no import lands without a sources.md entry |
 | **1. Curate + license-check** | For each section-5 candidate: confirm the artifact-level license at a pinned commit (including vendored-content audits like jorgerosal's), read fully, score relevance to Elayne/Nynaeve/imagewize.com | Shortlist with per-item license + relevance notes | Each shortlisted item has a named destination and a verified license |
 | **2. Convert skills** | Rename dir, rewrite frontmatter (name/description/version/source/license), copy per-skill LICENSE, then manual pass over quality gates | `skills/<new-name>/SKILL.md` per item | Gates 0–4 pass |
-| **3. Convert agents** | Adapt persona/agent markdown to Le Chat anatomy; create `prompts/<agent>/<run>/` example runs | `prompts/<agent>/ROLE.md` + example runs | Example run produces the documented output format |
+| **3. Convert agents** | Adapt persona/agent markdown to Le Chat anatomy; create `prompts/<name>/<run>/` example runs | `prompts/<name>/ROLE.md` + example runs | Example run produces the documented output format |
 | **4. Convert plugins** | Port priority plugins to native Agent Plugins 1.0 under `plugins/` | `plugins/<name>/` packages | Plugin loads in Vibe (`/reload`, no fatal diagnostics) in a test project |
 | **5. Reference layer** | Fold useful rules/commands material into existing skills' checklists (e.g. extend `code-review`) | Diff edits to existing skills | code-review gains sections; version bumped |
 | **6. Ship** | Branch per phase, semantic commits, PRs, CHANGELOG `[Unreleased]` entries, README/AGENTS.md layout updates, tag release when merged | PRs + `vX.Y.Z` release | All section-7 gates pass |
@@ -168,7 +168,7 @@ Suggested order within phases: WordPress skills first (`respira-press`, `mralami
 - [ ] No project-specific rules (those stay in consuming projects)
 - [ ] Commands are single plain commands; reads via `read_file`
 - [ ] `metadata.version` set (start at `1.0.0` for new imports)
-- [ ] Le Chat agents: anatomy + example run added
+- [ ] Le Chat prompt: anatomy + example run added
 - [ ] CHANGELOG `[Unreleased]` entry; PR names projects needing copies
 
 ## 11. Maintenance and upstream sync
