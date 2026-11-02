@@ -146,12 +146,13 @@ The design skills form a pipeline for FSE themes such as Elayne:
 ```
 brief → /landing-page + /design-first-ui-prompting   (structure, copy, spec)
       → /frontend-design or /ui-ux-pro-max           (anchored HTML/CSS, token-locked)
+      → /architectural-drawing or /illustration-isometric-mono   (SVG drawings from a kit, not hand-written)
       → /no-ai-design-slop                           (quality gate on the output)
       → /html-page-review                            (rendered review → REVIEW.md → change requests)
       → /html-to-block-theme                         (HTML/CSS/JS → theme + patterns)
 ```
 
-The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. `/ux-writing` covers the on-screen copy. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
+The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. `/ux-writing` covers the on-screen copy. Drawings come from a kit, not hand-written SVG: `/architectural-drawing` draws buildings as elevations and sections in metres at one shared scale, and `/illustration-isometric-mono` draws technical and product scenes. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
 
 ### Install
 
