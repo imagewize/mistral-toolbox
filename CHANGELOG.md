@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `docs/anubhav-vibe-integration-plan.md`: plan for curating and adapting skills, agents and plugins from the external `anubhav-vibe` collection (CC BY-NC-SA 4.0) into this repo — format mapping, licensing analysis, WordPress-relevant shortlist, quality gates and phased execution
+- Added `docs/external-skills-sourcing-plan.md`: plan for curating skills, agents, plugins and connector recommendations from permissively licensed external sources (MIT, Apache-2.0, CC0) into this repo — verified license table, a per-artifact license-check quality gate, candidate shortlists for WordPress dev, design → HTML/CSS → WordPress patterns, code review, DevOps and UI/UX, format mapping, quality gates and phased execution
+
+### Removed
+
+- Removed `docs/anubhav-vibe-integration-plan.md`: its source collection anubhav-vibe is CC BY-NC-SA 4.0, which conflicts with this repo's MIT license for imports — the collection stays reference-only and the new sourcing plan uses verified MIT/Apache-2.0/CC0 repositories instead
 
 ## [1.5.0] - 2026-11-02
 
