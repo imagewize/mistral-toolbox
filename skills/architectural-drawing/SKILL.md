@@ -29,6 +29,8 @@ style, and their scale can be checked. This skill does not draw perspective or i
 ## The look
 
 - **Lines, not fills.** Paper-white fills only to hide what is behind. One optional tint.
+- **A paper background.** Ink lines on a transparent SVG vanish on a dark page or preview, so the
+  kit draws a paper-coloured background unless you pass `background: false`.
 - **Line weights carry depth.** Heavier means nearer or cut. Use the kit's five weights only:
 
 | Weight | SVG units | Use |
@@ -95,11 +97,11 @@ every drawing in the set.
 | `d.cut(x0, y0, x1, y1)`, `d.slab(x0, x1, level, { t })` | Section poche: cut walls and slabs |
 | `d.stair(x0, y0, x1, y1, { steps })` | A stair in section |
 | `d.figure(x, { h, accent })` | A person, 1.75 m by default |
-| `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back' })` | A tree; `back` draws it faint, behind buildings |
+| `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back' })` | A tree: solid trunk, scalloped crown, branches; `back` draws it faint and unfilled, behind buildings |
 | `d.barge(x0, x1, level, { accent })` | A moored barge with a wheelhouse |
 | `d.dimension(x0, x1, y, label)` | A dimension line; labels use a decimal comma for Dutch sites |
 | `d.levelMark(x, y, label)` | A level marker such as `+14,0` |
-| `d.svg({ title, desc })` | The finished SVG; `title` is required and becomes the accessible name |
+| `d.svg({ title, desc, background })` | The finished SVG; `title` is required and becomes the accessible name. `background` (default `true`) puts a paper-coloured rect behind the drawing, so it stays readable in dark previews and on dark pages |
 | `A.write(file, svg)`, `A.printReport(d)` | Write the file; print the checks, exit 1 on errors |
 
 The kit draws in layers, so call order matters only within a layer: back trees, ground and water,

@@ -280,18 +280,36 @@ export function drawing(opts = {}) {
       rec('figure', x - 0.2 * k, 0, x + 0.2 * k, h);
     },
 
-    // A tree: trunk and a crown outline. type 'round' or 'poplar'. layer 'back' sits behind buildings.
+    // A tree: a solid trunk into a scalloped crown, with faint branches inside the crown.
+    // type 'round' or 'poplar'. layer 'back' draws it faint and unfilled, behind buildings.
     tree(x, { h = 9, crown, type = 'round', layer = 'front' } = {}) {
-      if (!inRange(h, RANGES.tree.h)) warnings.push(`tree at x=${x}: height ${h} m is implausible`);
-      const cw = crown ?? (type === 'poplar' ? h * 0.28 : h * 0.6);
-      const trunkTop = type === 'poplar' ? h * 0.2 : h * 0.38;
-      const w = layer === 'back' ? W.FAINT : W.DETAIL;
-      layers[layer].push(`<path d="${line(x, 0, x, trunkTop + (h - trunkTop) * 0.3)}" ${stroke(W.EDGE)}/>`);
-      const cy = (h + trunkTop) / 2, ry = (h - trunkTop) / 2;
-      layers[layer].push(`<ellipse cx="${X(x)}" cy="${Y(cy)}" rx="${L(cw / 2)}" ry="${L(ry)}" fill="${layer === 'back' ? 'none' : palette.paper}" stroke="${palette.ink}" stroke-width="${w}"/>`);
-      let br = line(x, trunkTop + ry * 0.4, x - cw * 0.2, cy + ry * 0.2) + line(x, trunkTop + ry * 0.7, x + cw * 0.22, cy + ry * 0.35);
-      layers[layer].push(`<path d="${br}" ${stroke(W.FAINT)}/>`);
-      rec('tree', x - cw / 2, 0, x + cw / 2, h);
+      if (!inRange(h, RANGES.tree.h)) warnings.push(`tree at x=${f(x)}: height ${f(h)} m is implausible`);
+      const back = layer === 'back';
+      const cw = crown ?? (type === 'poplar' ? h * 0.3 : h * 0.62);
+      const crownBase = type === 'poplar' ? h * 0.16 : h * 0.34;
+      const rx = cw / 2, ry = (h - crownBase) / 2, cy = crownBase + ry;
+      // Scalloped outline: small arcs between points on an ellipse read as foliage, not as a disc.
+      const n = Math.max(9, Math.round((Math.PI * (rx + ry)) / 1.5));
+      const pts = [];
+      for (let i = 0; i < n; i++) {
+        const t = (i / n) * Math.PI * 2 + 0.3;
+        pts.push([x + rx * Math.cos(t), cy + ry * Math.sin(t)]);
+      }
+      let c = `M${X(pts[0][0])} ${Y(pts[0][1])}`;
+      for (let i = 1; i <= n; i++) {
+        const [ax, ay] = pts[(i - 1) % n], [bx, by] = pts[i % n];
+        const r = (Math.hypot(L(bx - ax), L(by - ay)) * 0.62).toFixed(2);
+        c += `A${r} ${r} 0 0 0 ${X(bx)} ${Y(by)}`;
+      }
+      layers[layer].push(`<path d="${c}Z" fill="${back ? 'none' : palette.paper}" stroke="${palette.ink}" stroke-width="${back ? W.FAINT : W.DETAIL}" stroke-linejoin="round"/>`);
+      // Trunk: a tapered solid from the ground to just inside the crown.
+      const tw = Math.min(0.45, h * 0.035);
+      const tTop = crownBase + ry * 0.35;
+      layers[layer].push(`<path d="M${X(x - tw / 2)} ${Y(0)}L${X(x - tw / 4)} ${Y(tTop)}L${X(x + tw / 4)} ${Y(tTop)}L${X(x + tw / 2)} ${Y(0)}Z" fill="${back ? palette.mid : palette.ink}" stroke="none"/>`);
+      // Branches fork from the trunk top into the crown.
+      const br = line(x, tTop, x - rx * 0.45, cy + ry * 0.25) + line(x, tTop, x + rx * 0.5, cy + ry * 0.15) + line(x, tTop, x + rx * 0.05, cy + ry * 0.55);
+      layers[layer].push(`<path d="${br}" ${stroke(W.FAINT, back ? palette.mid : palette.ink)}/>`);
+      rec('tree', x - rx, 0, x + rx, h);
     },
 
     // A moored barge on water at `level`: hull, wheelhouse at the stern.
@@ -323,10 +341,14 @@ export function drawing(opts = {}) {
       layers.notes.push(`<text x="${X(x + t * 1.5)}" y="${Y(y) - 4}" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="7" fill="${palette.mid}">${esc(label)}</text>`);
     },
 
-    svg({ title, desc = '' } = {}) {
+    // background: a paper-coloured rect behind everything, so the drawing stays readable on dark
+    // previews and dark pages. Pass false only when the drawing sits on a paper-coloured page
+    // and must let it show through.
+    svg({ title, desc = '', background = true } = {}) {
       if (!title) throw new Error('svg(): pass a title; it becomes the accessible name');
       check();
-      const body = ['back', 'ground', 'fill', 'lines', 'detail', 'front', 'notes']
+      const bg = background ? `<rect width="${width}" height="${height}" fill="${palette.paper}"/>\n` : '';
+      const body = bg + ['back', 'ground', 'fill', 'lines', 'detail', 'front', 'notes']
         .map((k) => (layers[k].length ? `<g data-layer="${k}">${layers[k].join('')}</g>` : '')).join('\n');
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-labelledby="${prefix}title${desc ? ` ${prefix}desc` : ''}" data-kit="arch.mjs" data-scale="${s.toFixed(3)}" data-palette='${JSON.stringify(palette)}'>
 <title id="${prefix}title">${esc(title)}</title>${desc ? `\n<desc id="${prefix}desc">${esc(desc)}</desc>` : ''}
