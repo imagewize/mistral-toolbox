@@ -56,6 +56,11 @@ mistral-toolbox/
 │   ├── systematic-debugging/    # /systematic-debugging — 4-phase root-cause debugging (MIT, obra)
 │   ├── test-driven-development/ # /test-driven-development — red-green-refactor (MIT, obra)
 │   ├── verification-before-completion/ # /verification-before-completion — evidence before claims (MIT, obra)
+│   ├── code-review-and-quality/ # /code-review-and-quality — multi-axis review before merge (MIT, addyosmani)
+│   ├── security-and-hardening/  # /security-and-hardening — vulnerability hardening (MIT, addyosmani)
+│   ├── performance-optimization/ # /performance-optimization — profile-first perf work (MIT, addyosmani)
+│   ├── frontend-ui-engineering/ # /frontend-ui-engineering — accessible production UIs (MIT, addyosmani)
+│   ├── observability-and-instrumentation/ # /observability-and-instrumentation — logging/metrics/tracing (MIT, addyosmani)
 │   └── create-pull-request/   # /create-pull-request — safe gh PR creation, no quoting accidents (authored here)
 ├── docs/                    # Plans and source notes
 │   ├── external-skills-sourcing-plan.md  # Import policy, phased plan, quality gates
@@ -160,6 +165,11 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [systematic-debugging](/skills/systematic-debugging/SKILL.md) | `/systematic-debugging` | Four-phase root-cause debugging — no fixes before the root cause is identified. MIT, adapted from `obra/superpowers`. |
 | [test-driven-development](/skills/test-driven-development/SKILL.md) | `/test-driven-development` | Red-green-refactor: failing test first, minimum implementation, refactor. MIT, adapted from `obra/superpowers`. |
 | [create-pull-request](/skills/create-pull-request/SKILL.md) | `/create-pull-request` | Opens/edits GitHub PRs with `gh` safely: body via `write_file` + `--body-file` (never inline backticks in double quotes), single-quoted titles, then verify with `gh pr view`. Authored in this repo. |
+| [code-review-and-quality](/skills/code-review-and-quality/SKILL.md) | `/code-review-and-quality` | Multi-axis code review before merging: correctness, readability, maintainability, performance, security, tests — severity-ranked findings with verification steps. MIT, adapted from `addyosmani/agent-skills`. |
+| [security-and-hardening](/skills/security-and-hardening/SKILL.md) | `/security-and-hardening` | Harden code against vulnerabilities with attack-scenario verification and a hardening-patterns + security-checklist reference. MIT, adapted from `addyosmani/agent-skills`. |
+| [performance-optimization](/skills/performance-optimization/SKILL.md) | `/performance-optimization` | Profile-first performance work across frontend, backend, queries, databases; re-measure after every fix. MIT, adapted from `addyosmani/agent-skills`. |
+| [frontend-ui-engineering](/skills/frontend-ui-engineering/SKILL.md) | `/frontend-ui-engineering` | Production-quality accessible responsive UIs: semantic markup, keyboard/focus states, real content. MIT, adapted from `addyosmani/agent-skills`. |
+| [observability-and-instrumentation](/skills/observability-and-instrumentation/SKILL.md) | `/observability-and-instrumentation` | Structured logging, metrics, tracing and alerting so production behavior is diagnosable. MIT, adapted from `addyosmani/agent-skills`. |
 
 ```
 /code-review                 # this branch against the default base branch

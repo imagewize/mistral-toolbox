@@ -38,7 +38,12 @@ Rules:
   `skills/brainstorming/`, `skills/writing-plans/`, `skills/systematic-debugging/`,
   `skills/test-driven-development/` and `skills/receiving-code-review/` — from
   `github.com/obra/superpowers`, MIT (© 2025 Jesse Vincent, see the copied `LICENSE` in
-  each), pinned `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
+  each), pinned `2ce8aa15d05bd57213e6f746o953aafb7ded7a8b`
+- `skills/code-review-and-quality/`, `skills/security-and-hardening/`,
+  `skills/performance-optimization/`, `skills/frontend-ui-engineering/` and
+  `skills/observability-and-instrumentation/` — from `github.com/addyosmani/agent-skills`,
+  MIT (© 2025 Addy Osmani, see the copied `LICENSE` in each), pinned
+  `301b02b12bff98e4688e6984af6556802322bbde`
 - `skills/landing-page/`, `skills/no-ai-design-slop/` and
   `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
