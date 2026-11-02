@@ -86,3 +86,8 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/design-first-ui-prompting/` (SKILL.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/ui/design-first-ui-prompting | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
 | 2026-11-02 | `skills/ui-ux-pro-max/` (SKILL.md + references/ + data/ catalogs + LICENSE) | `github.com/nextlevelbuilder/ui-ux-pro-max-skill` .claude/skills/ui-ux-pro-max | MIT | `3a13158ff1f32156cbe144108de48eda2ecaed9a` | 1.0.0 |
 | 2026-11-02 | `skills/ux-writing/` (SKILL.md + LICENSE) | `github.com/content-designer/ux-writing-skill` SKILL.md | MIT | `98cacde4ba2dd10ed28df43a8d53eef1e321c539` | 1.0.0 |
+| 2026-11-02 | `skills/brainstorming/` (SKILL.md + 2 refs + LICENSE) | `github.com/obra/superpowers` skills/brainstorming | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
+| 2026-11-02 | `skills/writing-plans/` (SKILL.md + LICENSE) | `github.com/obra/superpowers` skills/writing-plans | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
+| 2026-11-02 | `skills/systematic-debugging/` (SKILL.md + 3 refs + LICENSE) | `github.com/obra/superpowers` skills/systematic-debugging | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
+| 2026-11-02 | `skills/test-driven-development/` (SKILL.md + ref + LICENSE) | `github.com/obra/superpowers` skills/test-driven-development | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
+| 2026-11-02 | `skills/receiving-code-review/` (SKILL.md + LICENSE) | `github.com/obra/superpowers` skills/receiving-code-review | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |

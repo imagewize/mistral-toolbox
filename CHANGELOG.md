@@ -57,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added `skills/create-pull-request/` — `/create-pull-request` (authored in this repo): open and edit GitHub PRs with `gh` without shell-quoting accidents — never inline a markdown body in double quotes (backticks/`$()` execute, backslashes are eaten); write the body with `write_file` and pass `--body-file`, single-quote titles, and verify the rendered PR with `gh pr view --json title,body,url`. `metadata.version` 1.0.0; README tree and skills table updated
+- Added `skills/brainstorming/`, `skills/writing-plans/`, `skills/systematic-debugging/`, `skills/test-driven-development/` and `skills/receiving-code-review/` — the remaining review/workflow skills from `obra/superpowers` @ `2ce8aa15` (MIT, `LICENSE` copied each, `metadata.version` 1.0.0): structured design questioning, spec-to-plan writing, four-phase root-cause debugging, red-green-refactor TDD, and review-feedback processing; cross-skill `superpowers:*` references re-routed to imported names or annotated as not imported, one `$(…)` snippet removed, dev artifacts/scripts not imported, reference docs included where relevant
+- Updated `docs/sources.md` import log and `NOTICE.md` with the five imports; README tree and skills table extended; `docs/curation-2026-11-02.md` records Round 7
 
 ## [1.5.0] - 2026-11-02
 

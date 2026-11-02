@@ -50,6 +50,11 @@ mistral-toolbox/
 │   ├── wordpress-i18n-workflow/    # /wordpress-i18n-workflow — POT/PO/MO/JSON + GlotPress (MIT, mralaminahamed)
 │   ├── wordpress-database/      # /wordpress-database — dbDelta, $wpdb CRUD, migrations (MIT, mralaminahamed)
 │   ├── requesting-code-review/  # /requesting-code-review — reviewer subagent before merge (MIT, obra)
+│   ├── receiving-code-review/   # /receiving-code-review — process review feedback with evidence (MIT, obra)
+│   ├── brainstorming/           # /brainstorming — structured design questioning (MIT, obra)
+│   ├── writing-plans/           # /writing-plans — spec → step-by-step plan (MIT, obra)
+│   ├── systematic-debugging/    # /systematic-debugging — 4-phase root-cause debugging (MIT, obra)
+│   ├── test-driven-development/ # /test-driven-development — red-green-refactor (MIT, obra)
 │   ├── verification-before-completion/ # /verification-before-completion — evidence before claims (MIT, obra)
 │   └── create-pull-request/   # /create-pull-request — safe gh PR creation, no quoting accidents (authored here)
 ├── docs/                    # Plans and source notes
@@ -149,6 +154,11 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [wordpress-database](/skills/wordpress-database/SKILL.md) | `/wordpress-database` | Custom DB tables in WordPress plugins: `dbDelta` schema rules, versioned upgrade routines, `$wpdb` prepared-statement CRUD, migrations, uninstall cleanup, multisite. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
 | [requesting-code-review](/skills/requesting-code-review/SKILL.md) | `/requesting-code-review` | Dispatch a read-only reviewer subagent with crafted context before merging; act on Critical/Important findings. MIT, adapted from `obra/superpowers`. |
 | [verification-before-completion](/skills/verification-before-completion/SKILL.md) | `/verification-before-completion` | Evidence before claims: run the proving command fresh, read the output, then claim. MIT, adapted from `obra/superpowers`. |
+| [receiving-code-review](/skills/receiving-code-review/SKILL.md) | `/receiving-code-review` | Process review feedback: verify each suggestion against the code, accept/adapt/push back with evidence, then implement. Pairs with `/requesting-code-review`. MIT, adapted from `obra/superpowers`. |
+| [brainstorming](/skills/brainstorming/SKILL.md) | `/brainstorming` | Turn a rough idea into a formed design via structured questioning and a builder check before implementation. MIT, adapted from `obra/superpowers`. |
+| [writing-plans](/skills/writing-plans/SKILL.md) | `/writing-plans` | Write a step-by-step implementation plan from a spec before coding — bite-sized tasks, exact paths, verification steps. MIT, adapted from `obra/superpowers`. |
+| [systematic-debugging](/skills/systematic-debugging/SKILL.md) | `/systematic-debugging` | Four-phase root-cause debugging — no fixes before the root cause is identified. MIT, adapted from `obra/superpowers`. |
+| [test-driven-development](/skills/test-driven-development/SKILL.md) | `/test-driven-development` | Red-green-refactor: failing test first, minimum implementation, refactor. MIT, adapted from `obra/superpowers`. |
 | [create-pull-request](/skills/create-pull-request/SKILL.md) | `/create-pull-request` | Opens/edits GitHub PRs with `gh` safely: body via `write_file` + `--body-file` (never inline backticks in double quotes), single-quoted titles, then verify with `gh pr view`. Authored in this repo. |
 
 ```
