@@ -43,6 +43,11 @@ if (pal) {
   for (const c of used) if (!allowed.has(c)) fails.push(`colour ${c} is not in the drawing's palette`);
 }
 
+// An animated drawing must switch its animation off for visitors who ask for reduced motion.
+if (/data-animate="true"/.test(svg) && !/prefers-reduced-motion:\s*reduce/.test(svg)) {
+  fails.push('animated drawing without a prefers-reduced-motion rule');
+}
+
 const scale = svg.match(/data-scale="([\d.]+)"/);
 console.log(`${file}: ${(Buffer.byteLength(svg) / 1024).toFixed(1)} KB${scale ? `, scale ${scale[1]} units/m` : ''}`);
 for (const w of warns) console.log(`WARN  ${w}`);

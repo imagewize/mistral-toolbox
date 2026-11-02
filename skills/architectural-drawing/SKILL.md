@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.2.1"
+  version: "1.3.0"
   source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
 ---
 
@@ -119,12 +119,32 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 | `d.barge(x0, x1, level, { accent })` | A moored barge with a wheelhouse |
 | `d.dimension(x0, x1, y, label, { from })` | A dimension line; `from` drops extension lines to that height (the ridge or eave). Labels use a decimal comma for Dutch sites |
 | `d.levelMark(x, y, label)` | A level marker such as `+14,0` |
-| `d.svg({ title, desc, background })` | The finished SVG; `title` is required and becomes the accessible name. `background` (default `true`) puts a paper-coloured rect behind the drawing, so it stays readable in dark previews and on dark pages |
+| `d.svg({ title, desc, background, animate })` | The finished SVG; `title` is required and becomes the accessible name. `background` (default `true`) puts a paper-coloured rect behind the drawing, so it stays readable in dark previews and on dark pages. `animate: true` (or `{ speed: 1.5 }`) makes it draw itself on load; see Animation |
 | `A.write(file, svg)`, `A.printReport(d)` | Write the file; print the checks, exit 1 on errors |
 
 The kit draws in layers, so call order matters only within a layer: back trees, ground and water,
 building fills, building lines, details (coursing before openings, so openings cover it), front
 (people and trees), annotations.
+
+## Animation
+
+`d.svg({ title, animate: true })` makes the drawing draw itself when it loads, in layer order:
+trees behind and the ground first, then the building lines, fills, details, people and the
+annotations, in about 3 seconds. `animate: { speed: 1.5 }` plays it faster.
+
+- **Lines are drawn stroke by stroke.** Filled shapes (poche, doors, people), dashed floor lines,
+  tree crowns and text fade in, because a filled shape cannot be drawn as a line.
+- **It works with `<img>`.** The animation lives in a `<style>` block inside the SVG, so it plays
+  in real browsers when the file is shown with `<img>`. It starts when the image loads: with
+  `loading="lazy"` that is shortly before the card scrolls into view, not exactly at it. A drawing
+  that must start exactly on scroll has to be inline SVG with its own trigger.
+- **Reduced motion:** visitors who ask for reduced motion see the finished drawing at once.
+  `check.mjs` fails an animated drawing without that rule.
+- **Safe by default:** the hidden start state lives only in the keyframes, so where animations do
+  not run, the drawing shows complete instead of blank.
+- **Headless screenshots:** headless Chrome freezes animated SVG images at their first frame. Add
+  `--force-prefers-reduced-motion` to any page screenshot (it shows the finished drawing), or
+  render the `.svg` file itself with `--virtual-time-budget`, as in step 5 of the workflow.
 
 ## Composition
 
@@ -162,9 +182,10 @@ Write absolute paths out in full.
 4. **Check the file:** `node /ABS/SKILL/DIR/scripts/check.mjs images/<name>.svg` must print `PASS`.
 5. **Render:** take a 2x screenshot with headless Chrome (on Linux `google-chrome` or `chromium`):
    ```
-   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=480,300 --screenshot=/ABS/PROJECT/images/<name>.png "file:///ABS/PROJECT/images/<name>.svg"
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --virtual-time-budget=6000 --window-size=480,300 --screenshot=/ABS/PROJECT/images/<name>.png "file:///ABS/PROJECT/images/<name>.svg"
    ```
-   Use the drawing's own `width` and `height` in `--window-size`.
+   Use the drawing's own `width` and `height` in `--window-size`. `--virtual-time-budget` lets an
+   animated drawing finish before the screenshot.
 6. **Look.** If you can view images, check the render against the Verify list and fix what is off.
    If you cannot, say so in your reply, rely on the kit's checks, and name the PNG so a human can
    look.
