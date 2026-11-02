@@ -1,11 +1,12 @@
 # Mistral Toolbox
 
-**Mistral Le Chat agent prompts and Mistral Vibe skills for WordPress development.**
+**Mistral Le Chat prompts, Mistral Vibe skills and Mistral Vibe agents for WordPress development.**
 
-This repository holds two kinds of reusable AI instructions:
+This repository holds three kinds of reusable AI instructions:
 
-- **Le Chat agents** — system prompts you paste into a [Mistral Le Chat](https://chat.mistral.ai) agent to get consistent output for a specific role, such as building a WordPress page section or reviewing its HTML/CSS.
+- **Le Chat prompts** — system prompts in `prompts/` you paste into a [Mistral Le Chat](https://chat.mistral.ai) agent to get consistent output for a specific role, such as building a WordPress page section or reviewing its HTML/CSS.
 - **Vibe skills** — [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) for [Mistral Vibe](https://docs.mistral.ai/vibe/) that run inside your project, read its files, run git and linters, and report — such as `/code-review`.
+- **Vibe agents** — TOML agent profiles in `agents/` that you select with `vibe --agent NAME` in any repository; each loads the skills it needs on demand.
 
 Imagewize created these for its own WordPress work — the Elayne block theme, the Nynaeve Sage theme and the Aludra block plugin — but they are written to adapt to other projects. Use as-is, extend, or fork.
 
@@ -18,23 +19,28 @@ mistral-toolbox/
 ├── AGENTS.md                # Instructions for coding agents working in this repo
 ├── .vibe/
 │   └── config.toml          # Vibe project settings for this repo
-├── agents/                  # Le Chat agent system prompts
-│   ├── FRONTEND-DEV.md      # Frontend Developer (WordPress-focused)
-│   ├── REVIEWER.md          # Frontend Code Reviewer
-│   └── (add your own!)
-├── prompts/                 # Example Le Chat agent runs (prompt → output → feedback)
+├── agents/                  # Vibe agent profiles (TOML) — wired in via agent_paths
+│   ├── wp-reviewer.toml         # WordPress code review agent
+│   ├── wp-frontend-builder.toml # WordPress FSE frontend build agent
+│   ├── ux-designer.toml         # UI/UX design agent
+│   ├── devops-oncall.toml       # incident / on-call agent
+│   ├── release-manager.toml     # release & PR agent
+│   └── README.md                # wiring + usage docs
+├── prompts/                 # Le Chat prompts + example runs, one dir per agent
 │   ├── frontend-dev/
+│   │   ├── FRONTEND-DEV.md      # Frontend Developer system prompt (WordPress-focused)
 │   │   └── elayne-hero-block/
 │   │       ├── PROMPT.md        # Input prompt used
 │   │       ├── OUTPUT.md        # Raw agent output
 │   │       ├── FEEDBACK.md      # Review notes and issues found
 │   │       └── canvas.html      # Generated HTML canvas
 │   └── reviewer/
+│       ├── REVIEWER.md          # Frontend Code Reviewer system prompt
 │       └── elayne-hero-block/
 │           ├── PROMPT.md        # HTML input submitted for review
 │           ├── OUTPUT.md        # Structured review report (FAIL)
 │           └── FEEDBACK.md      # Review notes
-├── skills/                  # Mistral Vibe skills (16; imported ones carry LICENSE + metadata.source)
+├── skills/                  # Mistral Vibe skills (40; imported ones carry LICENSE + metadata.source)
 │   ├── code-review/             # /code-review — review diffs, PRs, patterns in any WP project
 │   ├── frontend-design/         # /frontend-design — 8 aesthetic anchors → HTML/CSS (MIT, Ilm-Alan)
 │   ├── html-to-block-theme/     # /html-to-block-theme — HTML/CSS/JS → FSE block theme (MIT, siddik-web)
@@ -87,11 +93,11 @@ mistral-toolbox/
 
 ---
 
-## 💬 Le Chat Agents
+## 💬 Le Chat Prompts
 
 ### Quick Start
 
-1. Copy any `.md` file from the `agents/` directory (e.g., `agents/FRONTEND-DEV.md`)
+1. Copy the prompt file from an agent's directory under `prompts/` (e.g., `prompts/frontend-dev/FRONTEND-DEV.md`) — one `.md` system prompt per agent, kept next to its example runs
 2. Paste into Le Chat → **Agents** → New Agent → **System Prompt**
 3. Set model to `mistral-large-latest` or `devstral`
 4. Start chatting!
@@ -102,16 +108,10 @@ mistral-toolbox/
 
 | Agent | Role | Focus | Best For |
 |-------|------|-------|----------|
-| [FRONTEND-DEV.md](/agents/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns | WordPress devs, theme authors |
-| [REVIEWER.md](/agents/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance | Frontend devs, designers |
+| [FRONTEND-DEV.md](/prompts/frontend-dev/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns | WordPress devs, theme authors |
+| [REVIEWER.md](/prompts/reviewer/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance | Frontend devs, designers |
 
-**Planned Agents:**
-- `BACKEND-DEV.md` - PHP/WordPress & general backend development
-- `DEVOPS.md` - Deployment, infrastructure, and CI/CD
-- `CONTENT-STRATEGY.md` - Content planning and SEO
-- `UI-UX.md` - User interface and experience design
-- `QA-TESTING.md` - Quality assurance and testing strategies
-- `ACCESSIBILITY.md` - WCAG compliance and a11y best practices
+**More roles are covered by the Vibe agents and skills** — see [Vibe Agents](#-vibe-agents) below: `devops-oncall` (incident / CI / k8s), `ux-designer` (UI/UX, accessibility via `/better-accessibility`), `wp-reviewer` (review & QA), while the `wordpress-*` skills cover PHP/WordPress backend work. New Le Chat prompts are still welcome — add them as `prompts/<agent>/ROLE.md` with an example run under `prompts/<agent>/<run>/`.
 
 ### WordPress Context
 
@@ -135,7 +135,7 @@ They include full page builds with component extraction, developer handoff notes
 
 ### Example Agent Runs
 
-The `prompts/` directory contains real agent runs — input prompt, raw output, canvas, and review feedback — so you can see how each agent performs in practice and what to watch out for.
+The `prompts/` directory holds the Le Chat prompts and their example runs, one directory per agent: `prompts/<agent>/ROLE.md` is the system prompt, and each `prompts/<agent>/<run>/` folder is a real run — input prompt, raw output, canvas, and review feedback — so you can see how the agent performs in practice and what to watch out for.
 
 | Run | Agent | Status |
 |-----|-------|--------|
@@ -225,13 +225,14 @@ does the conversion.
 
 **Per project** — shared with everyone who works on it: copy `skills/code-review/` to the project's `.agents/skills/code-review/`.
 
-**For all your projects** — add this repository's `skills/` directory to `~/.vibe/config.toml`:
+**For all your projects** — add this repository's `skills/` and `agents/` directories to `~/.vibe/config.toml`:
 
 ```toml
 skill_paths = ["~/code/mistral-toolbox/skills"]
+agent_paths = ["~/code/mistral-toolbox/agents"]
 ```
 
-Vibe uses the first skill it finds with a given name, and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add `code-review` to it.
+Vibe uses the first skill it finds with a given name, and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add `code-review` to it. `agent_paths` makes the [Vibe agents](#-vibe-agents) selectable with `vibe --agent NAME` in every project — Vibe reads only `*.toml` files there, so the `README.md` in `agents/` is ignored by the loader. For a single project instead, put the same lines in that project's `.vibe/config.toml` (the folder must be trusted).
 
 ### Project rules
 
@@ -247,11 +248,48 @@ Vibe loads `AGENTS.md` files on top of its built-in system prompt; that is the p
 
 ---
 
+## 🤖 Vibe Agents
+
+Agent profiles in [`agents/`](/agents/) are TOML files you select with `vibe --agent NAME` — in this repo or any other. Each profile is a role agent whose `instructions` say which toolbox skill to load for which task; the model loads them on demand through Vibe's `skill` tool, and `enabled_skills` scopes what the agent may load.
+
+| Agent | Run with | Role | Skills it loads |
+|-------|----------|------|-----------------|
+| [wp-reviewer](/agents/wp-reviewer.toml) | `vibe --agent wp-reviewer` | Reviews WordPress diffs, PRs, plugins, patterns in the current repo | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
+| [wp-frontend-builder](/agents/wp-frontend-builder.toml) | `vibe --agent wp-frontend-builder` | Builds WordPress FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme |
+| [ux-designer](/agents/ux-designer.toml) | `vibe --agent ux-designer` | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, design-first-ui-prompting, no-ai-design-slop |
+| [devops-oncall](/agents/devops-oncall.toml) | `vibe --agent devops-oncall` | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
+| [release-manager](/agents/release-manager.toml) | `vibe --agent release-manager` | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
+
+### Quick start
+
+```toml
+# ~/.vibe/config.toml — once, and every project gets them
+skill_paths = ["~/code/mistral-toolbox/skills"]
+agent_paths = ["~/code/mistral-toolbox/agents"]
+```
+
+```bash
+cd ~/code/some-other-repo
+vibe --agent wp-reviewer                  # interactive review session
+vibe --agent wp-reviewer -p "review the diff against main"
+vibe --agent devops-oncall -p "triage this alert"
+vibe --agent release-manager -p "is main ready for release?"
+```
+
+Notes:
+
+- The agent name is the TOML file stem; `vibe --agent NAME` fails with the reason if a profile is invalid.
+- Skills are **not** auto-loaded — the agent loads them via the `skill` tool when the task calls for it. Remove `enabled_skills` from a profile to let it load any skill the session can see.
+- Set `agent_type = "subagent"` in a copy of a profile to make it spawnable by the model as a subagent instead of a user-facing agent.
+- These Vibe agents are a different artifact from the Le Chat prompts in [`prompts/`](#-le-chat-prompts) (which you paste into Le Chat and which have no file access).
+
+---
+
 ## 📝 Adding Your Own
 
-### A Le Chat agent
+### A Le Chat prompt
 
-1. **Create**: New `.md` file in the `agents/` directory (e.g., `agents/BACKEND-DEV.md`)
+1. **Create**: New directory `prompts/<agent>/` with the prompt file inside (e.g., `prompts/backend-dev/BACKEND-DEV.md`); example runs go in `prompts/<agent>/<run>/` subdirectories
 2. **Name it well**: Use role-based naming like `ROLE-SPECIALIZATION.md`
 3. **Structure your prompt**:
    - Role description and scope
@@ -281,6 +319,13 @@ Vibe loads `AGENTS.md` files on top of its built-in system prompt; that is the p
 3. **Keep it generic**: project-specific rules belong in the project, not in the skill.
 4. **Prescribe allowlist-friendly commands**: plain single commands, no shell loops or one-liners; read files with `read_file`.
 
+### A Vibe agent profile
+
+1. **Create** `agents/<name>.toml` — the file stem is the agent name used with `vibe --agent <name>`.
+2. **Required keys**: `display_name` and `description`; then `instructions` (the role plus which skill to load for which task) and `agent_type = "agent"` (default; use `"subagent"` for a model-spawned subagent).
+3. **Scope the skills** with `enabled_skills = ["code-review", ...]` so the agent can only load what it needs.
+4. Wire `agents/` in via `agent_paths` (see [Install](#install)); the profile loads skills on demand through the `skill` tool, it does not auto-load them.
+
 ---
 
 ## 🔗 Resources
@@ -295,7 +340,7 @@ Vibe loads `AGENTS.md` files on top of its built-in system prompt; that is the p
 ## 🤝 Contributing
 
 1. Fork this repository
-2. Create a new branch for your agent prompt or skill
+2. Create a new branch for your prompt, skill or agent profile
 3. Add your file following the conventions above (see also [AGENTS.md](/AGENTS.md))
 4. Update the README and CHANGELOG
 5. Submit a pull request

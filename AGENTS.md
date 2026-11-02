@@ -4,15 +4,17 @@ Instructions for coding agents (Mistral Vibe and others) working in this reposit
 
 ## What this repository is
 
-Reusable AI instructions for WordPress development, maintained by Imagewize, in two kinds:
+Reusable AI instructions for WordPress development, maintained by Imagewize, in three kinds:
 
-- **Le Chat agents** — `agents/*.md` are system prompts pasted into a Mistral Le Chat agent.
-  Le Chat has no shell or file access: these prompts work on what the user pastes in and must
-  not depend on running commands.
+- **Le Chat prompts** — `prompts/<agent>/ROLE.md` are system prompts pasted into a Mistral
+  Le Chat agent. Le Chat has no shell or file access: these prompts work on what the user
+  pastes in and must not depend on running commands.
 - **Vibe skills** — `skills/<name>/SKILL.md` are Agent Skills for Mistral Vibe. They run inside
   a project with Vibe's tools (`bash`, `read_file`, `grep`).
+- **Vibe agents** — `agents/*.toml` are Vibe agent profiles, selectable with `vibe --agent NAME`
+  once `agents/` is wired in via `agent_paths`. Each loads skills on demand via the `skill` tool.
 
-`prompts/` holds example Le Chat agent runs: input, raw output and review feedback.
+`prompts/<agent>/<run>/` holds example Le Chat runs: input, raw output and review feedback.
 
 ## Layout
 
@@ -20,21 +22,37 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 mistral-toolbox/
 ├── AGENTS.md          # This file
 ├── .vibe/config.toml  # Vibe project settings for this repo
-├── agents/            # Le Chat agent system prompts
-├── prompts/           # Example Le Chat runs: prompts/<agent>/<run>/
+├── agents/            # Vibe agent profiles: agents/<name>.toml (wired via agent_paths)
+├── prompts/           # Le Chat prompts + runs, one dir per agent: prompts/<agent>/ROLE.md + <run>/
 ├── skills/            # Vibe skills: skills/<name>/SKILL.md
 ├── docs/              # Plans and source notes: docs/<topic>.md
 ├── README.md
 └── CHANGELOG.md
 ```
 
-## Working on Le Chat agents
+## Working on Le Chat prompts
 
-- One role per file, named `ROLE.md` or `ROLE-SPECIALIZATION.md` (e.g. `FRONTEND-DEV.md`).
+- One directory per agent under `prompts/<agent>/`, containing the system prompt as a single
+  `ROLE.md` or `ROLE-SPECIALIZATION.md` file (e.g. `prompts/frontend-dev/FRONTEND-DEV.md`)
+  plus its example runs in `prompts/<agent>/<run>/` subdirectories. One prompt per file — the
+  same convention as Vibe's own prompt dirs (`.vibe/prompts/`, bare filename = prompt id).
 - Structure: role and scope, critical rules, output format, examples of expected output.
 - The WordPress prompts target Imagewize's Elayne (FSE block theme), Nynaeve (Sage 11 hybrid
   theme) and imagewize.com. Project conventions live in the prompts themselves.
 - When a prompt's behaviour changes, add or update an example run under `prompts/<agent>/<run>/`.
+
+## Working on Vibe agent profiles
+
+- One profile per file: `agents/<name>.toml`; the file stem is the agent name for
+  `vibe --agent <name>`. Vibe reads only `*.toml` from `agent_paths`, so a `README.md` in
+  `agents/` is safe.
+- Required keys: `display_name` and `description`; then `instructions` and optionally
+  `agent_type` (`"agent"` by default, `"subagent"` for a model-spawned subagent).
+- Scope the skills the agent may load with `enabled_skills = [...]` (same patterns as
+  `config.toml`); the agent loads skills on demand via the `skill` tool — the profile never
+  auto-loads them, so the `instructions` must say which skill to load for which task.
+- Wire the directory into any repo with `agent_paths = ["~/code/mistral-toolbox/agents"]` next
+  to `skill_paths`; validate a new profile by parsing it as TOML and checking the keys above.
 
 ## Working on Vibe skills
 
