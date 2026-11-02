@@ -95,6 +95,8 @@ mistral-toolbox/
 
 ## 💬 Le Chat Prompts
 
+System prompts you paste into a [Mistral Le Chat](https://chat.mistral.ai) agent — Le Chat has no file or shell access, so these work on what you paste in. To work on real files with the skills below, use the [Vibe agents](#-vibe-agents) instead.
+
 ### Quick Start
 
 1. Copy the prompt file from a prompt's directory under `prompts/` (e.g., `prompts/frontend-dev/FRONTEND-DEV.md`) — one `.md` system prompt per role, kept next to its example runs
@@ -111,7 +113,7 @@ mistral-toolbox/
 | [FRONTEND-DEV.md](/prompts/frontend-dev/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns | WordPress devs, theme authors |
 | [REVIEWER.md](/prompts/reviewer/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance | Frontend devs, designers |
 
-**More roles are covered by the Vibe agents and skills** — see [Vibe Agents](#-vibe-agents) below: `devops-oncall` (incident / CI / k8s), `ux-designer` (UI/UX, accessibility via `/better-accessibility`), `wp-reviewer` (review & QA), while the `wordpress-*` skills cover PHP/WordPress backend work. New Le Chat prompts are still welcome — add them as `prompts/<agent>/ROLE.md` with an example run under `prompts/<agent>/<run>/`.
+**More roles are covered by the Vibe agents and skills** — see [Vibe Agents](#-vibe-agents) below: `devops-oncall` (incident / CI / k8s), `ux-designer` (UI/UX, accessibility via `/better-accessibility`), `wp-reviewer` (review & QA), while the `wordpress-*` skills cover PHP/WordPress backend work. New Le Chat prompts are still welcome — add them as `prompts/<name>/ROLE.md` with an example run under `prompts/<name>/<run>/`.
 
 ### WordPress Context
 
@@ -135,7 +137,7 @@ They include full page builds with component extraction, developer handoff notes
 
 ### Example Prompt Runs
 
-The `prompts/` directory holds the Le Chat prompts and their example runs, one directory per prompt: `prompts/<agent>/ROLE.md` is the system prompt, and each `prompts/<agent>/<run>/` folder is a real run — input prompt, raw output, canvas, and review feedback — so you can see how the prompt performs in practice and what to watch out for.
+The `prompts/` directory holds the Le Chat prompts and their example runs, one directory per prompt: `prompts/<name>/ROLE.md` is the system prompt, and each `prompts/<name>/<run>/` folder is a real run — input prompt, raw output, canvas, and review feedback — so you can see how the prompt performs in practice and what to watch out for.
 
 | Run | Prompt | Status |
 |-----|-------|--------|
@@ -289,7 +291,7 @@ Notes:
 
 ### A Le Chat prompt
 
-1. **Create**: New directory `prompts/<agent>/` with the prompt file inside (e.g., `prompts/backend-dev/BACKEND-DEV.md`); example runs go in `prompts/<agent>/<run>/` subdirectories
+1. **Create**: New directory `prompts/<name>/` with the prompt file inside (e.g., `prompts/backend-dev/BACKEND-DEV.md`); example runs go in `prompts/<name>/<run>/` subdirectories
 2. **Name it well**: Use role-based naming like `ROLE-SPECIALIZATION.md`
 3. **Structure your prompt**:
    - Role description and scope

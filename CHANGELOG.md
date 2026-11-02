@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- README: the Le Chat Prompts section no longer labels the prompts as "agents" — "Available Agents" is now "Available Prompts" (table header `Prompt`), with "Rules for the Frontend Prompts" and "Example Prompt Runs" renamed to match, so the table lists the Le Chat prompts (`FRONTEND-DEV.md`, `REVIEWER.md`) while the actual agents — the Vibe profiles `wp-reviewer`, `wp-frontend-builder`, `ux-designer`, `devops-oncall`, `release-manager` in `agents/` — are documented in the Vibe Agents section
+- README: the Le Chat Prompts section no longer labels the prompts as "agents" — "Available Agents" is now "Available Prompts" (table header `Prompt`), with "Rules for the Frontend Prompts" and "Example Prompt Runs" renamed to match, so the table lists the Le Chat prompts (`FRONTEND-DEV.md`, `REVIEWER.md`) while the actual agents — the Vibe profiles `wp-reviewer`, `wp-frontend-builder`, `ux-designer`, `devops-oncall`, `release-manager` in `agents/` — are documented in the Vibe Agents section. The section also gained an intro sentence stating that Le Chat prompts are pasted into a Le Chat agent (no file access) while the Vibe agents run the skills on real files
+- README, AGENTS.md and `docs/external-skills-sourcing-plan.md`: the prompt directory slot is now `prompts/<name>/` instead of `prompts/<agent>/`, and "one dir per agent" prose now says "per prompt"; `docs/sources.md` maps personas to Le Chat prompts
 
 ## [1.6.0] - 2026-11-02
 
