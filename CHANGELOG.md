@@ -54,6 +54,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Appended the shared WordPress block-pattern handoff section to `ui-ux-pro-max` and a WordPress i18n note to `ux-writing`
 - Updated `docs/sources.md` import log and `NOTICE.md` with the two imports; README restructured (full skills tree, skills table, design-to-pattern pipeline); `docs/curation-2026-11-02.md` records Round 6
 
+### Added
+
+- Added `skills/create-pull-request/` — `/create-pull-request` (authored in this repo): open and edit GitHub PRs with `gh` without shell-quoting accidents — never inline a markdown body in double quotes (backticks/`$()` execute, backslashes are eaten); write the body with `write_file` and pass `--body-file`, single-quote titles, and verify the rendered PR with `gh pr view --json title,body,url`. `metadata.version` 1.0.0; README tree and skills table updated
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed

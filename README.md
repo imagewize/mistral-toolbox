@@ -50,7 +50,8 @@ mistral-toolbox/
 │   ├── wordpress-i18n-workflow/    # /wordpress-i18n-workflow — POT/PO/MO/JSON + GlotPress (MIT, mralaminahamed)
 │   ├── wordpress-database/      # /wordpress-database — dbDelta, $wpdb CRUD, migrations (MIT, mralaminahamed)
 │   ├── requesting-code-review/  # /requesting-code-review — reviewer subagent before merge (MIT, obra)
-│   └── verification-before-completion/ # /verification-before-completion — evidence before claims (MIT, obra)
+│   ├── verification-before-completion/ # /verification-before-completion — evidence before claims (MIT, obra)
+│   └── create-pull-request/   # /create-pull-request — safe gh PR creation, no quoting accidents (authored here)
 ├── docs/                    # Plans and source notes
 │   ├── external-skills-sourcing-plan.md  # Import policy, phased plan, quality gates
 │   ├── sources.md           # Verified external sources, licenses, pinned commits, import log
@@ -148,6 +149,7 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [wordpress-database](/skills/wordpress-database/SKILL.md) | `/wordpress-database` | Custom DB tables in WordPress plugins: `dbDelta` schema rules, versioned upgrade routines, `$wpdb` prepared-statement CRUD, migrations, uninstall cleanup, multisite. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
 | [requesting-code-review](/skills/requesting-code-review/SKILL.md) | `/requesting-code-review` | Dispatch a read-only reviewer subagent with crafted context before merging; act on Critical/Important findings. MIT, adapted from `obra/superpowers`. |
 | [verification-before-completion](/skills/verification-before-completion/SKILL.md) | `/verification-before-completion` | Evidence before claims: run the proving command fresh, read the output, then claim. MIT, adapted from `obra/superpowers`. |
+| [create-pull-request](/skills/create-pull-request/SKILL.md) | `/create-pull-request` | Opens/edits GitHub PRs with `gh` safely: body via `write_file` + `--body-file` (never inline backticks in double quotes), single-quoted titles, then verify with `gh pr view`. Authored in this repo. |
 
 ```
 /code-review                 # this branch against the default base branch
