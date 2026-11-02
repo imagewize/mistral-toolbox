@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-02
+
 ### Changed
 
 - README redesigned: centered header with shields.io badges (release, license, last commit, Mistral Vibe, Le Chat, WordPress, and skills/agents/prompts counts), a quick-nav bar, an overview table of the three artifact kinds, a Quick start section, skills grouped into four categories (WordPress, design & frontend, workflow & quality, DevOps & release) with a **Source** column, collapsible install/contributing details, a condensed repository tree, and new Credits and License sections listing the 11 MIT upstream collections
