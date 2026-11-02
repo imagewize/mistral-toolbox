@@ -27,8 +27,12 @@ if (!/viewBox="/.test(svg)) fails.push('no viewBox');
 if (!/data-kit="arch.mjs"/.test(svg)) warns.push('not made with arch.mjs; palette and weight checks may not apply');
 
 const weights = new Set(['2.2', '1.4', '0.9', '0.5', '0.35']);
-for (const m of svg.matchAll(/stroke-width="([\d.]+)"/g)) {
-  if (!weights.has(m[1])) { fails.push(`stroke-width ${m[1]} is not one of the kit weights (2.2, 1.4, 0.9, 0.5, 0.35)`); break; }
+// People scale their limb strokes with the drawing (data-part="figure"); every other stroke
+// must use one of the kit weights.
+for (const tag of svg.match(/<[a-zA-Z][^>]*>/g) || []) {
+  if (tag.includes('data-part="figure"')) continue;
+  const m = tag.match(/stroke-width="([\d.]+)"/);
+  if (m && !weights.has(m[1])) { fails.push(`stroke-width ${m[1]} is not one of the kit weights (2.2, 1.4, 0.9, 0.5, 0.35)`); break; }
 }
 
 const pal = svg.match(/data-palette='([^']+)'/);

@@ -51,7 +51,12 @@ const RANGES = {
 export function drawing(opts = {}) {
   const width = opts.width ?? 480;
   const height = opts.height ?? 300;
-  const margin = opts.margin ?? 20;
+  const margin = opts.margin ?? 14;
+  // labels: false leaves out dimension and level text, for drawings shown small (cards).
+  const labels = opts.labels ?? true;
+  // displayWidth: the width in CSS pixels the drawing will be shown at. Used to warn when text
+  // or people would be too small to read.
+  const displayWidth = opts.displayWidth ?? width;
   const palette = { ...DEFAULT_PALETTE, ...(opts.palette || {}) };
   const prefix = opts.prefix ?? 'ad-';
   const ext = opts.extent;
@@ -238,6 +243,15 @@ export function drawing(opts = {}) {
       path('detail', `M${X(cx + reach * 0.9)} ${Y(y - 0.8)}a${L(0.12)} ${L(0.12)} 0 1 1 ${-L(0.2)} ${L(0.05)}`, W.DETAIL);
     },
 
+    // A chimney standing on a roof or mass at height base: a stack with a cap.
+    chimney(cx, base, { w = 0.7, h = 1.6 } = {}) {
+      const x0 = cx - w / 2, x1 = cx + w / 2;
+      fillPath('fill', rectD(x0, base, x1, base + h), palette.paper);
+      path('lines', rectD(x0, base, x1, base + h), W.EDGE);
+      path('lines', rectD(x0 - 0.1, base + h, x1 + 0.1, base + h + 0.18), W.EDGE);
+      rec('chimney', x0, base, x1, base + h + 0.18);
+    },
+
     // Interior floor levels shown on an elevation (dashed) or in a section (pass dashed: false).
     floorLines(x0, x1, levels, { dashed = true } = {}) {
       const sorted = [0, ...levels].sort((a, b) => a - b);
@@ -265,19 +279,31 @@ export function drawing(opts = {}) {
       path('detail', line(x0, y0 - 0.2, x1, y1 - 0.2), W.DETAIL);
     },
 
-    // A standing person, 1.75 m by default: the scale reference every drawing needs.
-    figure(x, { h = 1.75, accent = false, layer = 'front' } = {}) {
-      if (!inRange(h, RANGES.figure.h)) warnings.push(`figure at x=${x}: height ${h} m is implausible`);
+    // A person, 1.75 m by default: the scale reference every drawing needs.
+    // pose: 'stand', 'walk' (legs apart, facing +x) or 'stand-left' / 'walk-left' (facing -x).
+    figure(x, { h = 1.75, accent = false, layer = 'front', pose = 'stand' } = {}) {
+      if (!inRange(h, RANGES.figure.h)) warnings.push(`figure at x=${f(x)}: height ${f(h)} m is implausible`);
       const k = h / 1.75;
       const col = useAccent(accent, 'figure');
-      const head = 0.11 * k;
-      const neck = h - 2 * head;
-      layers[layer].push(`<circle cx="${X(x)}" cy="${Y(h - head)}" r="${L(head)}" fill="${col}" stroke="none"/>`);
-      const ys = neck - 0.04 * k;
-      const pts = [[-0.19, ys], [0.19, ys], [0.15, 0.95 * k], [0.13, 0], [0.03, 0], [0, 0.85 * k], [-0.03, 0], [-0.13, 0], [-0.15, 0.95 * k]];
-      const body = 'M' + pts.map(([dx, y]) => `${X(x + (Math.abs(dx) < 0.1 ? dx : dx * k))} ${Y(y)}`).join('L') + 'Z';
-      layers[layer].push(`<path d="${body}" fill="${col}" stroke="none"/>`);
-      rec('figure', x - 0.2 * k, 0, x + 0.2 * k, h);
+      const dir = pose.endsWith('-left') ? -1 : 1;
+      const walk = pose.startsWith('walk');
+      const head = 0.115 * k;
+      const sh = h - 2.2 * head;          // shoulders
+      const hip = 0.92 * k;
+      layers[layer].push(`<circle cx="${X(x + 0.02 * dir * k)}" cy="${Y(h - head)}" r="${L(head)}" fill="${col}" stroke="none"/>`);
+      // torso: shoulders to hips, slightly narrower at the hips
+      const torso = `M${X(x - 0.2 * k)} ${Y(sh)}L${X(x + 0.2 * k)} ${Y(sh)}L${X(x + 0.15 * k)} ${Y(hip)}L${X(x - 0.15 * k)} ${Y(hip)}Z`;
+      layers[layer].push(`<path d="${torso}" fill="${col}" stroke="none"/>`);
+      // legs and arms as strokes, so a figure stays readable at small sizes
+      const lw = Math.max(L(0.13 * k), 0.9).toFixed(2);
+      const aw = Math.max(L(0.09 * k), 0.7).toFixed(2);
+      const step = walk ? 0.22 * k : 0.07 * k;
+      const legs = line(x - 0.07 * k, hip, x - 0.07 * k - step * dir, 0) + line(x + 0.07 * k, hip, x + 0.07 * k + step * dir, 0);
+      const swing = walk ? 0.16 * k : 0.04 * k;
+      const arms = line(x - 0.19 * k, sh - 0.04 * k, x - 0.2 * k + swing * dir, hip - 0.05 * k) + line(x + 0.19 * k, sh - 0.04 * k, x + 0.2 * k - swing * dir, hip - 0.05 * k);
+      layers[layer].push(`<path data-part="figure" d="${legs}" fill="none" stroke="${col}" stroke-width="${lw}" stroke-linecap="round"/>`);
+      layers[layer].push(`<path data-part="figure" d="${arms}" fill="none" stroke="${col}" stroke-width="${aw}" stroke-linecap="round"/>`);
+      rec('figure', x - 0.25 * k, 0, x + 0.25 * k, h);
     },
 
     // A tree: a solid trunk into a scalloped crown, with faint branches inside the crown.
@@ -309,7 +335,7 @@ export function drawing(opts = {}) {
       // Branches fork from the trunk top into the crown.
       const br = line(x, tTop, x - rx * 0.45, cy + ry * 0.25) + line(x, tTop, x + rx * 0.5, cy + ry * 0.15) + line(x, tTop, x + rx * 0.05, cy + ry * 0.55);
       layers[layer].push(`<path d="${br}" ${stroke(W.FAINT, back ? palette.mid : palette.ink)}/>`);
-      rec('tree', x - rx, 0, x + rx, h);
+      rec('tree', x - rx, 0, x + rx, h, { front: !back, cx: x, cy0: crownBase });
     },
 
     // A moored barge on water at `level`: hull, wheelhouse at the stern.
@@ -327,15 +353,20 @@ export function drawing(opts = {}) {
       rec('barge', x0, level - draft, x1, level + freeboard + 2.0);
     },
 
-    // Dimension line with ticks and a label, at height y (use a y above the drawing or below ground).
-    dimension(x0, x1, y, label) {
+    // Dimension line with ticks and a label, at height y above the building. `from` is the height
+    // the extension lines drop to (usually the eave or ridge), with a small gap above it.
+    dimension(x0, x1, y, label, { from } = {}) {
+      if (!labels) return;
       const t = 0.35;
-      path('notes', line(x0, y, x1, y) + line(x0 - t, y - t, x0 + t, y + t) + line(x1 - t, y - t, x1 + t, y + t), W.DETAIL, palette.mid);
+      let d1 = line(x0, y, x1, y) + line(x0 - t, y - t, x0 + t, y + t) + line(x1 - t, y - t, x1 + t, y + t);
+      if (from !== undefined && from < y - 0.6) d1 += line(x0, y + 0.4, x0, from + 0.4) + line(x1, y + 0.4, x1, from + 0.4);
+      path('notes', d1, W.DETAIL, palette.mid);
       layers.notes.push(`<text x="${X((x0 + x1) / 2)}" y="${Y(y) - 3}" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="7" fill="${palette.mid}" text-anchor="middle">${esc(label ?? `${(x1 - x0).toFixed(1).replace('.', ',')} m`)}</text>`);
     },
 
     // Level marker: a small triangle and a label, e.g. '+12,0'.
     levelMark(x, y, label) {
+      if (!labels) return;
       const t = 0.45;
       path('notes', `M${X(x)} ${Y(y)}l${L(-t)} ${-L(t)}h${L(2 * t)}Z` + line(x - t * 2, y, x + t * 4, y), W.DETAIL, palette.mid);
       layers.notes.push(`<text x="${X(x + t * 1.5)}" y="${Y(y) - 4}" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="7" fill="${palette.mid}">${esc(label)}</text>`);
@@ -389,10 +420,36 @@ ${body}
       }
     }
     if (!items.some((i) => i.type === 'figure')) warnings.push('no figure(): add at least one 1.75 m person as a scale reference');
+    // A front tree whose crown covers a building corner hides the silhouette.
+    const crowns = items.filter((i) => i.type === 'tree' && i.front);
+    for (const m of items.filter((i) => i.type === 'mass')) {
+      for (const t of crowns) {
+        const coversX = (t.x0 < m.x0 && t.x1 > m.x0 + 0.3) || (t.x0 < m.x1 - 0.3 && t.x1 > m.x1);
+        if (coversX && t.cy0 < m.y1) warnings.push(`tree at x=${f(t.cx)} covers a corner of the mass ${f(m.x0)}..${f(m.x1)}; move it clear of the outline or use layer: 'back'`);
+      }
+    }
+    // Masses and chimneys must stand on the ground or on something.
+    const supports = items.filter((i) => i.type === 'mass' || i.type === 'roof');
+    for (const m of items.filter((i) => (i.type === 'mass' || i.type === 'chimney') && i.y0 > 0.01)) {
+      const onTop = supports.some((o) => o !== m && Math.abs(o.y1 - m.y0) < 0.05 && o.x0 < m.x1 && m.x0 < o.x1)
+        || supports.some((o) => o !== m && o.type === 'roof' && m.y0 >= o.y0 - 0.01 && m.y0 <= o.y1 && m.x0 >= o.x0 && m.x1 <= o.x1);
+      if (!onTop) errors.push(`${m.type} ${f(m.x0)}..${f(m.x1)} starts at ${f(m.y0)} m but stands on nothing`);
+    }
+    // Small display: people and text become unreadable.
+    const px = displayWidth / width;
+    if (L(1.75) * px < 14) warnings.push(`people will be ${f(L(1.75) * px)} px tall at ${displayWidth} px display width; show less of the scene (tighter extent) or a larger scale`);
+    if (labels && 7 * px < 6) warnings.push(`labels will be ${f(7 * px)} px at ${displayWidth} px display width; pass labels: false`);
     if (L(1) < 3) warnings.push(`scale is ${s.toFixed(2)} units per metre; details under 1 m will not read, show less of the building or make the drawing larger`);
   }
 
   return d;
+}
+
+// One scale for a set of drawings: the largest extent fits, the others keep their true size.
+//   const scale = A.sharedScale([extA, extB, ...], { width: 480, height: 300 });
+//   A.drawing({ ..., extent: extA, scale })
+export function sharedScale(extents, { width = 480, height = 300, margin = 14 } = {}) {
+  return Math.min(...extents.map((e) => Math.min((width - 2 * margin) / (e.x1 - e.x0), (height - 2 * margin) / (e.top - (e.bottom ?? -2)))));
 }
 
 function f(n) { return String(Math.round(n * 100) / 100); }

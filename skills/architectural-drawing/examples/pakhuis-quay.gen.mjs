@@ -12,10 +12,12 @@ const LEVELS = [4.0, 7.3, 10.6];                             // ground floor stu
 const SHED = { x0: 16, x1: 30, eave: 6, tooth: 2.6, n: 5 };  // former shed, now studios
 const QUAY = { edge: 36, end: 50, water: -1.2 };
 
-const d = A.drawing({ width: 480, height: 300, extent: { x0: -4, x1: QUAY.end, top: 23.5, bottom: -3 }, prefix: 'pk-' });
+// One extent per drawing. For a set, compute one scale for all of them with A.sharedScale([...]).
+const EXTENT = { x0: -6, x1: QUAY.end, top: 23.5, bottom: -3 };
+const d = A.drawing({ width: 480, height: 300, extent: EXTENT, prefix: 'pk-' });
 
 // ground and water first
-d.ground(-4, QUAY.edge);
+d.ground(EXTENT.x0, QUAY.edge);
 d.quay(QUAY.edge, QUAY.end, { level: QUAY.water });
 d.tree(33, { h: 16, type: 'poplar', layer: 'back' });
 
@@ -45,13 +47,13 @@ d.windowRow(SHED.x0 + 0.6, SHED.x1 - 0.6, 0.5, 4.6, 4, { transom: true });
 
 // boat, people, trees in front
 d.barge(38, 49, QUAY.water);
-d.figure(5.5);
+d.figure(5.5, { pose: 'walk' });
 d.figure(21);
-d.figure(34.2);
-d.tree(-1.8, { h: 8 });
+d.figure(34.2, { pose: 'stand-left' });
+d.tree(-3.2, { h: 7 });                                       // clear of the warehouse corner
 
 // annotations
-d.dimension(PAKHUIS.x0, PAKHUIS.x1, 22.6, '16,0 m');
+d.dimension(PAKHUIS.x0, PAKHUIS.x1, 22.6, '16,0 m', { from: PAKHUIS.ridge });
 d.levelMark(PAKHUIS.x1 + 0.8, PAKHUIS.eave, '+14,0');
 
 A.write(out, d.svg({

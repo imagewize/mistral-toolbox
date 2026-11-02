@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
 ---
 
@@ -71,13 +71,21 @@ Use real dimensions. The kit warns when a door, window, storey, figure or tree i
 
 ```js
 import * as A from '/ABS/SKILL/DIR/scripts/arch.mjs';
-const d = A.drawing({ width: 480, height: 300, extent: { x0, x1, top, bottom }, palette, scale, prefix: 'xx-' });
+const d = A.drawing({ width: 480, height: 300, extent: { x0, x1, top, bottom }, palette, scale, labels, displayWidth, prefix: 'xx-' });
 ```
 
 `extent` is the part of the world to show, in metres: `x0..x1` along the facade, `top` above
-ground and `bottom` below it (negative). The kit fits it into the drawing with a 20-unit margin
-and reports the scale. To draw a set at one scale, pass the same `scale` (units per metre) to
-every drawing in the set.
+ground and `bottom` below it (negative). The kit fits it into the drawing with a 14-unit margin
+and reports the scale. Keep the extent tight: 1–3 m of context beyond the outermost tree or boat,
+and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
+
+- **A set at one scale:** list every drawing's extent and compute the scale once with
+  `A.sharedScale([ext1, ext2, ...], { width, height })`, then pass that `scale` to every
+  `drawing()`. The largest building fills its drawing and the others keep their true size.
+- **`displayWidth`:** the CSS width the drawing will be shown at, for example 330 for a card in a
+  three-column grid. The kit then warns when people or labels get too small to read.
+- **`labels: false`:** leaves out dimension and level text. Use it for drawings shown under about
+  400 px wide, where 7-unit text shrinks below 6 px.
 
 | Call | Draws |
 |------|-------|
@@ -93,13 +101,14 @@ every drawing in the set.
 | `d.windowRow(x0, x1, sill, head, count, opts)` | Evenly spaced windows; `accentIndex` picks one for the accent |
 | `d.door(cx, w, h, { type: 'single' \| 'double' \| 'loading', base, accent })` | A door; `base` lifts it to an upper floor |
 | `d.hoist(cx, y)` | A warehouse hoist beam and hook |
+| `d.chimney(cx, base, { w, h })` | A chimney with a cap, standing on a roof or mass at height `base` |
 | `d.floorLines(x0, x1, levels, { dashed })` | Floor levels; dashed on an elevation, solid in a section |
 | `d.cut(x0, y0, x1, y1)`, `d.slab(x0, x1, level, { t })` | Section poche: cut walls and slabs |
 | `d.stair(x0, y0, x1, y1, { steps })` | A stair in section |
-| `d.figure(x, { h, accent })` | A person, 1.75 m by default |
+| `d.figure(x, { h, pose, accent })` | A person, 1.75 m by default, with arms and legs. `pose`: `stand`, `walk`, `stand-left`, `walk-left`; vary them across a drawing |
 | `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back' })` | A tree: solid trunk, scalloped crown, branches; `back` draws it faint and unfilled, behind buildings |
 | `d.barge(x0, x1, level, { accent })` | A moored barge with a wheelhouse |
-| `d.dimension(x0, x1, y, label)` | A dimension line; labels use a decimal comma for Dutch sites |
+| `d.dimension(x0, x1, y, label, { from })` | A dimension line; `from` drops extension lines to that height (the ridge or eave). Labels use a decimal comma for Dutch sites |
 | `d.levelMark(x, y, label)` | A level marker such as `+14,0` |
 | `d.svg({ title, desc, background })` | The finished SVG; `title` is required and becomes the accessible name. `background` (default `true`) puts a paper-coloured rect behind the drawing, so it stays readable in dark previews and on dark pages |
 | `A.write(file, svg)`, `A.printReport(d)` | Write the file; print the checks, exit 1 on errors |
@@ -116,8 +125,13 @@ building fills, building lines, details (coursing before openings, so openings c
 - **Context on both sides:** a tree, a neighbouring block, a quay or a boat. Do not leave one half empty.
 - **Leave sky.** Keep `top` 2–3 m above the highest ridge for the dimension line.
 - **Spread openings in a rhythm** that follows the building's bays. Align windows on all floors.
-- **A set of drawings** (for example six project cards) shares `width`, `height`, `scale`,
-  palette and annotation style, so the buildings compare at one size.
+- **Keep trees clear of the hero's corners.** A crown over a building corner hides the
+  silhouette; the kit warns. Put the tree beside the building, or behind it with `layer: 'back'`.
+- **A set of drawings** (for example six project cards) shares `width`, `height`, one scale from
+  `sharedScale`, the palette and the annotation style, so the buildings compare at one size.
+- **Cards:** a drawing in a card is shown small. Match the card's image frame to the drawing's
+  aspect ratio (480x300 is 16:10) so no white bands appear, pass `displayWidth`, and use
+  `labels: false` when the kit says labels are too small.
 
 ## Workflow
 
@@ -157,7 +171,12 @@ Write absolute paths out in full.
 - **A clogged facade.** Coursing heavier than faint, or detail on every surface, reads as noise.
   Texture one main facade at most.
 - **Mixed scales in a set.** Six cards at six scales make a villa look as big as a warehouse.
-  Pass one `scale`.
+  Pass one `scale` from `sharedScale`.
+- **Too small to read.** A loose extent or a large shared scale leaves the building small in its
+  card: people become pins and labels vanish. Tighten the extents, then recompute `sharedScale`.
+- **Something floating.** A mass or chimney that starts above the ground and does not stand on a
+  mass or roof is an error.
+- **Trees over corners.** The kit warns when a front tree's crown covers a mass corner.
 - **Invalid SVG.** A repeated attribute makes the browser show an error page instead of the
   drawing. `check.mjs` catches it.
 
@@ -171,4 +190,5 @@ Write absolute paths out in full.
 - [ ] One or two accent elements.
 - [ ] At most one dimension line or level mark.
 - [ ] The palette matches the page; the `title` and `desc` describe the building.
-- [ ] A set of drawings shares one scale, size and palette.
+- [ ] A set of drawings shares one scale from `sharedScale`, one size and one palette.
+- [ ] With `displayWidth` set, the generator prints no warning about people or labels being too small.
