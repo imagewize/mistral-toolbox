@@ -418,14 +418,35 @@ export function drawing(opts = {}) {
     // background: a paper-coloured rect behind everything, so the drawing stays readable on dark
     // previews and dark pages. Pass false only when the drawing sits on a paper-coloured page
     // and must let it show through.
-    svg({ title, desc = '', background = true } = {}) {
+    // animate: true (or { speed }) makes the drawing draw itself when it loads, in layer order:
+    // trees behind, ground, building lines, fills, details, people, annotations. Lines are drawn
+    // stroke by stroke; filled shapes, dashed lines, people and text fade in. The animation lives
+    // inside the SVG, so it also runs when the file is shown with <img>, and it is switched off
+    // for visitors who ask for reduced motion. speed scales all timings (2 = twice as fast).
+    svg({ title, desc = '', background = true, animate = false } = {}) {
       if (!title) throw new Error('svg(): pass a title; it becomes the accessible name');
       check();
+      const anim = animate ? { speed: 1, ...(typeof animate === 'object' ? animate : {}) } : null;
       const bg = background ? `<rect width="${width}" height="${height}" fill="${palette.paper}"/>\n` : '';
-      const body = bg + ['back', 'ground', 'fill', 'lines', 'detail', 'front', 'notes']
-        .map((k) => (layers[k].length ? `<g data-layer="${k}">${layers[k].join('')}</g>` : '')).join('\n');
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-labelledby="${prefix}title${desc ? ` ${prefix}desc` : ''}" data-kit="arch.mjs" data-scale="${s.toFixed(3)}" data-palette='${JSON.stringify(palette)}'>
-<title id="${prefix}title">${esc(title)}</title>${desc ? `\n<desc id="${prefix}desc">${esc(desc)}</desc>` : ''}
+      const order = ['back', 'ground', 'fill', 'lines', 'detail', 'front', 'notes'];
+      // seconds after load at which each layer starts, and the stagger between its elements
+      const START = { back: 0, ground: 0.15, lines: 0.35, fill: 0.9, detail: 1.1, front: 1.6, notes: 2.0 };
+      const STEP = 0.025, MAXSTEP = 24;
+      const body = bg + order.map((k) => {
+        if (!layers[k].length) return '';
+        const els = anim ? layers[k].map((el, i) => animateEl(el, (START[k] + Math.min(i, MAXSTEP) * STEP) / anim.speed)) : layers[k];
+        return `<g data-layer="${k}">${els.join('')}</g>`;
+      }).join('\n');
+      const style = anim ? `\n<style>
+/* The hidden state lives only in the keyframes (fill-mode both): where animations do not run, the drawing shows complete. */
+.${prefix}draw{stroke-dasharray:1 1.02;animation:${prefix}draw ${(0.9 / anim.speed).toFixed(2)}s ease-out both}
+.${prefix}fade{animation:${prefix}fade ${(0.6 / anim.speed).toFixed(2)}s ease-out both}
+@keyframes ${prefix}draw{from{stroke-dashoffset:1.01}to{stroke-dashoffset:0}}
+@keyframes ${prefix}fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){.${prefix}draw,.${prefix}fade{animation:none;stroke-dasharray:none;stroke-dashoffset:0;opacity:1}}
+</style>` : '';
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-labelledby="${prefix}title${desc ? ` ${prefix}desc` : ''}" data-kit="arch.mjs" data-scale="${s.toFixed(3)}" data-palette='${JSON.stringify(palette)}'${anim ? ' data-animate="true"' : ''}>
+<title id="${prefix}title">${esc(title)}</title>${desc ? `\n<desc id="${prefix}desc">${esc(desc)}</desc>` : ''}${style}
 ${body}
 </svg>
 `;
@@ -436,6 +457,22 @@ ${body}
       return { scale_units_per_m: +s.toFixed(3), size: [width, height], items: items.length, accents, warnings, errors };
     },
   };
+
+  // Give one element its animation: a stroke-only shape without a dash pattern is drawn (it gets
+  // pathLength="1" so the dash maths works for any length); everything else fades in.
+  function animateEl(el, delay) {
+    const m = el.match(/^<([a-z]+)\s/);
+    if (!m) return el;
+    const fill = (el.match(/\sfill="([^"]*)"/) || [])[1];
+    const stroke = (el.match(/\sstroke="([^"]*)"/) || [])[1];
+    const dashed = /stroke-dasharray=/.test(el);
+    const drawable = ['path', 'line', 'polyline', 'polygon', 'circle', 'ellipse', 'rect'].includes(m[1]);
+    const draw = drawable && fill === 'none' && stroke && stroke !== 'none' && !dashed && !/data-part="figure"/.test(el);
+    const attrs = draw
+      ? ` class="${prefix}draw" pathLength="1" style="animation-delay:${delay.toFixed(2)}s"`
+      : ` class="${prefix}fade" style="animation-delay:${delay.toFixed(2)}s"`;
+    return el.replace(/^<([a-z]+)/, `<$1${attrs}`);
+  }
 
   let checked = false;
   function check() {

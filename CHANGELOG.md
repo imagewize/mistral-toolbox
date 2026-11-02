@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `architectural-drawing` 1.3.0: `d.svg({ animate: true })` makes a drawing draw itself on load, in layer order (trees and ground, building lines, fills, details, people, annotations). Lines are drawn stroke by stroke; fills, dashed lines, crowns and text fade in. The animation lives inside the SVG, so it plays when the file is shown with `<img>`, which page CSS cannot animate. Visitors who ask for reduced motion see the finished drawing at once, and the hidden start state lives only in the keyframes, so a drawing whose animation does not run still shows complete. `check.mjs` fails an animated drawing without a `prefers-reduced-motion` rule. Tested in Chrome: the drawing animates inside an `<img>`, finishes in about 3 seconds, and shows complete under reduced motion. The `architect-demo` drawings lost their draw-on animation when they moved from inline SVG to `<img>` files; this brings it back
+
+### Changed
+
+- `html-page-review` 1.0.1 and `architectural-drawing`: the screenshot commands add `--force-prefers-reduced-motion` (page) or `--virtual-time-budget` (SVG file). Headless Chrome freezes animated SVG images at their first frame, so page screenshots showed animated drawings blank
+
 ## [1.7.0] - 2026-11-02
 
 ### Added

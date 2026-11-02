@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/imagewize/mistral-toolbox skills/html-page-review"
 ---
 
@@ -73,10 +73,13 @@ Take a screenshot per width. Use the `page_height` from the probe as the window 
 the full page:
 
 ```
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --virtual-time-budget=6000 --window-size=390,9400 --screenshot=/tmp/html-page-review/page-390.png "file:///ABS/PROJECT/index.html"
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --virtual-time-budget=6000 --window-size=390,9400 --screenshot=/tmp/html-page-review/page-390.png "file:///ABS/PROJECT/index.html"
 ```
 
-Keep `--virtual-time-budget`: without it Chrome captures before entrance animations finish, and
+Keep `--force-prefers-reduced-motion`: animated SVG images (`<img src="…svg">` with CSS animation
+inside the file) stay frozen at their first frame in a headless screenshot, so cards would show
+blank. With the flag, a drawing that respects reduced motion shows complete. Keep
+`--virtual-time-budget`: without it Chrome captures before entrance animations finish, and
 drawings show half-drawn. A tall window also stretches elements sized in `vh` (full-screen
 heroes). Judge those from the probe numbers, not from the screenshot.
 
