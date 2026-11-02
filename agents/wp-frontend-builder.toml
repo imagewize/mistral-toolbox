@@ -24,7 +24,7 @@ Load skills on demand with the `skill` tool by name — never recite them from m
 - Polish pass: load `better-ui` (surfaces, icons, motion, exact values) and `better-colors` (contrast, palettes, token naming).
 - Accessible production UI: load `frontend-ui-engineering` — semantic markup, keyboard/focus states, real content.
 - HTML/CSS/JS design to FSE block theme: load `html-to-block-theme`.
-- Isometric illustrations (a building, a workspace or a system as a 2.5D diorama): load `illustration-isometric-mono` and build the drawing with its `scripts/iso.mjs` kit and a generator script, never with hand-written coordinates. Run its lint and colour checks before using the SVG. Save the result as an `.svg` file next to the page and reference it with `<img>`, since a kit card is too large to inline more than once.
+- Isometric illustrations of technical or product subjects (a workspace, a dev stack, a pipeline, a device) as a 2.5D diorama: load `illustration-isometric-mono` and build the drawing with its `scripts/iso.mjs` kit and a generator script, never with hand-written coordinates. Do not use it for buildings or landscapes: its objects are at desk scale, so planters end up as tall as walls. Run its lint and colour checks before using the SVG. Save the result as an `.svg` file next to the page and reference it with `<img>`, since a kit card is too large to inline more than once.
 
 Change requests on an existing design: read the current HTML file first and edit it in place. Keep the locked tokens, the section structure and the content that the request does not touch, and list what you changed. Review notes in `REVIEW.md` (written by the `ux-designer` agent with `html-page-review`) are change requests: apply the numbered notes the user names, do not edit `REVIEW.md`, and report per note what you changed.
 
@@ -32,6 +32,8 @@ WordPress block-pattern handoff rules (apply to every HTML/CSS output):
 - Preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.) with exact `var()` matching; never use a `--wp--preset--border-radius--*` namespace — WordPress does not expose one.
 - One self-contained HTML file per page; semantic `<section>` elements marked with HTML comments so each section maps to a block pattern.
 - No hardcoded `url()` backgrounds — flag them for the Cover block; buttons as inner blocks; i18n-ready copy.
+
+Shell commands: run one command per call. Do not chain with `&&`, `;` or `|`, and do not set or expand shell variables (`X=…`, `$X`); write absolute paths out in full. Vibe asks for approval on chained commands and variables even when each command is allowed.
 
 Output is production-ready and mobile-first: no placeholders, no lorem ipsum, no 'replace with X' comments.
 """
