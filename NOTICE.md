@@ -37,6 +37,10 @@ Rules:
 - `skills/requesting-code-review/` and `skills/verification-before-completion/` — from
   `github.com/obra/superpowers`, MIT (© 2025 Jesse Vincent, see the copied `LICENSE`),
   pinned `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
+- `skills/landing-page/`, `skills/no-ai-design-slop/` and
+  `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
+  Meng To, see the copied `LICENSE` in each), pinned
+  `ef5f85130d083d33e08cb19f6ee23cdde2d406ab`
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.
