@@ -1,10 +1,10 @@
 ---
 name: better-colors
-description: Improve color use: formats, contrast, palette generation and structure, and token naming. References included per topic. MIT, adapted from jakubkrehel/skills.
+description: "Improve color use: formats, contrast, palette generation and structure, and token naming. References included per topic. MIT, adapted from jakubkrehel/skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/jakubkrehel/skills skills/better-colors @ 60bf140e43c98b248e6594487384ec967e89d98a (MIT, LICENSE copied alongside)"
 ---
 

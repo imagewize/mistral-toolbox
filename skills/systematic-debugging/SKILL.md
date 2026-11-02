@@ -1,10 +1,10 @@
 ---
 name: systematic-debugging
-description: Four-phase root-cause debugging (reproduce, isolate, identify, fix) with a hard rule: no fixes before the root cause is identified; includes root-cause tracing, defense-in-depth and condition-based-waiting references. MIT, adapted from obra/superpowers.
+description: "Four-phase root-cause debugging (reproduce, isolate, identify, fix) with a hard rule: no fixes before the root cause is identified; includes root-cause tracing, defense-in-depth and condition-based-waiting references. MIT, adapted from obra/superpowers."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/obra/superpowers skills/systematic-debugging @ 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b (MIT, LICENSE copied alongside)"
 ---
 

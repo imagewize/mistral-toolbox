@@ -1,10 +1,10 @@
 ---
 name: ui-ux-pro-max
-description: UI/UX design intelligence for web and WordPress frontends — use when designing, building, reviewing or fixing interfaces: pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts and stack-specific implementation. Ships searchable local catalogs (styles, palettes, font pairings, UX guidelines, icons, motion presets, charts, stacks) under data/ plus full rule references. Includes a WordPress block-pattern handoff section.
+description: "UI/UX design intelligence for web and WordPress frontends — use when designing, building, reviewing or fixing interfaces: pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts and stack-specific implementation. Ships searchable local catalogs (styles, palettes, font pairings, UX guidelines, icons, motion presets, charts, stacks) under data/ plus full rule references. Includes a WordPress block-pattern handoff section."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/nextlevelbuilder/ui-ux-pro-max-skill .claude/skills/ui-ux-pro-max @ 3a13158ff1f32156cbe144108de48eda2ecaed9a (MIT, LICENSE copied alongside; scripts/ and upstream font/icon dumps not imported)"
 ---
 

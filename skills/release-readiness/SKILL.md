@@ -1,10 +1,10 @@
 ---
 name: release-readiness
-description: Assess release readiness: changelog, versioning, rollback plan, migrations, comms, monitoring. MIT, adapted from NotHarshhaa/devops-skills.
+description: "Assess release readiness: changelog, versioning, rollback plan, migrations, comms, monitoring. MIT, adapted from NotHarshhaa/devops-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/NotHarshhaa/devops-skills release-readiness @ 3605f9452e331d984a2a119e5a00763ecdff23e5 (MIT, LICENSE copied alongside)"
 ---
 

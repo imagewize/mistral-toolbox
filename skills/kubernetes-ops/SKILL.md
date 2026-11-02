@@ -1,10 +1,10 @@
 ---
 name: kubernetes-ops
-description: Deploy, scale and manage Kubernetes workloads: deployments, services, rollouts, troubleshooting (+ references/ and assets/ template; upstream scripts/ not imported). MIT, adapted from BagelHole/DevOps-Security-Agent-Skills.
+description: "Deploy, scale and manage Kubernetes workloads: deployments, services, rollouts, troubleshooting (+ references/ and assets/ template; upstream scripts/ not imported). MIT, adapted from BagelHole/DevOps-Security-Agent-Skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/BagelHole/DevOps-Security-Agent-Skills devops/orchestration/kubernetes-ops @ 0365f57a079b1332f95cf26e31dd5d2332a8399f (MIT, LICENSE copied alongside; scripts/ not imported)"
 ---
 

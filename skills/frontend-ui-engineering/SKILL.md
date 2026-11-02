@@ -1,10 +1,10 @@
 ---
 name: frontend-ui-engineering
-description: Build production-quality, accessible, responsive user-facing UIs: semantic markup, keyboard/focus states, responsive behavior and real content. MIT, adapted from addyosmani/agent-skills.
+description: "Build production-quality, accessible, responsive user-facing UIs: semantic markup, keyboard/focus states, responsive behavior and real content. MIT, adapted from addyosmani/agent-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/addyosmani/agent-skills skills/frontend-ui-engineering @ 301b02b12bff98e4688e6984af6556802322bbde (MIT, LICENSE copied alongside)"
 ---
 

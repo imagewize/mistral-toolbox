@@ -62,6 +62,9 @@ mistral-toolbox/
 - A skill is a directory with `SKILL.md`: YAML frontmatter with `name` (lowercase letters, digits
   and hyphens, at most 64 characters) and `description` (at most 1024), optionally
   `user-invocable`, `allowed-tools`, `license`, `compatibility` and `metadata`.
+- Quote a `description` that contains `: ` (`description: "Audit: …"`). Unquoted, it is invalid
+  YAML and Vibe skips the skill with `Invalid YAML frontmatter: mapping values are not allowed
+  here`. Check a new or changed skill by parsing its frontmatter with a YAML parser, not by eye.
 - `allowed-tools` documents intent only. Approvals come from the `[tools.bash] allowlist` in a
   project's `.vibe/config.toml`, and a project allowlist replaces the user-level one.
 - Keep skills generic. Project-specific rules belong in the project — for `code-review`, in the
