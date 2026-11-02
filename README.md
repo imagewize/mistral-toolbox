@@ -35,10 +35,22 @@ mistral-toolbox/
 │           ├── OUTPUT.md        # Structured review report (FAIL)
 │           └── FEEDBACK.md      # Review notes
 ├── skills/                  # Mistral Vibe skills
-│   └── code-review/
-│       └── SKILL.md         # /code-review for WordPress plugins, themes and sites
+│   ├── code-review/
+│   │   └── SKILL.md         # /code-review for WordPress plugins, themes and sites
+│   ├── frontend-design/
+│   │   ├── SKILL.md         # /frontend-design — anchored HTML/CSS design (MIT, upstream Ilm-Alan/frontend-design)
+│   │   └── LICENSE.txt
+│   └── html-to-block-theme/
+│       ├── SKILL.md         # /html-to-block-theme — HTML/CSS/JS design → FSE block theme (MIT, upstream siddik-web)
+│       ├── LICENSE
+│       └── references/      # 21 on-demand conversion workflow docs
+├── docs/                    # Plans and source notes
+│   ├── external-skills-sourcing-plan.md
+│   ├── sources.md           # Verified external sources, licenses, pinned commits, import log
+│   └── curation-2026-11-02.md
 ├── README.md
 ├── CHANGELOG.md
+├── NOTICE.md                # Third-party sources included in this repo
 └── LICENSE.md
 ```
 
@@ -114,6 +126,8 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | Skill | Command | What it does |
 |-------|---------|--------------|
 | [code-review](/skills/code-review/SKILL.md) | `/code-review [target]` | Reviews a branch diff, a GitHub PR, or a block, pattern, template or path in place, in any WordPress plugin, theme or site. Detects the project type, minimum PHP/WordPress and lint commands from the repository, and applies the project's own rules from `.agents/code-review.md`. |
+| [frontend-design](/skills/frontend-design/SKILL.md) | `/frontend-design` | Builds a frontend with one of eight aesthetic anchors locked to exact CSS tokens, with real on-screen content instead of filler — output uses `var(--wp--preset--*)` and theme.json conventions so it converts cleanly to WordPress block patterns. MIT, adapted from `Ilm-Alan/frontend-design`. |
+| [html-to-block-theme](/skills/html-to-block-theme/SKILL.md) | `/html-to-block-theme` | Converts an HTML/CSS/JS design into a production-ready WordPress block theme (FSE): theme.json v3 from design tokens, templates, parts, registered block patterns, Interactivity API, optional WooCommerce. MIT, adapted from `siddik-web/wp-block-theme-converter`. |
 
 ```
 /code-review                 # this branch against the default base branch

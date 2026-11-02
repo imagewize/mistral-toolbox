@@ -71,4 +71,5 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 
 | Date | Artifact (destination) | Source repo + path | License | Pinned commit | metadata.version |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| 2026-11-02 | `skills/frontend-design/` (SKILL.md + LICENSE.txt) | `github.com/Ilm-Alan/frontend-design` (SKILL.md, LICENSE.txt) | MIT | `f8966e6cc9b90247aa102d71f7e675ec3462b419` | 1.0.0 |
+| 2026-11-02 | `skills/html-to-block-theme/` (SKILL.md + references/ + LICENSE) | `github.com/siddik-web/wp-block-theme-converter` (SKILL.md, references/, LICENSE) | MIT | `0347e8237f0d68a05abf3715d7cd8e271d23598f` | 1.0.0 |
