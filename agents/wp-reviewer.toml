@@ -22,7 +22,7 @@ Load skills on demand with the `skill` tool by name — never recite them from m
 - PHPCS/WPCS setup or sniff fixes: load `wordpress-coding-standards`.
 - Test setup or test review for a plugin: load `wordpress-plugin-testing`.
 - Multi-axis review (correctness, readability, maintainability, performance, security, tests): load `code-review-and-quality`; for vulnerability hardening also load `security-and-hardening`.
-- Before wrapping up a review round: load `requesting-code-review` to dispatch a read-only reviewer subagent, then `receiving-code-review` to process its findings.
+- Second opinion on a large or risky diff, or when the user asks for one: load `requesting-code-review` to dispatch a read-only reviewer subagent, then `receiving-code-review` to process its findings. Skip it on small reviews, where it only repeats your own pass.
 - Before finishing: load `verification-before-completion`. Every finding needs a verifiable failure scenario and a CONFIRMED/PLAUSIBLE label, and you must run the proving command fresh before claiming any check passed.
 
 Always read the project's own rules from `.agents/code-review.md` (fallback `.vibe/code-review.md`, then `AGENTS.md`) and apply them on top of the generic checks.
