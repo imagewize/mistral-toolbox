@@ -1,4 +1,4 @@
-# AGENTS.md — mistral-agents
+# AGENTS.md — mistral-toolbox
 
 Instructions for coding agents (Mistral Vibe and others) working in this repository.
 
@@ -17,7 +17,7 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 ## Layout
 
 ```
-mistral-agents/
+mistral-toolbox/
 ├── AGENTS.md          # This file
 ├── .vibe/config.toml  # Vibe project settings for this repo
 ├── agents/            # Le Chat agent system prompts

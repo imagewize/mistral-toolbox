@@ -1,4 +1,4 @@
-# Mistral Agents
+# Mistral Toolbox
 
 **Mistral Le Chat agent prompts and Mistral Vibe skills for WordPress development.**
 
@@ -14,7 +14,7 @@ Imagewize created these for its own WordPress work — the Elayne block theme, t
 ## 📂 Repository Structure
 
 ```
-mistral-agents/
+mistral-toolbox/
 ├── AGENTS.md                # Instructions for coding agents working in this repo
 ├── .vibe/
 │   └── config.toml          # Vibe project settings for this repo
@@ -129,7 +129,7 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 **For all your projects** — add this repository's `skills/` directory to `~/.vibe/config.toml`:
 
 ```toml
-skill_paths = ["~/code/mistral-agents/skills"]
+skill_paths = ["~/code/mistral-toolbox/skills"]
 ```
 
 Vibe uses the first skill it finds with a given name, and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add `code-review` to it.
