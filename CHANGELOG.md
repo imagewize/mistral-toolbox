@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `wp-frontend-builder`: the fuzzy-brief instruction no longer tells the agent to load `brainstorming`, which is not in its `enabled_skills`. It now loads `design-first-ui-prompting` and, when the user asks for minimal questions, states its assumptions and builds instead of asking. For a full discovery conversation it points to the `ux-designer` agent
+- `ux-designer`: `brainstorming` ends by invoking `writing-plans`, which this agent cannot load. The agent now ends with the approved design doc and hands WordPress frontend builds to `wp-frontend-builder`. It also skips brainstorming when the user asks for minimal questions
+
+### Changed
+
+- `wp-frontend-builder`: `landing-page` is now used only for single-offer landing pages, not for homepages or multi-page company sites. Change requests read the existing HTML file and edit it in place, keeping the locked tokens and untouched sections, and list what changed
+- `wp-reviewer`: the extra reviewer-subagent pass (`requesting-code-review`) now runs only on large or risky diffs or when asked, not after every review round
+- `release-manager`: the release flow now names the steps the instructions left out: move the `[Unreleased]` entries under the new version heading, and create a GitHub release after tagging `vX.Y.Z`
+
 ## [1.6.1] - 2026-11-02
 
 ### Changed
