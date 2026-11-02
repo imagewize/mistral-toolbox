@@ -70,6 +70,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `skills/better-ui/`, `skills/better-accessibility/`, `skills/better-colors/` and `skills/interface-review/` — UI polish/review skills from `jakubkrehel/skills` @ `60bf140` (MIT, `LICENSE` copied each, `metadata.version` 1.0.0) with their per-topic reference docs; vendor `agents/` subagent defs not imported; each carries the WordPress block-pattern handoff section
 - Updated `docs/sources.md` import log and `NOTICE.md` with the four imports; README tree and skills table extended; `docs/curation-2026-11-02.md` records Round 9 (also notes `plugin87` and `sergekostenchuk` surveyed and skipped — their skills are thin wrappers over shared python-script kits)
 
+### Added
+
+- Added the DevOps lane: `skills/incident/`, `skills/runbook/`, `skills/observability-review/`, `skills/security-review/`, `skills/pipeline-review/`, `skills/release-readiness/` from `NotHarshhaa/devops-skills` @ `3605f94` (MIT, `LICENSE` copied each) — read-only incident investigation, runbooks, observability/security/CI-CD/release reviews (upstream `observability` renamed `observability-review`); plus `skills/git-workflow/`, `skills/alerting-oncall/` and `skills/kubernetes-ops/` (+ references/ and assets/) from `BagelHole/DevOps-Security-Agent-Skills` @ `0365f57` (MIT, `LICENSE` copied each; upstream `scripts/*.sh` not imported, sibling cross-links annotated) — all `metadata.version` 1.0.0
+- Updated `docs/sources.md` import log and `NOTICE.md` with the nine imports; README tree and skills table extended; `docs/curation-2026-11-02.md` records Round 10
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed

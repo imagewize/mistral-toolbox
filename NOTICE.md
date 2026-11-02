@@ -48,6 +48,13 @@ Rules:
   `skills/interface-review/` — from `github.com/jakubkrehel/skills`, MIT (© 2026 Jakub
   Krehel, see the copied `LICENSE` in each), pinned
   `60bf140e43c98b248e6594487384ec967e89d98a`
+- `skills/incident/`, `skills/runbook/`, `skills/observability-review/`,
+  `skills/security-review/`, `skills/pipeline-review/` and `skills/release-readiness/` —
+  from `github.com/NotHarshhaa/devops-skills`, MIT (© 2026 devops-skills contributors, see
+  the copied `LICENSE` in each), pinned `3605f9452e331d984a2a119e5a00763ecdff23e5`
+- `skills/git-workflow/`, `skills/alerting-oncall/` and `skills/kubernetes-ops/` — from
+  `github.com/BagelHole/DevOps-Security-Agent-Skills`, MIT (© 2026 Toby Miller, see the
+  copied `LICENSE` in each), pinned `0365f57a079b1332f95cf26e31dd5d2332a8399f`
 - `skills/landing-page/`, `skills/no-ai-design-slop/` and
   `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
