@@ -12,7 +12,7 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 - **Vibe skills** — `skills/<name>/SKILL.md` are Agent Skills for Mistral Vibe. They run inside
   a project with Vibe's tools (`bash`, `read_file`, `grep`).
 - **Vibe agents** — `agents/*.toml` are Vibe agent profiles, selectable with `vibe --agent NAME`
-  once `agents/` is wired in via `agent_paths`. Each loads skills on demand via the `skill` tool.
+  once `agents/` is linked to `~/.vibe/agents`. Each loads skills on demand via the `skill` tool.
 
 `prompts/<name>/<run>/` holds example Le Chat runs: input, raw output and review feedback.
 
@@ -22,7 +22,7 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 mistral-toolbox/
 ├── AGENTS.md          # This file
 ├── .vibe/config.toml  # Vibe project settings for this repo
-├── agents/            # Vibe agent profiles: agents/<name>.toml (wired via agent_paths)
+├── agents/            # Vibe agent profiles: agents/<name>.toml (linked to ~/.vibe/agents)
 ├── prompts/           # Le Chat prompts + runs, one dir per prompt: prompts/<name>/ROLE.md + <run>/
 ├── skills/            # Vibe skills: skills/<name>/SKILL.md
 ├── docs/              # Plans and source notes: sourcing plan, source register, curation notes
@@ -46,15 +46,16 @@ mistral-toolbox/
 ## Working on Vibe agent profiles
 
 - One profile per file: `agents/<name>.toml`; the file stem is the agent name for
-  `vibe --agent <name>`. Vibe reads only `*.toml` from `agent_paths`, so a `README.md` in
+  `vibe --agent <name>`. Vibe reads only `*.toml` from its agent directories, so a `README.md` in
   `agents/` is safe.
 - Required keys: `display_name` and `description`; then `instructions` and optionally
   `agent_type` (`"agent"` by default, `"subagent"` for a model-spawned subagent).
 - Scope the skills the agent may load with `enabled_skills = [...]` (same patterns as
   `config.toml`); the agent loads skills on demand via the `skill` tool — the profile never
   auto-loads them, so the `instructions` must say which skill to load for which task.
-- Wire the directory into any repo with `agent_paths = ["~/code/mistral-toolbox/agents"]` next
-  to `skill_paths`; validate a new profile by parsing it as TOML and checking the keys above.
+- Wire the directory in with `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents`, which Vibe
+  searches without config. `agent_paths` needs an absolute path: Vibe does not expand `~`
+  there, unlike in `skill_paths`. Validate a new profile by parsing it as TOML and checking the keys above.
 
 ## Working on Vibe skills
 

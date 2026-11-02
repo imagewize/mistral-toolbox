@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Agent setup docs (README, `agents/README.md`, AGENTS.md, `docs/external-skills-sourcing-plan.md`): the recommended `agent_paths = ["~/code/mistral-toolbox/agents"]` never worked. Vibe expands `~` in `skill_paths` but not in `agent_paths`, so the entry was silently skipped and `vibe --agent NAME` failed with `Agent 'NAME' not found`. The docs now recommend `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents`, a folder Vibe searches with no config and no absolute path. They explain that `agent_paths` needs an absolute path, and that the symlink means private profiles added to `~/.vibe/agents` land in the repository
+
 - `wp-frontend-builder`: the fuzzy-brief instruction no longer tells the agent to load `brainstorming`, which is not in its `enabled_skills`. It now loads `design-first-ui-prompting` and, when the user asks for minimal questions, states its assumptions and builds instead of asking. For a full discovery conversation it points to the `ux-designer` agent
 - `ux-designer`: `brainstorming` ends by invoking `writing-plans`, which this agent cannot load. The agent now ends with the approved design doc and hands WordPress frontend builds to `wp-frontend-builder`. It also skips brainstorming when the user asks for minimal questions
 
