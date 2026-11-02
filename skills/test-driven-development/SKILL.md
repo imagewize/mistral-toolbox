@@ -1,10 +1,10 @@
 ---
 name: test-driven-development
-description: Red-green-refactor discipline for any feature or bugfix: write a failing test first, watch it fail, implement the minimum to pass, refactor; includes writing-good-tests reference. MIT, adapted from obra/superpowers.
+description: "Red-green-refactor discipline for any feature or bugfix: write a failing test first, watch it fail, implement the minimum to pass, refactor; includes writing-good-tests reference. MIT, adapted from obra/superpowers."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/obra/superpowers skills/test-driven-development @ 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b (MIT, LICENSE copied alongside)"
 ---
 

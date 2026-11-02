@@ -1,10 +1,10 @@
 ---
 name: performance-optimization
-description: Optimize performance across frontend, backend, queries and databases: profile first, fix the measured bottleneck, re-measure; includes the optimization-patterns reference. MIT, adapted from addyosmani/agent-skills.
+description: "Optimize performance across frontend, backend, queries and databases: profile first, fix the measured bottleneck, re-measure; includes the optimization-patterns reference. MIT, adapted from addyosmani/agent-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/addyosmani/agent-skills skills/performance-optimization @ 301b02b12bff98e4688e6984af6556802322bbde (MIT, LICENSE copied alongside)"
 ---
 

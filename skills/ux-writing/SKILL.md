@@ -1,10 +1,10 @@
 ---
 name: ux-writing
-description: Write user-centered, accessible interface copy (microcopy) — buttons, labels, errors, empty states, onboarding, help text — based on four quality standards: purposeful, concise, conversational, clear. Covers voice and tone, error patterns, accessibility of strings and benchmarks. For WordPress deliverables, keep strings translatable (see the WordPress note).
+description: "Write user-centered, accessible interface copy (microcopy) — buttons, labels, errors, empty states, onboarding, help text — based on four quality standards: purposeful, concise, conversational, clear. Covers voice and tone, error patterns, accessibility of strings and benchmarks. For WordPress deliverables, keep strings translatable (see the WordPress note)."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/content-designer/ux-writing-skill SKILL.md @ 98cacde4ba2dd10ed28df43a8d53eef1e321c539 (MIT, LICENSE copied alongside)"
 ---
 

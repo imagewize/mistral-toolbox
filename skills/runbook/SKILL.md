@@ -1,10 +1,10 @@
 ---
 name: runbook
-description: Write and maintain operational runbooks: symptom -> diagnostic -> mitigation -> escalation, with verification steps. MIT, adapted from NotHarshhaa/devops-skills.
+description: "Write and maintain operational runbooks: symptom -> diagnostic -> mitigation -> escalation, with verification steps. MIT, adapted from NotHarshhaa/devops-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/NotHarshhaa/devops-skills runbook @ 3605f9452e331d984a2a119e5a00763ecdff23e5 (MIT, LICENSE copied alongside)"
 ---
 

@@ -1,10 +1,10 @@
 ---
 name: alerting-oncall
-description: Set up alerting rules, on-call rotations and incident-response wiring: alert quality, routing, escalation. MIT, adapted from BagelHole/DevOps-Security-Agent-Skills.
+description: "Set up alerting rules, on-call rotations and incident-response wiring: alert quality, routing, escalation. MIT, adapted from BagelHole/DevOps-Security-Agent-Skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/BagelHole/DevOps-Security-Agent-Skills devops/observability/alerting-oncall @ 0365f57a079b1332f95cf26e31dd5d2332a8399f (MIT, LICENSE copied alongside)"
 ---
 

@@ -1,10 +1,10 @@
 ---
 name: observability-and-instrumentation
-description: Instrument code so production behavior is visible and diagnosable: structured logging, metrics, tracing and alerting that answer real questions. MIT, adapted from addyosmani/agent-skills.
+description: "Instrument code so production behavior is visible and diagnosable: structured logging, metrics, tracing and alerting that answer real questions. MIT, adapted from addyosmani/agent-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/addyosmani/agent-skills skills/observability-and-instrumentation @ 301b02b12bff98e4688e6984af6556802322bbde (MIT, LICENSE copied alongside)"
 ---
 

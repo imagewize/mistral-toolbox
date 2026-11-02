@@ -1,10 +1,10 @@
 ---
 name: observability-review
-description: Review observability coverage: metrics, logs, traces, dashboards, alerting quality and SLOs. MIT, adapted from NotHarshhaa/devops-skills (upstream name: observability).
+description: "Review observability coverage: metrics, logs, traces, dashboards, alerting quality and SLOs. MIT, adapted from NotHarshhaa/devops-skills (upstream name: observability)."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/NotHarshhaa/devops-skills observability @ 3605f9452e331d984a2a119e5a00763ecdff23e5 (MIT, LICENSE copied alongside; renamed observability -> observability-review)"
 ---
 

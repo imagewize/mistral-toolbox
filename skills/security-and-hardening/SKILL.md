@@ -1,10 +1,10 @@
 ---
 name: security-and-hardening
-description: Harden code against vulnerabilities: audit input handlers, auth flows and data exposure; apply the hardening patterns reference; verify fixes with concrete attack scenarios. MIT, adapted from addyosmani/agent-skills.
+description: "Harden code against vulnerabilities: audit input handlers, auth flows and data exposure; apply the hardening patterns reference; verify fixes with concrete attack scenarios. MIT, adapted from addyosmani/agent-skills."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/addyosmani/agent-skills skills/security-and-hardening @ 301b02b12bff98e4688e6984af6556802322bbde (MIT, LICENSE copied alongside)"
 ---
 

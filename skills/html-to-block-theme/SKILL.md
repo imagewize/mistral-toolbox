@@ -1,10 +1,10 @@
 ---
 name: html-to-block-theme
-description: Convert HTML/CSS/JS designs into production-ready WordPress block themes (FSE): theme.json v3 generated from design tokens, FSE templates and parts, registered block patterns, Interactivity API and Block Bindings, optional WooCommerce support. Use when converting a static design, landing page or classic theme to blocks, scaffolding a block theme, or turning HTML sections into block patterns and templates.
+description: "Convert HTML/CSS/JS designs into production-ready WordPress block themes (FSE): theme.json v3 generated from design tokens, FSE templates and parts, registered block patterns, Interactivity API and Block Bindings, optional WooCommerce support. Use when converting a static design, landing page or classic theme to blocks, scaffolding a block theme, or turning HTML sections into block patterns and templates."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
