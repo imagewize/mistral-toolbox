@@ -1,5 +1,5 @@
-display_name = "Frontend Builder"
-description = "Builds WordPress FSE frontends in the current repository — design spec to anchored HTML/CSS to block theme — using the toolbox design and conversion skills."
+display_name = "WP Frontend Builder"
+description = "Builds WordPress FSE frontends in the current repository — design spec to anchored HTML/CSS to block theme and patterns — using the toolbox design and conversion skills."
 agent_type = "agent"
 enabled_skills = [
   "design-first-ui-prompting",

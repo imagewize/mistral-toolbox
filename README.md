@@ -21,7 +21,7 @@ mistral-toolbox/
 │   └── config.toml          # Vibe project settings for this repo
 ├── agents/                  # Vibe agent profiles (TOML) — wired in via agent_paths
 │   ├── wp-reviewer.toml         # WordPress code review agent
-│   ├── frontend-builder.toml    # FSE frontend build agent
+│   ├── wp-frontend-builder.toml # WordPress FSE frontend build agent
 │   ├── ux-designer.toml         # UI/UX design agent
 │   ├── devops-oncall.toml       # incident / on-call agent
 │   ├── release-manager.toml     # release & PR agent
@@ -255,7 +255,7 @@ Agent profiles in [`agents/`](/agents/) are TOML files you select with `vibe --a
 | Agent | Run with | Role | Skills it loads |
 |-------|----------|------|-----------------|
 | [wp-reviewer](/agents/wp-reviewer.toml) | `vibe --agent wp-reviewer` | Reviews WordPress diffs, PRs, plugins, patterns in the current repo | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
-| [frontend-builder](/agents/frontend-builder.toml) | `vibe --agent frontend-builder` | Builds FSE frontends: spec → anchored HTML/CSS → block theme | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme |
+| [wp-frontend-builder](/agents/wp-frontend-builder.toml) | `vibe --agent wp-frontend-builder` | Builds WordPress FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme |
 | [ux-designer](/agents/ux-designer.toml) | `vibe --agent ux-designer` | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, design-first-ui-prompting, no-ai-design-slop |
 | [devops-oncall](/agents/devops-oncall.toml) | `vibe --agent devops-oncall` | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [release-manager](/agents/release-manager.toml) | `vibe --agent release-manager` | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
