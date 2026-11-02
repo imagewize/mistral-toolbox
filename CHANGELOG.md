@@ -39,6 +39,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `skills/wordpress-woocommerce/`, `skills/wordpress-plugin-testing/`, `skills/wordpress-i18n-workflow/` and `skills/wordpress-database/` — the remaining queued `wp-dev-skills` skills, MIT from `mralaminahamed/wp-dev-skills` @ `762b7bc7` (`references/` and `LICENSE` included each, `evals/` not imported); renamed `wp-*` → `wordpress-*` per the established precedent; vendor model names generalized; sibling-skill references re-routed to imported names or annotated as not imported; WC version claims verified (HPOS WC 7.1+ opt-in / 8.2+ stable default, blocks default in 8.3); `metadata.version` 1.0.0 each
 - Updated `docs/sources.md` import log and `NOTICE.md` with the four imports; README skills table extended; `docs/curation-2026-11-02.md` records Round 4
 
+### Added
+
+- Added `skills/landing-page/` — `/landing-page`: high-conversion landing page design (one offer, one audience, one primary action) with discovery questions, structure, layout types, conversion strategies, copywriting templates and SEO/AEO; MIT from `MengTo/Skills` @ `ef5f851`, `REFERENCES.md` and repo `LICENSE` included, `demo/` not imported (ready-made designs stay in the consuming project); `metadata.version` 1.0.0
+- Added `skills/no-ai-design-slop/` — `/no-ai-design-slop`: passive quality gate against generic AI-design defaults with compact quality gates, a removal test and the full catalog in `ARTICLE.md`; MIT from `MengTo/Skills` @ `ef5f851`, `REFERENCES.md` and `LICENSE` included, vendor `agents/openai.yaml` not imported; `metadata.version` 1.0.0
+- Added `skills/design-first-ui-prompting/` — `/design-first-ui-prompting`: design-first spec-driven prompting (prompt skeleton, constraints cards, single-variable variants, local reference pack); MIT from `MengTo/Skills` @ `ef5f851`, `REFERENCES.md` and `LICENSE` included, `demo/` not imported; `metadata.version` 1.0.0
+- Appended a shared WordPress block-pattern handoff section to all three: preset-named CSS custom properties (`--wp--preset--color--<slug>` etc. with exact `var()` matching, no `--wp--preset--border-radius--*`), sectioned semantic markup marked with HTML comments so each `<section>` maps to a block pattern, no hardcoded `url()` backgrounds (flag for Cover), buttons as inner blocks, i18n-ready copy
+- Updated `docs/sources.md` import log and `NOTICE.md` with the three imports; README skills table extended; `docs/curation-2026-11-02.md` records Round 5
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed

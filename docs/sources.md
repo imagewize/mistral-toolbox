@@ -81,3 +81,6 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/wordpress-plugin-testing/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-plugin-testing | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
 | 2026-11-02 | `skills/wordpress-i18n-workflow/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-i18n-workflow | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
 | 2026-11-02 | `skills/wordpress-database/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-database | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/landing-page/` (SKILL.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/web-design/landing-page | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
+| 2026-11-02 | `skills/no-ai-design-slop/` (SKILL.md + ARTICLE.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/ui/no-ai-design-slop | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
+| 2026-11-02 | `skills/design-first-ui-prompting/` (SKILL.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/ui/design-first-ui-prompting | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
