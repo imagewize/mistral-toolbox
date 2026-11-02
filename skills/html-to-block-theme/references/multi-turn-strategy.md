@@ -51,7 +51,7 @@ Single-turn delivery for this scale risks:
 - `.gitignore`, `.editorconfig`
 
 **Stop with:**
-> ✅ **Turn 1 complete: Foundation delivered.**
+> PASS **Turn 1 complete: Foundation delivered.**
 >
 > Ready for Turn 2 (patterns, block styles, style variations)?
 >
@@ -69,7 +69,7 @@ Single-turn delivery for this scale risks:
 - Matching CSS for block styles in `assets/css/style.css` and `editor.css`
 
 **Stop with:**
-> ✅ **Turn 2 complete: Patterns and styles delivered.**
+> PASS **Turn 2 complete: Patterns and styles delivered.**
 >
 > Ready for Turn 3 (JavaScript, accessibility, i18n, docs)?
 >
@@ -96,7 +96,7 @@ Single-turn delivery for this scale risks:
 - Validation checklist (recommended next steps)
 
 **Stop with:**
-> ✅ **Turn 3 complete: Theme is production-ready.**
+> PASS **Turn 3 complete: Theme is production-ready.**
 >
 > Run validation checks from `references/validation-checklist.md` and let me know if you need any adjustments.
 
@@ -123,11 +123,11 @@ At the start of Turn 1, announce the strategy:
 
 If the project meets ALL these criteria, deliver in a single turn:
 
-- ✅ < 10 HTML pages
-- ✅ No WooCommerce
-- ✅ Single style variation (no multi-aesthetic)
-- ✅ Vanilla JS or simple Alpine.js
-- ✅ Estimated output < 6,000 lines
+- PASS < 10 HTML pages
+- PASS No WooCommerce
+- PASS Single style variation (no multi-aesthetic)
+- PASS Vanilla JS or simple Alpine.js
+- PASS Estimated output < 6,000 lines
 
 For these smaller projects, the user benefits from a single complete delivery.
 

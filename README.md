@@ -40,10 +40,21 @@ mistral-toolbox/
 │   ├── frontend-design/
 │   │   ├── SKILL.md         # /frontend-design — anchored HTML/CSS design (MIT, upstream Ilm-Alan/frontend-design)
 │   │   └── LICENSE.txt
-│   └── html-to-block-theme/
-│       ├── SKILL.md         # /html-to-block-theme — HTML/CSS/JS design → FSE block theme (MIT, upstream siddik-web)
-│       ├── LICENSE
-│       └── references/      # 21 on-demand conversion workflow docs
+│   ├── html-to-block-theme/
+│   │   ├── SKILL.md         # /html-to-block-theme — HTML/CSS/JS design → FSE block theme (MIT, upstream siddik-web)
+│   │   ├── LICENSE
+│   │   └── references/      # 21 on-demand conversion workflow docs
+│   ├── wordpress-plugin-audit/
+│   │   ├── SKILL.md         # /wordpress-plugin-audit — read-only security/consistency audit (MIT, upstream mralaminahamed)
+│   │   ├── LICENSE
+│   │   └── references/      # 7 checklists: security, escaping, nonces, i18n, readme
+│   ├── requesting-code-review/
+│   │   ├── SKILL.md         # /requesting-code-review — dispatch reviewer subagent before merge (MIT, upstream obra/superpowers)
+│   │   ├── code-reviewer.md
+│   │   └── LICENSE
+│   └── verification-before-completion/
+│       ├── SKILL.md         # /verification-before-completion — evidence before claims (MIT, upstream obra/superpowers)
+│       └── LICENSE
 ├── docs/                    # Plans and source notes
 │   ├── external-skills-sourcing-plan.md
 │   ├── sources.md           # Verified external sources, licenses, pinned commits, import log
@@ -128,6 +139,9 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [code-review](/skills/code-review/SKILL.md) | `/code-review [target]` | Reviews a branch diff, a GitHub PR, or a block, pattern, template or path in place, in any WordPress plugin, theme or site. Detects the project type, minimum PHP/WordPress and lint commands from the repository, and applies the project's own rules from `.agents/code-review.md`. |
 | [frontend-design](/skills/frontend-design/SKILL.md) | `/frontend-design` | Builds a frontend with one of eight aesthetic anchors locked to exact CSS tokens, with real on-screen content instead of filler — output uses `var(--wp--preset--*)` and theme.json conventions so it converts cleanly to WordPress block patterns. MIT, adapted from `Ilm-Alan/frontend-design`. |
 | [html-to-block-theme](/skills/html-to-block-theme/SKILL.md) | `/html-to-block-theme` | Converts an HTML/CSS/JS design into a production-ready WordPress block theme (FSE): theme.json v3 from design tokens, templates, parts, registered block patterns, Interactivity API, optional WooCommerce. MIT, adapted from `siddik-web/wp-block-theme-converter`. |
+| [wordpress-plugin-audit](/skills/wordpress-plugin-audit/SKILL.md) | `/wordpress-plugin-audit` | Read-only audit of a WordPress plugin across four dimensions (metadata, naming/i18n, docs vs code, conventions/security) with file:line-verified findings. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
+| [requesting-code-review](/skills/requesting-code-review/SKILL.md) | `/requesting-code-review` | Dispatch a read-only reviewer subagent with crafted context before merging; act on Critical/Important findings. MIT, adapted from `obra/superpowers`. |
+| [verification-before-completion](/skills/verification-before-completion/SKILL.md) | `/verification-before-completion` | Evidence before claims: run the proving command fresh, read the output, then claim. MIT, adapted from `obra/superpowers`. |
 
 ```
 /code-review                 # this branch against the default base branch

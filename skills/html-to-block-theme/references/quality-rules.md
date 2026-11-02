@@ -2,76 +2,76 @@
 
 These rules apply to EVERY file in the generated theme. Violations result in failed WordPress.org reviews, accessibility issues, or production bugs.
 
-## ❌ NEVER
+## FAIL NEVER
 
 ### In Block Markup (Templates / Parts / Patterns)
 
 - **NEVER** use inline `style=""` attributes
-  - ❌ `<div style="background: red;">`
-  - ✅ Use block attributes: `<!-- wp:group {"backgroundColor":"primary"} -->`
+  - FAIL `<div style="background: red;">`
+  - PASS Use block attributes: `<!-- wp:group {"backgroundColor":"primary"} -->`
 
 - **NEVER** include `<style>` tags
-  - ❌ `<style>.hero { color: red; }</style>`
-  - ✅ Put CSS in `assets/css/style.css` AND `assets/css/editor.css`
+  - FAIL `<style>.hero { color: red; }</style>`
+  - PASS Put CSS in `assets/css/style.css` AND `assets/css/editor.css`
 
 - **NEVER** include `<script>` tags
-  - ❌ `<script>document.querySelector(...)</script>`
-  - ✅ Enqueue via `wp_enqueue_script()` in `inc/enqueue.php`
+  - FAIL `<script>document.querySelector(...)</script>`
+  - PASS Enqueue via `wp_enqueue_script()` in `inc/enqueue.php`
 
 - **NEVER** hardcode asset paths
-  - ❌ `<img src="/wp-content/themes/my-theme/assets/img.jpg">`
-  - ✅ `<img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/img.jpg">`
+  - FAIL `<img src="/wp-content/themes/my-theme/assets/img.jpg">`
+  - PASS `<img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/img.jpg">`
 
 - **NEVER** hardcode user-facing strings
-  - ❌ `<h1>Welcome to our site</h1>`
-  - ✅ `<h1><?php esc_html_e( 'Welcome to our site', 'theme-slug' ); ?></h1>`
+  - FAIL `<h1>Welcome to our site</h1>`
+  - PASS `<h1><?php esc_html_e( 'Welcome to our site', 'theme-slug' ); ?></h1>`
 
 ### In CSS (assets/css/*.css)
 
 - **NEVER** hardcode colors
-  - ❌ `color: #0F172A;`
-  - ✅ `color: var(--wp--preset--color--primary);`
+  - FAIL `color: #0F172A;`
+  - PASS `color: var(--wp--preset--color--primary);`
 
 - **NEVER** hardcode font sizes (when a preset exists)
-  - ❌ `font-size: 1.5rem;`
-  - ✅ `font-size: var(--wp--preset--font-size--large);`
+  - FAIL `font-size: 1.5rem;`
+  - PASS `font-size: var(--wp--preset--font-size--large);`
 
 - **NEVER** hardcode spacing
-  - ❌ `padding: 2rem;`
-  - ✅ `padding: var(--wp--preset--spacing--50);`
+  - FAIL `padding: 2rem;`
+  - PASS `padding: var(--wp--preset--spacing--50);`
 
 - **NEVER** use IDs for styling
-  - ❌ `#hero { ... }`
-  - ✅ `.wp-block-group.is-style-hero { ... }`
+  - FAIL `#hero { ... }`
+  - PASS `.wp-block-group.is-style-hero { ... }`
 
 - **NEVER** use `!important` (except as a last resort to override WordPress core styles)
 
 - **NEVER** use physical directional properties when logical alternatives exist (for RTL support)
-  - ❌ `margin-left: 1rem;`
-  - ✅ `margin-inline-start: 1rem;`
-  - ❌ `text-align: left;`
-  - ✅ `text-align: start;`
+  - FAIL `margin-left: 1rem;`
+  - PASS `margin-inline-start: 1rem;`
+  - FAIL `text-align: left;`
+  - PASS `text-align: start;`
 
 ### In PHP
 
 - **NEVER** echo unescaped output
-  - ❌ `<?php echo $user_input; ?>`
-  - ✅ `<?php echo esc_html( $user_input ); ?>`
-  - ✅ `<?php echo esc_attr( $attribute_value ); ?>`
-  - ✅ `<?php echo esc_url( $url ); ?>`
-  - ✅ `<?php echo wp_kses_post( $rich_text ); ?>`
+  - FAIL `<?php echo $user_input; ?>`
+  - PASS `<?php echo esc_html( $user_input ); ?>`
+  - PASS `<?php echo esc_attr( $attribute_value ); ?>`
+  - PASS `<?php echo esc_url( $url ); ?>`
+  - PASS `<?php echo wp_kses_post( $rich_text ); ?>`
 
 - **NEVER** double-escape translation functions
-  - ❌ `<?php echo esc_html( __( 'text', 'domain' ) ); ?>`
-  - ✅ `<?php esc_html_e( 'text', 'domain' ); ?>`
-  - ✅ `<?php echo esc_html__( 'text', 'domain' ); ?>`
+  - FAIL `<?php echo esc_html( __( 'text', 'domain' ) ); ?>`
+  - PASS `<?php esc_html_e( 'text', 'domain' ); ?>`
+  - PASS `<?php echo esc_html__( 'text', 'domain' ); ?>`
 
 - **NEVER** use deprecated WordPress functions
   - Check against: https://developer.wordpress.org/reference/since/
 
 - **NEVER** make direct database queries
-  - ❌ `$wpdb->query("SELECT * FROM wp_posts WHERE ...")`
-  - ✅ `WP_Query` or core functions like `get_posts()`
+  - FAIL `$wpdb->query("SELECT * FROM wp_posts WHERE ...")`
+  - PASS `WP_Query` or core functions like `get_posts()`
 
 - **NEVER** use `eval()`, `exec()`, `system()`, `passthru()`, `popen()`
 
@@ -102,7 +102,7 @@ These rules apply to EVERY file in the generated theme. Violations result in fai
 
 ---
 
-## ✅ ALWAYS
+## PASS ALWAYS
 
 ### In Block Markup
 
@@ -227,8 +227,8 @@ Required practices:
 - **ALWAYS** use `_n()` for plural-aware strings
 - **ALWAYS** use `_x()` when context disambiguates meaning
 - **NEVER** concatenate translated strings (use `sprintf()` with placeholders)
-  - ❌ `__( 'Posted on ' ) . $date`
-  - ✅ `sprintf( __( 'Posted on %s', 'domain' ), $date )`
+  - FAIL `__( 'Posted on ' ) . $date`
+  - PASS `sprintf( __( 'Posted on %s', 'domain' ), $date )`
 
 ## Security Rules
 

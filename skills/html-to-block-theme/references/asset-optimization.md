@@ -340,13 +340,13 @@ For the global stylesheet (`assets/css/style.css`), keep it small (< 10 KB). It 
 Theme.json automatically generates CSS custom properties at `:root`. Reference them everywhere:
 
 ```css
-/* ✅ Correct */
+/* PASS Correct */
 .site-header {
     background-color: var(--wp--preset--color--surface);
     padding-block: var(--wp--preset--spacing--50);
 }
 
-/* ❌ Wrong — hardcoded, breaks theming, not RTL-safe */
+/* FAIL Wrong — hardcoded, breaks theming, not RTL-safe */
 .site-header {
     background-color: #ffffff;
     padding-top: 2rem;
@@ -359,10 +359,10 @@ Theme.json automatically generates CSS custom properties at `:root`. Reference t
 Never use IDs (`#hero`). Avoid deep nesting. Keep specificity low so theme.json overrides work correctly:
 
 ```css
-/* ✅ Low specificity — theme.json can override */
+/* PASS Low specificity — theme.json can override */
 .wp-block-group.is-style-card { }
 
-/* ❌ High specificity — blocks theme.json overrides */
+/* FAIL High specificity — blocks theme.json overrides */
 div.wp-block-group.is-style-card > div { }
 ```
 
@@ -371,7 +371,7 @@ div.wp-block-group.is-style-card > div { }
 All padding/margin/border must use logical properties for RTL compatibility:
 
 ```css
-/* ✅ Logical */
+/* PASS Logical */
 .card {
     margin-inline: auto;
     padding-inline: var(--wp--preset--spacing--40);
@@ -380,7 +380,7 @@ All padding/margin/border must use logical properties for RTL compatibility:
     text-align: start;
 }
 
-/* ❌ Physical */
+/* FAIL Physical */
 .card {
     margin-left: auto;
     margin-right: auto;
@@ -450,10 +450,10 @@ This ensures users on pages without the `hero` block don't download its JS.
 Vite tree-shakes by default. Ensure imports are named (not namespace imports):
 
 ```js
-// ✅ Tree-shakeable
+// PASS Tree-shakeable
 import { store, getContext } from '@wordpress/interactivity';
 
-// ❌ Prevents tree-shaking
+// FAIL Prevents tree-shaking
 import * as interactivity from '@wordpress/interactivity';
 ```
 
@@ -500,13 +500,13 @@ add_filter( 'wp_resource_hints', '{{theme_slug_underscored}}_resource_hints', 10
 
 | Resource | Use `rel="preload"`? | Notes |
 |----------|---------------------|-------|
-| Body font (400 weight) | ✅ Yes | Prevents FOUT |
-| Heading font (700 weight) | ✅ Yes | Prevents FOUT |
-| 3rd+ font file | ❌ No | Competes with LCP image |
-| Hero image | ✅ Yes (if not in `<img>` with `fetchpriority="high"`) | Use `fetchpriority` on the `<img>` instead |
-| Critical CSS | ❌ No | WordPress inlines per-block CSS automatically |
-| Main JS bundle | ❌ No | Defer it instead |
-| Vendor CSS | ❌ No | Load conditionally with `wp_enqueue_block_style()` |
+| Body font (400 weight) | PASS Yes | Prevents FOUT |
+| Heading font (700 weight) | PASS Yes | Prevents FOUT |
+| 3rd+ font file | FAIL No | Competes with LCP image |
+| Hero image | PASS Yes (if not in `<img>` with `fetchpriority="high"`) | Use `fetchpriority` on the `<img>` instead |
+| Critical CSS | FAIL No | WordPress inlines per-block CSS automatically |
+| Main JS bundle | FAIL No | Defer it instead |
+| Vendor CSS | FAIL No | Load conditionally with `wp_enqueue_block_style()` |
 
 ---
 

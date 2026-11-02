@@ -73,3 +73,6 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 |---|---|---|---|---|---|
 | 2026-11-02 | `skills/frontend-design/` (SKILL.md + LICENSE.txt) | `github.com/Ilm-Alan/frontend-design` (SKILL.md, LICENSE.txt) | MIT | `f8966e6cc9b90247aa102d71f7e675ec3462b419` | 1.0.0 |
 | 2026-11-02 | `skills/html-to-block-theme/` (SKILL.md + references/ + LICENSE) | `github.com/siddik-web/wp-block-theme-converter` (SKILL.md, references/, LICENSE) | MIT | `0347e8237f0d68a05abf3715d7cd8e271d23598f` | 1.0.0 |
+| 2026-11-02 | `skills/wordpress-plugin-audit/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-plugin-audit | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/requesting-code-review/` (SKILL.md + code-reviewer.md + LICENSE) | `github.com/obra/superpowers` skills/requesting-code-review | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
+| 2026-11-02 | `skills/verification-before-completion/` (SKILL.md + LICENSE) | `github.com/obra/superpowers` skills/verification-before-completion | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
