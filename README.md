@@ -36,11 +36,16 @@ Imagewize built these for its own WordPress work — the **Elayne** block theme,
 
 ## 🚀 Quick start
 
-**1. Wire the toolbox into Vibe once** — in `~/.vibe/config.toml`:
+**1. Wire the toolbox into Vibe once** — skills in `~/.vibe/config.toml`:
 
 ```toml
 skill_paths = ["~/code/mistral-toolbox/skills"]
-agent_paths = ["~/code/mistral-toolbox/agents"]
+```
+
+and the agents by linking them into Vibe's own agents folder, which it searches without any config:
+
+```bash
+ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents
 ```
 
 **2. Use it in any repository:**
@@ -146,7 +151,7 @@ The design skills emit one self-contained HTML file per page, with sections mark
 
 ### Install
 
-**For all your projects** — add this repository's `skills/` and `agents/` to `~/.vibe/config.toml`, as in [Quick start](#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
+**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and link `agents/` to `~/.vibe/agents`, as in [Quick start](#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
 
 **For one project** — put the same lines in that project's `.vibe/config.toml` (the folder must be trusted), or copy individual skill directories (e.g. `skills/code-review/`) into the project's `.agents/skills/` so everyone on the project gets them. Copies carry `metadata.version`, so you can compare them with this repository.
 
@@ -191,6 +196,7 @@ vibe --agent wp-reviewer -p "review the diff against main"
 vibe --agent devops-oncall -p "triage this alert"
 ```
 
+- Wire them in with `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents` (see [Quick start](#-quick-start)). If you use `agent_paths` instead, give an absolute path: Vibe expands `~` in `skill_paths` but not in `agent_paths`, so a `~/…` entry is silently skipped and `vibe --agent NAME` reports the agent as not found.
 - The agent name is the TOML file stem; `vibe --agent NAME` fails with the reason if a profile is invalid.
 - Skills are **not** auto-loaded — the agent loads them via the `skill` tool when the task calls for it. Remove `enabled_skills` from a profile to let it load any skill the session can see.
 - Set `agent_type = "subagent"` in a copy of a profile to make it spawnable by the model as a subagent.

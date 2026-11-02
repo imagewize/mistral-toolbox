@@ -20,16 +20,32 @@ prompts — those live in [`prompts/`](../prompts/) together with their example 
 
 ## Wiring them into any repository
 
-Point Vibe at this repo's `skills/` and `agents/` in `~/.vibe/config.toml` (user-level,
-so it applies in every project):
+Vibe always searches `~/.vibe/agents/` for agent profiles, with no config needed. Link
+this directory there once, so the profiles work in every project and stay current with
+`git pull`:
+
+```bash
+ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents
+```
+
+Add the skills the profiles load to `~/.vibe/config.toml` (user-level, so it applies in
+every project):
 
 ```toml
 skill_paths = ["~/code/mistral-toolbox/skills"]
-agent_paths = ["~/code/mistral-toolbox/agents"]
 ```
 
-For a single project instead, put the same two lines in that project's `.vibe/config.toml`
-(the folder must be trusted). Then, from any repository:
+The symlink makes `~/.vibe/agents` *this* directory, so a private profile you add there
+lands in the repository. To keep your own profiles next to these, make `~/.vibe/agents` a
+real directory and link the individual `.toml` files into it instead.
+
+**`agent_paths` alternative:** Vibe also reads profiles from directories listed in
+`agent_paths`, but it does not expand `~` there (it does in `skill_paths`). A
+`~/code/...` entry is treated as a path relative to the working directory, silently
+skipped, and `vibe --agent NAME` then fails with `Agent 'NAME' not found`. Use an absolute
+path, and keep it in your own `~/.vibe/config.toml` rather than a committed project config.
+
+Then, from any repository:
 
 ```bash
 vibe --agent wp-reviewer                 # interactive review session
@@ -37,8 +53,8 @@ vibe --agent wp-reviewer -p "review the diff against main"
 vibe --agent devops-oncall -p "triage alert X"
 ```
 
-Vibe discovers only `*.toml` files in `agent_paths`, so this README is ignored by the
-loader. The agent name is the file stem.
+Vibe discovers only `*.toml` files in its agent directories, so this README is ignored by
+the loader. The agent name is the file stem.
 
 ## Notes
 
