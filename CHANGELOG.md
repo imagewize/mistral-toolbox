@@ -5,7 +5,17 @@ All notable changes to the mistral-toolbox repository will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.0] - 2026-11-02
+
+### Added
+
+- Added `agents/` as the home of Vibe agent profiles — five TOML profiles (`wp-reviewer`, `frontend-builder`, `ux-designer`, `devops-oncall`, `release-manager`) that wire the toolbox skills into agents callable from any repository: each profile scopes its skills with `enabled_skills` and its `instructions` tell the agent which skill to load for which task via the `skill` tool; wired cross-repo with `agent_paths = ["~/code/mistral-toolbox/agents"]` next to the existing `skill_paths`, then run e.g. `vibe --agent wp-reviewer`; profiles validated against Vibe's `AgentProfile.from_toml` loader; includes `agents/README.md` with wiring and usage docs
+- Added a "Vibe Agents" section to the README (profiles table, quick start with `agent_paths` + `vibe --agent`, notes on on-demand skill loading and the subagent variant), restructured the intro and structure tree for the three artifact kinds, and corrected the skills count (40)
+- Updated AGENTS.md: layout now lists `agents/` (Vibe profiles) and `prompts/` (Le Chat prompts + runs), with a new "Working on Vibe agent profiles" section documenting the TOML schema
+
+### Moved
+
+- Moved the Le Chat prompts `agents/FRONTEND-DEV.md` and `agents/REVIEWER.md` to `prompts/FRONTEND-DEV.md` and `prompts/REVIEWER.md`, so `agents/` holds the Vibe agent profiles and `prompts/` holds the Le Chat prompts as flat `.md` files (one prompt per file, Vibe's `.vibe/prompts/` convention) plus the example runs under `prompts/<agent>/<run>/`; README, AGENTS.md and the sourcing plan's format mapping updated accordingly
 
 ### Added
 
