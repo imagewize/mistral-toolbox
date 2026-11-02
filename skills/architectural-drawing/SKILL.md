@@ -1,13 +1,13 @@
 ---
 name: architectural-drawing
-description: "Draw buildings as architectural elevations and sections in SVG with a bundled kit (scripts/arch.mjs) that works in metres, not hand-written coordinates: one scale per drawing, a fixed line-weight hierarchy (cut, profile, edge, detail, faint), poche, brick coursing, windows, doors, gable, stepped, sawtooth and flat roofs, quays and water, barges, trees, people for scale, dimensions and level marks. The kit checks proportions, overlaps and bounds; check.mjs validates the finished file. Use for project drawings, hero illustrations and figures on architecture, construction, real-estate or housing sites, in a restrained line style that matches the page's palette."
+description: "Draw buildings as architectural elevations and sections in SVG with a bundled kit (scripts/arch.mjs) that works in metres, not hand-written coordinates: one scale per drawing, a fixed line-weight hierarchy (cut, profile, edge, detail, faint), poche, brick coursing, windows, doors, gable, stepped, sawtooth and flat roofs, quays and water, barges, trees, people for scale, dimensions and level marks, plus an opt-in refinement layer (tint faces, flat shadows, reveals, glazing grids, string courses, plinths, downpipes, railings) for dense, refined drawings. The kit checks proportions, overlaps and bounds; check.mjs validates the finished file. Use for project drawings, hero illustrations and figures on architecture, construction, real-estate or housing sites, in a restrained line style that matches the page's palette."
 user-invocable: true
 allowed-tools:
   - read_file
   - write_file
   - bash
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
   source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
 ---
 
@@ -104,19 +104,25 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 | `d.stepGable(x0, x1, eave, ridge, { steps })` | A Dutch stepped gable (trapgevel) |
 | `d.sawtoothRoof(x0, x1, eave, toothH, count)` | A sawtooth (shed) roof with glazing |
 | `d.flatRoof(x0, x1, h, { parapet })` | A parapet with coping |
-| `d.coursing(x0, x1, y0, y1, { course })` | Brick coursing, faint |
-| `d.window(cx, sill, w, h, { mullion, transom, accent })` | One window |
-| `d.windowRow(x0, x1, sill, head, count, opts)` | Evenly spaced windows; `accentIndex` picks one for the accent |
-| `d.door(cx, w, h, { type: 'single' \| 'double' \| 'loading', base, accent })` | A door; `base` lifts it to an upper floor |
+| `d.coursing(x0, x1, y0, y1, { course, joints, joint })` | Brick coursing, faint; `joints: true` adds staggered perpends so courses read as masonry |
+| `d.window(cx, sill, w, h, { mullion, transom, accent, glass, reveal, bars, drip, head })` | One window; refinement options: `glass` fills the pane with the tint, `reveal` (metres) draws the frame reveal, `bars: [nx, ny]` a glazing grid, `drip` a second sill line, `head` a head line |
+| `d.windowRow(x0, x1, sill, head, count, opts)` | Evenly spaced windows; `accentIndex` picks one for the accent; `opts` pass through to `window()` |
+| `d.door(cx, w, h, { type: 'single' \| 'double' \| 'loading', base, accent, frame, handle })` | A door; `base` lifts it to an upper floor; `frame` draws the reveal, `handle` a knob dot |
 | `d.hoist(cx, y)` | A warehouse hoist beam and hook |
-| `d.chimney(cx, base, { w, h })` | A chimney with a cap, standing on a roof or mass at height `base` |
+| `d.chimney(cx, base, { w, h, pot })` | A chimney with a cap, standing on a roof or mass at height `base`; `pot: true` adds a chimney pot |
 | `d.floorLines(x0, x1, levels, { dashed })` | Floor levels; dashed on an elevation, solid in a section |
 | `d.cut(x0, y0, x1, y1)`, `d.slab(x0, x1, level, { t })` | Section poche: cut walls and slabs |
-| `d.cutOpening(x0, x1, sill, head, { glass })` | A window or door in a cut wall (`x0..x1` is the wall thickness); call it after the `cut()`. For a door: `sill` 0, `glass: false` |
-| `d.stair(x0, y0, x1, y1, { steps })` | A stair in section |
+| `d.cutOpening(x0, x1, sill, head, { glass, reveal })` | A window or door in a cut wall (`x0..x1` is the wall thickness); call it after the `cut()`. For a door: `sill` 0, `glass: false`; `reveal: true` draws the jamb lines |
+| `d.stair(x0, y0, x1, y1, { steps, rail })` | A stair in section; `rail: true` adds a handrail and posts |
 | `d.figure(x, { h, pose, base, accent })` | A person, 1.75 m by default, with arms and legs. `pose`: `stand`, `walk`, `stand-left`, `walk-left`; vary them across a drawing. `base` puts the person on a floor, for sections |
-| `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back' })` | A tree: solid trunk, scalloped crown, branches; `back` draws it faint and unfilled, behind buildings |
-| `d.barge(x0, x1, level, { accent })` | A moored barge with a wheelhouse |
+| `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back', shade, shadow })` | A tree: solid trunk, scalloped crown, branches; `back` draws it faint and unfilled, behind buildings; `shade: true` adds foliage scallops inside the crown, `shadow: true` a flat ground shadow |
+| `d.barge(x0, x1, level, { accent, rail })` | A moored barge with a wheelhouse; `rail: true` adds a foredeck guard rail |
+| `d.groundShadow(x0, x1, { depth, side, opacity })` | A flat shadow on the ground to one side of a building (`side: 1` right, `-1` left) |
+| `d.castShadow(x0, x1, y, { depth, opacity })` | The shadow a projecting roof or balcony casts on the wall below `y` |
+| `d.plinth(x0, x1, { h, out })` | A stone plinth course at the base of a mass; call after `mass()` |
+| `d.stringCourse(x0, x1, y, { h, out })` | A tint band with edge lines at a floor line; call after `mass()` |
+| `d.downpipe(x, yTop, { bracket, hopper })` | A rain downpipe at facade position `x`, with hopper head and brackets |
+| `d.railing(x0, x1, y, { h, post })` | A guard rail: top rail, end posts, intermediate posts |
 | `d.dimension(x0, x1, y, label, { from })` | A dimension line; `from` drops extension lines to that height (the ridge or eave). Labels use a decimal comma for Dutch sites |
 | `d.levelMark(x, y, label)` | A level marker such as `+14,0` |
 | `d.svg({ title, desc, background, animate })` | The finished SVG; `title` is required and becomes the accessible name. `background` (default `true`) puts a paper-coloured rect behind the drawing, so it stays readable in dark previews and on dark pages. `animate: true` (or `{ speed: 1.5 }`) makes it draw itself on load; see Animation |
@@ -125,6 +131,28 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 The kit draws in layers, so call order matters only within a layer: back trees, ground and water,
 building fills, building lines, details (coursing before openings, so openings cover it), front
 (people and trees), annotations.
+
+## Refinement: making a drawing read as built
+
+A sparse elevation — one outline and a few openings — reads as a sketch. A refined one has tones,
+shadows and small true parts. The kit's refinement layer is opt-in: without these options the
+output is unchanged. Use it deliberately, not everywhere:
+
+- **Two tonal steps, not colour.** Paper for the light faces, `tint` for recessive ones (a set-back
+  volume, the shed wing, a plinth, a string course, glass in windows). Solid ink poche stays
+  reserved for the section cut. Flat translucent ink (`groundShadow`, `castShadow`, tree `shadow`)
+  gives depth in an elevation without any perspective.
+- **Micro-detail at true scale.** Reveals around openings, glazing grids, drip sills, downpipes
+  with brackets, railing posts, chimney pots, door frames and handles. These are what read as
+  "refined" when the drawing is zoomed or shown large.
+- **Density rule.** Zoom to 2x on the finished render: every region of the facade should still
+  have something true in it. A bare stretch of wall between windows is unfinished — add a
+  downpipe, a string course, coursing or a reveal there.
+- **Texture ends on an edge.** Coursing and perpends run edge to edge of their facade; never stop
+  a texture in the middle of a wall.
+- **Still restrained.** Five line weights, five palette colours, one accent used once or twice.
+  Refinement adds parts and tones, never new colours or heavier lines. `check.mjs` fails a stroke
+  outside the five weights or a colour outside the palette, so the style cannot drift.
 
 ## Animation
 

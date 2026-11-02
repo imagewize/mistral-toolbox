@@ -88,6 +88,9 @@ export function drawing(opts = {}) {
     `fill="none" stroke="${colour}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"${extra}`;
   const path = (layer, d, w, colour, extra) => layers[layer].push(`<path d="${d}" ${stroke(w, colour, extra)}/>`);
   const fillPath = (layer, d, colour) => layers[layer].push(`<path d="${d}" fill="${colour}" stroke="none"/>`);
+  // A flat translucent fill (shadows). Colour stays a palette value; opacity carries the softness,
+  // so the file still passes check.mjs and renders through <img> without filters.
+  const fillPathO = (layer, d, colour, opacity) => layers[layer].push(`<path d="${d}" fill="${colour}" fill-opacity="${opacity}" stroke="none"/>`);
   const rectD = (x0, y0, x1, y1) => `M${X(x0)} ${Y(y0)}H${X(x1)}V${Y(y1)}H${X(x0)}Z`;
   const line = (x0, y0, x1, y1) => `M${X(x0)} ${Y(y0)}L${X(x1)} ${Y(y1)}`;
   const useAccent = (on, what) => {
@@ -138,9 +141,17 @@ export function drawing(opts = {}) {
     },
 
     // Brick coursing: faint horizontal lines in the mid tone. Gives a facade texture without noise.
-    coursing(x0, x1, y0, y1, { course = 0.6 } = {}) {
+    // joints: true adds staggered vertical perpends, so the courses read as masonry, not stripes.
+    coursing(x0, x1, y0, y1, { course = 0.6, joints = false, joint = 0.6 } = {}) {
       let c = '';
-      for (let y = y0 + course; y < y1 - 0.05; y += course) c += line(x0, y, x1, y);
+      let row = 0;
+      for (let y = y0 + course; y < y1 - 0.05; y += course, row++) {
+        c += line(x0, y, x1, y);
+        if (joints) {
+          const off = (row % 2) * joint * 0.5;
+          for (let x = x0 + off; x < x1 - 0.01; x += joint) c += line(x, y, x, Math.min(y + course, y1));
+        }
+      }
       path('detail', c, W.FAINT, palette.mid);
     },
 
@@ -228,18 +239,29 @@ export function drawing(opts = {}) {
     },
 
     // One window: frame, optional mullion and transom, two faint glass reflection strokes.
-    window(cx, sill, w, h, { mullion = w > 1.2, transom = false, accent = false, sillLine = true } = {}) {
+    // Refinement options (all opt-in): glass fills the pane with the tint, reveal draws the frame
+    // reveal around the opening, bars: [nx, ny] adds a glazing grid, drip adds a second sill line
+    // under the sill, head adds a line at the head.
+    window(cx, sill, w, h, { mullion = w > 1.2, transom = false, accent = false, sillLine = true, glass = false, reveal = 0, bars = null, drip = false, head = false } = {}) {
       if (!inRange(w, RANGES.window.w) || !inRange(h, RANGES.window.h)) warnings.push(`window at x=${f(cx)}: ${f(w)} x ${f(h)} m is outside plausible window sizes`);
       const x0 = cx - w / 2, x1 = cx + w / 2;
       const col = useAccent(accent, 'window');
-      fillPath('detail', rectD(x0, sill, x1, sill + h), palette.paper);
+      fillPath('detail', rectD(x0, sill, x1, sill + h), glass ? palette.tint : palette.paper);
+      if (reveal > 0) path('detail', rectD(x0 - reveal, sill - reveal, x1 + reveal, sill + h + reveal), W.DETAIL, col);
       path('detail', rectD(x0, sill, x1, sill + h), W.EDGE, col);
       let det = '';
       if (mullion) det += line(cx, sill, cx, sill + h);
       if (transom) det += line(x0, sill + h * 0.72, x1, sill + h * 0.72);
+      if (bars) {
+        const [nx, ny] = bars;
+        for (let i = 1; i < nx; i++) det += line(x0 + (w * i) / nx, sill, x0 + (w * i) / nx, sill + h);
+        for (let j = 1; j < ny; j++) det += line(x0, sill + (h * j) / ny, x1, sill + (h * j) / ny);
+      }
       if (det) path('detail', det, W.DETAIL, col);
       path('detail', line(x0 + w * 0.15, sill + h * 0.35, x0 + w * 0.32, sill + h * 0.62) + line(x0 + w * 0.22, sill + h * 0.3, x0 + w * 0.36, sill + h * 0.52), W.FAINT, col);
       if (sillLine) path('detail', line(x0 - 0.08, sill, x1 + 0.08, sill), W.EDGE);
+      if (drip) path('detail', line(x0 - 0.05, sill - 0.09, x1 + 0.05, sill - 0.09), W.DETAIL, col);
+      if (head) path('detail', line(x0 - 0.08, sill + h, x1 + 0.08, sill + h), W.EDGE, col);
       return rec('opening', x0, sill, x1, sill + h, { kind: 'window' });
     },
 
@@ -252,17 +274,22 @@ export function drawing(opts = {}) {
 
     // Door types: single, double, loading (a warehouse loading door with a cross brace).
     // base lifts a door to an upper floor, as for the stacked loading doors of a warehouse.
-    door(cx, w, h, { type = 'single', accent = false, base = 0 } = {}) {
+    door(cx, w, h, { type = 'single', accent = false, base = 0, frame = false, handle = false } = {}) {
       if (!inRange(w, RANGES.door.w) || !inRange(h, RANGES.door.h)) warnings.push(`door at x=${f(cx)}: ${f(w)} x ${f(h)} m is outside plausible door sizes`);
       const x0 = cx - w / 2, x1 = cx + w / 2;
       const col = useAccent(accent, 'door');
       const b = base, t = base + h;
       fillPath('detail', rectD(x0, b, x1, t), accent ? palette.accent : palette.paper);
+      if (frame) path('detail', rectD(x0 - 0.08, b - 0.08, x1 + 0.08, t + 0.08), W.DETAIL);
       path('detail', rectD(x0, b, x1, t), W.EDGE);
       let det = '';
       if (type === 'double' || type === 'loading') det += line(cx, b, cx, t);
       if (type === 'loading') det += line(x0, b, cx, t) + line(cx, b, x0, t) + line(cx, b, x1, t) + line(x1, b, cx, t);
       if (det) path('detail', det, W.DETAIL, accent ? palette.ink : col);
+      if (handle) {
+        const hx = cx + w * 0.32, hy = b + h * 0.48;
+        layers.detail.push(`<circle cx="${X(hx)}" cy="${Y(hy)}" r="${Math.max(L(0.055), 0.45).toFixed(2)}" fill="${accent ? palette.ink : palette.mid}" stroke="none"/>`);
+      }
       return rec('opening', x0, b, x1, t, { kind: 'door' });
     },
 
@@ -273,11 +300,19 @@ export function drawing(opts = {}) {
     },
 
     // A chimney standing on a roof or mass at height base: a stack with a cap.
-    chimney(cx, base, { w = 0.7, h = 1.6 } = {}) {
+    chimney(cx, base, { w = 0.7, h = 1.6, pot = false } = {}) {
       const x0 = cx - w / 2, x1 = cx + w / 2;
       fillPath('fill', rectD(x0, base, x1, base + h), palette.paper);
       path('lines', rectD(x0, base, x1, base + h), W.EDGE);
       path('lines', rectD(x0 - 0.1, base + h, x1 + 0.1, base + h + 0.18), W.EDGE);
+      if (pot) {
+        const pw = w * 0.55, ph = 0.28;
+        fillPath('fill', rectD(cx - pw / 2, base + h + 0.18, cx + pw / 2, base + h + 0.18 + ph), palette.paper);
+        path('detail', rectD(cx - pw / 2, base + h + 0.18, cx + pw / 2, base + h + 0.18 + ph), W.DETAIL);
+        path('detail', line(cx, base + h + 0.18, cx, base + h + 0.18 + ph), W.FAINT);
+        rec('chimney', x0, base, x1, base + h + 0.18 + ph);
+        return;
+      }
       rec('chimney', x0, base, x1, base + h + 0.18);
     },
 
@@ -301,22 +336,35 @@ export function drawing(opts = {}) {
     // A window or door in a cut wall (x0..x1 is the wall thickness), seen in section: the opening
     // clears the poche, with frame lines at sill and head and glass in the middle. Draw it after
     // the cut(). For a door, pass sill 0 and glass: false.
-    cutOpening(x0, x1, sill, head, { glass = true, accent = false } = {}) {
+    cutOpening(x0, x1, sill, head, { glass = true, accent = false, reveal = false } = {}) {
       const col = useAccent(accent, 'section opening');
       fillPath('detail', rectD(x0, sill, x1, head), palette.paper);
       path('detail', line(x0, sill, x1, sill) + line(x0, head, x1, head), W.EDGE);
       if (glass) path('detail', line((x0 + x1) / 2, sill, (x0 + x1) / 2, head), W.DETAIL, col);
+      if (reveal) path('detail', line(x0 + 0.06, sill, x0 + 0.06, head) + line(x1 - 0.06, sill, x1 - 0.06, head), W.DETAIL, col);
       return rec('opening', x0, sill, x1, head, { kind: 'section opening' });
     },
 
-    // A straight stair in section from (x0, y0) to (x1, y1).
-    stair(x0, y0, x1, y1, { steps } = {}) {
+    // A straight stair in section from (x0, y0) to (x1, y1). rail: true adds a handrail and posts.
+    stair(x0, y0, x1, y1, { steps, rail = false } = {}) {
       const n = steps ?? Math.max(3, Math.round((y1 - y0) / 0.18));
       const r = (y1 - y0) / n, g = (x1 - x0) / n;
       let p = `M${X(x0)} ${Y(y0)}`;
       for (let i = 0; i < n; i++) p += `V${Y(y0 + r * (i + 1))}H${X(x0 + g * (i + 1))}`;
       path('detail', p, W.EDGE);
       path('detail', line(x0, y0 - 0.2, x1, y1 - 0.2), W.DETAIL);
+      if (rail) {
+        const rh = 1.05;
+        path('detail', line(x0, y0 + rh, x1, y1 + rh), W.EDGE);
+        let posts = '';
+        const np = Math.max(2, Math.round((x1 - x0) / 0.9));
+        for (let i = 0; i <= np; i++) {
+          const px = x0 + ((x1 - x0) * i) / np;
+          const py = y0 + ((y1 - y0) * i) / np;
+          posts += line(px, py, px, py + rh);
+        }
+        path('detail', posts, W.DETAIL);
+      }
     },
 
     // A person, 1.75 m by default: the scale reference every drawing needs.
@@ -351,12 +399,16 @@ export function drawing(opts = {}) {
 
     // A tree: a solid trunk into a scalloped crown, with faint branches inside the crown.
     // type 'round' or 'poplar'. layer 'back' draws it faint and unfilled, behind buildings.
-    tree(x, { h = 9, crown, type = 'round', layer = 'front' } = {}) {
+    tree(x, { h = 9, crown, type = 'round', layer = 'front', shade = false, shadow = false } = {}) {
       if (!inRange(h, RANGES.tree.h)) warnings.push(`tree at x=${f(x)}: height ${f(h)} m is implausible`);
       const back = layer === 'back';
       const cw = crown ?? (type === 'poplar' ? h * 0.3 : h * 0.62);
       const crownBase = type === 'poplar' ? h * 0.16 : h * 0.34;
       const rx = cw / 2, ry = (h - crownBase) / 2, cy = crownBase + ry;
+      if (shadow) {
+        layers.ground.push(`<ellipse cx="${X(x + rx * 0.4)}" cy="${Y(-0.04)}" rx="${L(rx * 0.95).toFixed(2)}" ry="${Math.max(L(0.16), 0.5).toFixed(2)}" fill="${palette.ink}" fill-opacity="0.07" stroke="none"/>`);
+        rec('shadow', x - rx * 0.55, -0.2, x + rx * 1.35, 0);
+      }
       // Scalloped outline: small arcs between points on an ellipse read as foliage, not as a disc.
       const n = Math.max(9, Math.round((Math.PI * (rx + ry)) / 1.5));
       const pts = [];
@@ -378,11 +430,22 @@ export function drawing(opts = {}) {
       // Branches fork from the trunk top into the crown.
       const br = line(x, tTop, x - rx * 0.45, cy + ry * 0.25) + line(x, tTop, x + rx * 0.5, cy + ry * 0.15) + line(x, tTop, x + rx * 0.05, cy + ry * 0.55);
       layers[layer].push(`<path d="${br}" ${stroke(W.FAINT, back ? palette.mid : palette.ink)}/>`);
+      // shade: small foliage scallops inside the crown, so the crown has texture, not just an outline
+      if (shade && type !== 'poplar') {
+        const col = back ? palette.mid : palette.ink;
+        let sc = '';
+        const tufts = [[-0.45, 0.15], [0.4, 0.3], [-0.1, -0.25], [0.15, 0.55], [-0.5, -0.4]];
+        for (const [fx, fy] of tufts) {
+          const px = x + rx * fx, py = cy + ry * fy, r = Math.max(L(rx * 0.3), 0.8);
+          sc += `M${(X(px) - r).toFixed(2)} ${Y(py)}A${r.toFixed(2)} ${r.toFixed(2)} 0 0 1 ${(X(px) + r).toFixed(2)} ${Y(py)}`;
+        }
+        layers[layer].push(`<path d="${sc}" ${stroke(W.FAINT, col)}/>`);
+      }
       rec('tree', x - rx, 0, x + rx, h, { front: !back, cx: x, cy0: crownBase });
     },
 
     // A moored barge on water at `level`: hull, wheelhouse at the stern.
-    barge(x0, x1, level, { freeboard = 1.0, accent = false } = {}) {
+    barge(x0, x1, level, { freeboard = 1.0, accent = false, rail = false } = {}) {
       const draft = 0.6;
       const hull = `M${X(x0)} ${Y(level + freeboard)}H${X(x1)}L${X(x1 - 0.8)} ${Y(level - draft)}H${X(x0 + 1.2)}Z`;
       fillPath('lines', hull, palette.paper);
@@ -393,7 +456,64 @@ export function drawing(opts = {}) {
       fillPath('lines', rectD(wh0, level + freeboard, wh1, level + freeboard + 2.0), accent ? palette.accent : palette.paper);
       path('lines', rectD(wh0, level + freeboard, wh1, level + freeboard + 2.0), W.EDGE);
       path('detail', rectD(wh0 + 0.3, level + freeboard + 1.0, wh1 - 0.3, level + freeboard + 1.7), W.DETAIL, accent ? palette.ink : col);
+      if (rail) {
+        // guard rail along the foredeck, clear of the wheelhouse
+        const rh = 0.55;
+        path('detail', line(x0 + 0.2, level + freeboard + rh, wh0 - 0.2, level + freeboard + rh), W.DETAIL);
+        let posts = '';
+        for (let x = x0 + 0.5; x < wh0 - 0.3; x += 1.1) posts += line(x, level + freeboard, x, level + freeboard + rh);
+        path('detail', posts, W.FAINT);
+      }
       rec('barge', x0, level - draft, x1, level + freeboard + 2.0);
+    },
+
+    // --- Refinement layer: flat tones, shadows and small built details. All opt-in; without them
+    // the kit draws exactly as before. Colours stay in the palette and strokes in the five weights.
+
+    // Flat shadow on the ground to the side of a building or tree, `side` 1 = right (light from left).
+    groundShadow(x0, x1, { depth = 0.55, side = 1, opacity = 0.08 } = {}) {
+      const d1 = `M${X(x0)} ${Y(0)}L${X(x1)} ${Y(0)}L${X(x1 + side * depth)} ${Y(-depth * 0.4)}L${X(x0 + side * depth)} ${Y(-depth * 0.4)}Z`;
+      fillPathO('ground', d1, palette.ink, opacity);
+      rec('shadow', Math.min(x0, x0 + side * depth), -depth * 0.4, Math.max(x1, x1 + side * depth), 0);
+    },
+
+    // Shadow a projecting element (roof plate, balcony) casts on the wall below it, from y down depth.
+    castShadow(x0, x1, y, { depth = 0.6, opacity = 0.08 } = {}) {
+      fillPathO('fill', rectD(x0, y - depth, x1, y), palette.ink, opacity);
+      rec('shadow', x0, y - depth, x1, y);
+    },
+
+    // A stone plinth course at the base of a mass: tint band, slightly projecting. Call after mass().
+    plinth(x0, x1, { h = 0.5, out = 0.08 } = {}) {
+      fillPath('fill', rectD(x0 - out, 0, x1 + out, h), palette.tint);
+      path('lines', rectD(x0 - out, 0, x1 + out, h), W.EDGE);
+      rec('plinth', x0 - out, 0, x1 + out, h);
+    },
+
+    // A string course band at a floor line: tint band with an edge line. Call after mass().
+    stringCourse(x0, x1, y, { h = 0.14, out = 0.04 } = {}) {
+      fillPath('fill', rectD(x0 - out, y - h / 2, x1 + out, y + h / 2), palette.tint);
+      path('detail', line(x0 - out, y + h / 2, x1 + out, y + h / 2) + line(x0 - out, y - h / 2, x1 + out, y - h / 2), W.EDGE);
+      rec('band', x0 - out, y - h / 2, x1 + out, y + h / 2);
+    },
+
+    // A rain downpipe at facade position x, from just above ground to yTop, with hopper head and brackets.
+    downpipe(x, yTop, { bracket = 2.4, hopper = 0.35 } = {}) {
+      path('detail', line(x, 0.12, x, yTop), W.EDGE);
+      path('detail', rectD(x - 0.09, yTop, x + 0.09, yTop + hopper), W.DETAIL);
+      let b = '';
+      for (let y = bracket; y < yTop - 0.3; y += bracket) b += line(x - 0.07, y, x + 0.07, y);
+      if (b) path('detail', b, W.DETAIL);
+      rec('downpipe', x - 0.1, 0, x + 0.1, yTop + hopper);
+    },
+
+    // A guard rail from x0 to x1 at height y: top rail, end posts and intermediate posts.
+    railing(x0, x1, y, { h = 1.0, post = 1.1 } = {}) {
+      path('detail', line(x0, y + h, x1, y + h), W.EDGE);
+      let p = line(x0, y, x0, y + h) + line(x1, y, x1, y + h);
+      for (let x = x0 + post; x < x1 - 0.05; x += post) p += line(x, y, x, y + h);
+      path('detail', p, W.DETAIL);
+      rec('railing', x0, y, x1, y + h);
     },
 
     // Dimension line with ticks and a label, at height y above the building. `from` is the height
