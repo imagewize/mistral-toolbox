@@ -12,7 +12,7 @@
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
-[![Skills](https://img.shields.io/badge/skills-42-brightgreen)](#-vibe-skills)
+[![Skills](https://img.shields.io/badge/skills-43-brightgreen)](#-vibe-skills)
 [![Agents](https://img.shields.io/badge/agents-5-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
@@ -30,7 +30,7 @@ Reusable AI instructions in three kinds:
 | 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
 | 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 39 of the 42 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 39 of the 43 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
 
 ---
 
@@ -88,6 +88,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/landing-page`](skills/landing-page/SKILL.md) | High-converting landing pages — structure, layouts, conversion strategy, copy templates, SEO/AEO — with a block-pattern handoff. | MengTo |
 | [`/design-first-ui-prompting`](skills/design-first-ui-prompting/SKILL.md) | Turns fuzzy ideas into a design-first spec: prompt skeleton, constraints, single-variable variants, reference pack. | MengTo |
 | [`/no-ai-design-slop`](skills/no-ai-design-slop/SKILL.md) | Quality gate against generic AI-design defaults: removal test and full slop catalog. | MengTo |
+| [`/architectural-drawing`](skills/architectural-drawing/SKILL.md) | Architectural elevations and sections as SVG, built in metres with a bundled kit (`arch.mjs`): one scale, a fixed line-weight hierarchy, people and trees for scale, with proportion, overlap and file checks. | Imagewize |
 | [`/illustration-isometric-mono`](skills/illustration-isometric-mono/SKILL.md) | True-isometric SVG dioramas built with a bundled scene kit (`iso.mjs`) instead of hand-written coordinates, with lint and colour checks and a render-and-critique loop. | MengTo |
 | [`/ui-ux-pro-max`](skills/ui-ux-pro-max/SKILL.md) | Design intelligence with local catalogs (styles, palettes, font pairings, 119 UX guidelines, icons, motion, charts, 22 stacks). | nextlevelbuilder |
 | [`/ux-writing`](skills/ux-writing/SKILL.md) | Microcopy — buttons, labels, errors, empty states, onboarding — with voice/tone and accessibility guidance. | content-designer |
@@ -188,7 +189,7 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 | Agent | Role | Skills it loads |
 |-------|------|-----------------|
 | [`wp-reviewer`](agents/wp-reviewer.toml) | Reviews WordPress diffs, PRs, plugins and patterns | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
-| [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, illustration-isometric-mono |
+| [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono |
 | [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
