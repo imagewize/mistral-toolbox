@@ -1,6 +1,6 @@
 # Sourcing external skills, agents, plugins and connectors into Mistral Toolbox — Plan
 
-- **Status:** proposal (not yet executed)
+- **Status:** in progress — Phase 0 executed 2026-11-02 (`docs/sources.md` + `NOTICE.md` created; licenses verified via LICENSE files and the GitHub API; commits pinned in `docs/sources.md`); Phase 1 license checks recorded there
 - **Date:** 2026-11-02
 - **Replaces:** `docs/anubhav-vibe-integration-plan.md` (removed — its source collection is CC BY-NC-SA 4.0 and stays reference-only, see section 2)
 - **Target repo:** `mistral-toolbox` (this repository, MIT, Imagewize)
@@ -26,7 +26,7 @@ Can we improve mistral-toolbox with external collections of skills, agents, plug
 
 ## 3. Source table
 
-Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENSE file on 2026-11-02; others are per README or registry listing and need confirmation at import time.
+Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENSE file on 2026-11-02; **(API)** means the GitHub API `license` field. Pinned commit hashes and full verification notes live in `docs/sources.md`.
 
 ### Ready to import (verified permissive licenses)
 
@@ -55,26 +55,28 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 | `xiaopu-ai/web-design` | MIT (LICENSE fetched) | Spec-first, code-second web design skill |
 | `rekryt/skill-tailwind` | MIT (LICENSE fetched) | Tailwind CSS v4 skill |
 | `siddik-web/wp-block-theme-converter` | MIT (LICENSE fetched) | Converts any HTML/CSS/JS project into a production-ready WordPress block theme (FSE) — the design → WP-pattern bridge |
+| `mralaminahamed/wp-dev-skills` | MIT (API) | WordPress plugin development skills |
+| `BagelHole/DevOps-Security-Agent-Skills` | MIT (API) | 80+ skills: K8s, Terraform, AWS/Azure/GCP, SOC2/ISO27001, incident response |
+| `mustafakendiguzel/claude-code-ui-agents` | MIT (API) | UI/UX agent prompts |
 
 ### Verify license before any import
 
 | Source | Why caution |
 |---|---|
-| `WordPress/agent-skills` (official WP org, 15 skills incl. `wp-patterns` and `wp-block-themes`) | No root LICENSE found at `trunk` — check repo metadata/README; until a permissive license is confirmed, treat as reference-only |
-| `Automattic/wp-skill` | No root LICENSE found — reference-only until confirmed |
-| `Automattic/agent-skills`, `Automattic/wordpress-agent-skills` | Early prototypes; check license |
-| `jorgerosal/wordpress-skills` (plugin review, security audits, WooCommerce, WPGraphQL, performance, REST, migrations) | Claims MIT but ships no LICENSE file, and ~78 of 120 skills are vendored from 12 other projects — per-skill license audit required |
-| `wpacademy/wordpress-dev-skills`, `dknauss/agent-skills`, `mralaminahamed/wp-dev-skills` | Check per repo |
-| `BagelHole/DevOps-Security-Agent-Skills` (80+ skills: K8s, Terraform, AWS/Azure/GCP, SOC2/ISO27001, incident response) | License unverified |
+| `jorgerosal/wordpress-skills` (plugin review, security audits, WooCommerce, WPGraphQL, performance, REST, migrations) | Claims MIT but ships no LICENSE file, and ~78 of 120 skills are vendored from 12 other projects — per-skill license audit required before any use |
 | `anthropics/skills` | Mixed: example skills Apache-2.0, document skills source-available — per-skill licenses only |
-| `mustafakendiguzel/claude-code-ui-agents` | MIT declared in third-party registries; confirm LICENSE file |
-| `shadcn-ui/ui`, `modelcontextprotocol/servers` | MIT (well-known) — component code / reference MCP servers, not prompts |
+| `shadcn-ui/ui` | MIT (API) — component code reference, not prompts |
 
 **Tools we reference but never vendor:** `humanmade/block-runner` (GPL-2.0+, LICENSE fetched) converts HTML into WordPress blocks — GPL is fine for *running* it in a client project, but its code and docs must not be copied into this MIT repo. List it in `docs/sources.md` as a recommended project-level tool for HTML → block-pattern conversion.
 
 ### Reference-only (never import)
 
 - `anubhav-vibe` (CC BY-NC-SA 4.0) — generalist 5,340-skill collection incl. 35 `acd-*-design` aesthetic-style skills and design modes; the *categories* inform our curation, the content is never copied
+- `WordPress/agent-skills` (official WP org, incl. `wp-patterns` / `wp-block-themes`) — GitHub API reports NOASSERTION (no LICENSE at `trunk`, pinned `eff3785f`); reference-only unless the WP org adds a CC0/MIT LICENSE (open action item)
+- `Automattic/wp-skill`, `Automattic/agent-skills`, `Automattic/wordpress-agent-skills` — no repo-level license detected; reference-only
+- `dknauss/agent-skills` — NOASSERTION; reference-only
+- `wpacademy/wordpress-dev-skills` — GPL-2.0, outside the allowed license list; reference-only
+- `modelcontextprotocol/servers` — no repo-level license detected; reference listing only
 - `jiji262/claude-design-skill` — adapted from Anthropic's internal design prompt; derivative of proprietary material, never import regardless of repo license
 - Any vendor system-prompt leak collections — licensing/IP risk
 - Anything all-rights-reserved (GitHub "no license") — no usage rights at all
@@ -93,7 +95,7 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 
 ## 5. Curated candidate list by area
 
-**WordPress dev (`skills/`):** `respira-press/agent-skills-wordpress` (MIT — audit/optimize/fix/migrate), `WordPress/agent-skills` (after license check), `jorgerosal/wordpress-skills` (after per-skill license audit), `wpacademy/wordpress-dev-skills` (block themes, theme.json), `dknauss/agent-skills` (plugins, blocks, themes, ops, security).
+**WordPress dev (`skills/`):** `respira-press/agent-skills-wordpress` (MIT — audit/optimize/fix/migrate), `mralaminahamed/wp-dev-skills` (MIT — plugin dev), `jorgerosal/wordpress-skills` (only after the per-skill license audit). The official `WordPress/agent-skills`, Automattic, wpacademy and dknauss repos are reference-only — see `docs/sources.md`.
 
 **Code review & workflow (`skills/`):** `obra/superpowers` (code-review pair, systematic-debugging, TDD, writing-plans), `addyosmani/agent-skills` (`code-review-and-quality` + 23 more), security/review subsets of `alirezarezvani/claude-skills`, reviewer agents from `wshobson/agents`.
 
@@ -103,7 +105,7 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 
 **Working with designs:** `GLips/Figma-Context-MCP` (MIT) — recommend as a project-level MCP connector (Figma → agent), documented, not vendored. `shadcn-ui/ui` (MIT) as component reference for imagewize.com-style frontends.
 
-**Design → HTML/CSS → WordPress patterns (`skills/`):** `Ilm-Alan/frontend-design` (aesthetic anchors locked to CSS tokens — the closest permissive-license equivalent of anubhav-vibe's `acd-*-design` style skills), `MengTo/Skills` (web-design + Tailwind v4), `Koomook/claude-frontend-skills`, `xiaopu-ai/web-design`, `rekryt/skill-tailwind`; bridge to WordPress: `siddik-web/wp-block-theme-converter` (HTML/CSS/JS → FSE block theme), the `wp-patterns` / `wp-block-themes` skills from `WordPress/agent-skills` (pending license check), and `humanmade/block-runner` as a project-level conversion tool. Acceptance for this area: a skill-generated HTML/CSS design converts to a valid block pattern in Elayne without manual fixes to CSS variable names or markup semantics.
+**Design → HTML/CSS → WordPress patterns (`skills/`):** `Ilm-Alan/frontend-design` (aesthetic anchors locked to CSS tokens — the closest permissive-license equivalent of anubhav-vibe's `acd-*-design` style skills), `MengTo/Skills` (web-design + Tailwind v4), `Koomook/claude-frontend-skills`, `xiaopu-ai/web-design`, `rekryt/skill-tailwind`; bridge to WordPress: `siddik-web/wp-block-theme-converter` (HTML/CSS/JS → FSE block theme), `wp-patterns` / `wp-block-themes` guidance from `WordPress/agent-skills` (reference-only — we replicate it in our own skills), and `humanmade/block-runner` as a project-level conversion tool. Acceptance for this area: a skill-generated HTML/CSS design converts to a valid block pattern in Elayne without manual fixes to CSS variable names or markup semantics.
 
 **Personas / Le Chat agents (`agents/`):** `mthalman/agent-personas`, `dontriskit/awesome-ai-system-prompts`, `mustafakendiguzel` personas — re-scoped to our agent anatomy, each with a `prompts/<agent>/<run>/` example.
 
@@ -111,7 +113,7 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 
 ## 6. Gaps — what these sources do NOT have
 
-None of them carry Elayne/Nynaeve/Aludra-specific conventions, and most lack Bedrock/WP-CLI/Sage-specific depth (the official `WordPress/agent-skills` covers core blocks/themes/plugins best practices — pending license check). Those we author ourselves; our existing `code-review` skill, `FRONTEND-DEV` and `REVIEWER` agents already cover part of it. Ready-made design *styles* like anubhav-vibe's `acd-*-design` set exist only in CC BY-NC-SA sources, so we rebuild that capability from the MIT design skills above rather than copying styles. Treat external sources as a force multiplier for the generic layer (WordPress core, review, DevOps, UI/UX, design-to-code), not as a source of Imagewize-specific conventions.
+None of them carry Elayne/Nynaeve/Aludra-specific conventions, and most lack Bedrock/WP-CLI/Sage-specific depth (the official `WordPress/agent-skills` would cover core blocks/themes/plugins best practices, but it has no detectable license and is reference-only — we author that guidance ourselves). Those we author ourselves; our existing `code-review` skill, `FRONTEND-DEV` and `REVIEWER` agents already cover part of it. Ready-made design *styles* like anubhav-vibe's `acd-*-design` set exist only in CC BY-NC-SA sources, so we rebuild that capability from the MIT design skills above rather than copying styles. Treat external sources as a force multiplier for the generic layer (WordPress core, review, DevOps, UI/UX, design-to-code), not as a source of Imagewize-specific conventions.
 
 ## 7. Import standards (quality gates from AGENTS.md)
 
@@ -147,7 +149,7 @@ README's structure section and AGENTS.md's layout section get updated in the sam
 
 | Phase | Work | Output | Acceptance |
 |---|---|---|---|
-| **0. Provenance files** | Create `docs/sources.md` and `NOTICE.md` skeletons; record this licensing policy; CHANGELOG entry | Provenance scaffolding in repo | Policy recorded; no import lands without a sources.md entry |
+| **0. Provenance files** | Create `docs/sources.md` and `NOTICE.md`; record licensing policy; verify licenses (LICENSE files + GitHub API) and pin commits; CHANGELOG entry — **done 2026-11-02** | Provenance scaffolding in repo | Policy recorded; no import lands without a sources.md entry |
 | **1. Curate + license-check** | For each section-5 candidate: confirm the artifact-level license at a pinned commit (including vendored-content audits like jorgerosal's), read fully, score relevance to Elayne/Nynaeve/imagewize.com | Shortlist with per-item license + relevance notes | Each shortlisted item has a named destination and a verified license |
 | **2. Convert skills** | Rename dir, rewrite frontmatter (name/description/version/source/license), copy per-skill LICENSE, then manual pass over quality gates | `skills/<new-name>/SKILL.md` per item | Gates 0–4 pass |
 | **3. Convert agents** | Adapt persona/agent markdown to Le Chat anatomy; create `prompts/<agent>/<run>/` example runs | `agents/ROLE.md` + example runs | Example run produces the documented output format |
@@ -155,7 +157,7 @@ README's structure section and AGENTS.md's layout section get updated in the sam
 | **5. Reference layer** | Fold useful rules/commands material into existing skills' checklists (e.g. extend `code-review`) | Diff edits to existing skills | code-review gains sections; version bumped |
 | **6. Ship** | Branch per phase, semantic commits, PRs, CHANGELOG `[Unreleased]` entries, README/AGENTS.md layout updates, tag release when merged | PRs + `vX.Y.Z` release | All section-7 gates pass |
 
-Suggested order within phases: WordPress skills first (`respira-press`, then `WordPress/agent-skills` once its license is confirmed), then the design → HTML/CSS → WordPress-pattern set (`Ilm-Alan/frontend-design`, `MengTo/Skills`, `siddik-web/wp-block-theme-converter`), then review/workflow (`superpowers`, `addyosmani`), then DevOps, then remaining UI/UX, then plugins.
+Suggested order within phases: WordPress skills first (`respira-press`, `mralaminahamed`), then the design → HTML/CSS → WordPress-pattern set (`Ilm-Alan/frontend-design`, `MengTo/Skills`, `siddik-web/wp-block-theme-converter`), then review/workflow (`superpowers`, `addyosmani`), then DevOps (`NotHarshhaa`, `BagelHole`), then remaining UI/UX, then plugins.
 
 ## 10. Per-artifact conversion checklist
 
@@ -177,7 +179,7 @@ Suggested order within phases: WordPress skills first (`respira-press`, then `Wo
 
 ## 12. Open questions
 
-1. `WordPress/agent-skills` license: no root LICENSE at `trunk` — confirm via repo metadata or an issue to the WP org. Until confirmed permissive: reference-only. (Blocks its use in Phase 2.)
+1. ~~`WordPress/agent-skills` license~~ **Resolved 2026-11-02:** GitHub API reports NOASSERTION (no LICENSE at `trunk`, pinned `eff3785f`) → reference-only. Open action: ask the WordPress org to add a CC0/MIT LICENSE; re-evaluate at the next sync.
 2. Scope of DevOps and UI/UX imports: full sets, or a curated top-N per area?
 3. Plugins: native Agent Plugins 1.0 conversion for everything, or let Vibe auto-adapt Claude-format plugins (less work, less control)?
 4. MCP connectors (Figma-Context-MCP etc.): document as recommended project-level connectors in `docs/sources.md`, or leave entirely to consuming projects?
