@@ -61,6 +61,10 @@ mistral-toolbox/
 │   ├── performance-optimization/ # /performance-optimization — profile-first perf work (MIT, addyosmani)
 │   ├── frontend-ui-engineering/ # /frontend-ui-engineering — accessible production UIs (MIT, addyosmani)
 │   ├── observability-and-instrumentation/ # /observability-and-instrumentation — logging/metrics/tracing (MIT, addyosmani)
+│   ├── better-ui/               # /better-ui — surfaces, icons, motion polish (MIT, jakubkrehel)
+│   ├── better-accessibility/    # /better-accessibility — WCAG keyboard/ARIA/forms fixes (MIT, jakubkrehel)
+│   ├── better-colors/           # /better-colors — contrast, palettes, token naming (MIT, jakubkrehel)
+│   ├── interface-review/        # /interface-review — review a change for interface regressions (MIT, jakubkrehel)
 │   └── create-pull-request/   # /create-pull-request — safe gh PR creation, no quoting accidents (authored here)
 ├── docs/                    # Plans and source notes
 │   ├── external-skills-sourcing-plan.md  # Import policy, phased plan, quality gates
@@ -170,6 +174,10 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [performance-optimization](/skills/performance-optimization/SKILL.md) | `/performance-optimization` | Profile-first performance work across frontend, backend, queries, databases; re-measure after every fix. MIT, adapted from `addyosmani/agent-skills`. |
 | [frontend-ui-engineering](/skills/frontend-ui-engineering/SKILL.md) | `/frontend-ui-engineering` | Production-quality accessible responsive UIs: semantic markup, keyboard/focus states, real content. MIT, adapted from `addyosmani/agent-skills`. |
 | [observability-and-instrumentation](/skills/observability-and-instrumentation/SKILL.md) | `/observability-and-instrumentation` | Structured logging, metrics, tracing and alerting so production behavior is diagnosable. MIT, adapted from `addyosmani/agent-skills`. |
+| [better-ui](/skills/better-ui/SKILL.md) | `/better-ui` | Polish surfaces, icons and motion with exact values (radius, optical alignment, enter/exit). MIT, adapted from `jakubkrehel/skills`. |
+| [better-accessibility](/skills/better-accessibility/SKILL.md) | `/better-accessibility` | Fix keyboard/focus, ARIA, accessible names, forms, hit areas, motion/zoom, screen readers. MIT, adapted from `jakubkrehel/skills`. |
+| [better-colors](/skills/better-colors/SKILL.md) | `/better-colors` | Color formats, contrast, palette generation/structure and token naming. MIT, adapted from `jakubkrehel/skills`. |
+| [interface-review](/skills/interface-review/SKILL.md) | `/interface-review` | Review a branch/PR/change for the interface problems it introduces, scoped to what changed. MIT, adapted from `jakubkrehel/skills`. |
 
 ```
 /code-review                 # this branch against the default base branch

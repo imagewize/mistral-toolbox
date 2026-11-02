@@ -96,3 +96,7 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/performance-optimization/` (SKILL.md + references/ + LICENSE) | `github.com/addyosmani/agent-skills` skills/performance-optimization + references/ | MIT | `301b02b12bff98e4688e6984af6556802322bbde` | 1.0.0 |
 | 2026-11-02 | `skills/frontend-ui-engineering/` (SKILL.md + references/ + LICENSE) | `github.com/addyosmani/agent-skills` skills/frontend-ui-engineering + references/ | MIT | `301b02b12bff98e4688e6984af6556802322bbde` | 1.0.0 |
 | 2026-11-02 | `skills/observability-and-instrumentation/` (SKILL.md + references/ + LICENSE) | `github.com/addyosmani/agent-skills` skills/observability-and-instrumentation + references/ | MIT | `301b02b12bff98e4688e6984af6556802322bbde` | 1.0.0 |
+| 2026-11-02 | `skills/better-ui/` (SKILL.md + 6 refs + LICENSE) | `github.com/jakubkrehel/skills` skills/better-ui | MIT | `60bf140e43c98b248e6594487384ec967e89d98a` | 1.0.0 |
+| 2026-11-02 | `skills/better-accessibility/` (SKILL.md + 6 refs + LICENSE) | `github.com/jakubkrehel/skills` skills/better-accessibility | MIT | `60bf140e43c98b248e6594487384ec967e89d98a` | 1.0.0 |
+| 2026-11-02 | `skills/better-colors/` (SKILL.md + 6 refs + LICENSE) | `github.com/jakubkrehel/skills` skills/better-colors | MIT | `60bf140e43c98b248e6594487384ec967e89d98a` | 1.0.0 |
+| 2026-11-02 | `skills/interface-review/` (SKILL.md + 2 refs + LICENSE) | `github.com/jakubkrehel/skills` skills/interface-review | MIT | `60bf140e43c98b248e6594487384ec967e89d98a` | 1.0.0 |
