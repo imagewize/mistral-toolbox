@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-02
+
 ### Changed
 
-- Renamed the repository from `mistral-agents` to `mistral-toolbox` ("Mistral Toolbox") so the name also covers future artifact types beyond agents and skills (MCP servers, plugins, hooks); updated the README title and install path, AGENTS.md, this changelog, and the `code-review` skill `metadata.source` (version bumped to 1.1.1) accordingly. `imagewize/aludra` carries a copy of `code-review` and needs the new copy.
+- Renamed the repository from `mistral-agents` to `mistral-toolbox` ("Mistral Toolbox") — on GitHub (`gh repo rename`, the old URL redirects) and in the local clone — so the name also covers future artifact types beyond agents and skills (MCP servers, plugins, hooks); updated the README title and install path, AGENTS.md, this changelog, and the `code-review` skill `metadata.source` (version bumped to 1.1.1) accordingly
+- Updated the `code-review` skill copies carried by `imagewize/aludra`, `seed` and `koffie` to 1.1.1 with the new source, and pointed living references in other local repos (`mshin`, `ecotuin`, `winespring`, `aviendha`) at the new name
 
 ## [1.4.0] - 2026-09-13
 
