@@ -1,11 +1,15 @@
 # Changelog
 
-All notable changes to the mistral-agents repository will be documented in this file.
+All notable changes to the mistral-toolbox repository will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
+
+- Renamed the repository from `mistral-agents` to `mistral-toolbox` ("Mistral Toolbox") so the name also covers future artifact types beyond agents and skills (MCP servers, plugins, hooks); updated the README title and install path, AGENTS.md, this changelog, and the `code-review` skill `metadata.source` (version bumped to 1.1.1) accordingly. `imagewize/aludra` carries a copy of `code-review` and needs the new copy.
 
 ## [1.4.0] - 2026-09-13
 

@@ -9,8 +9,8 @@ allowed-tools:
   - ask_user_question
   - todo
 metadata:
-  version: "1.1.0"
-  source: "github.com/imagewize/mistral-agents skills/code-review"
+  version: "1.1.1"
+  source: "github.com/imagewize/mistral-toolbox skills/code-review"
 ---
 
 # Code Review
