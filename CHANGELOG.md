@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README redesigned: centered header with shields.io badges (release, license, last commit, Mistral Vibe, Le Chat, WordPress, and skills/agents/prompts counts), a quick-nav bar, an overview table of the three artifact kinds, a Quick start section, skills grouped into four categories (WordPress, design & frontend, workflow & quality, DevOps & release) with a **Source** column, collapsible install/contributing details, a condensed repository tree, and new Credits and License sections listing the 11 MIT upstream collections
+- README: replaced the dead Mistral Agent docs link (`docs.mistral.ai/capabilities/agent/`, 404) with `docs.mistral.ai/agents/introduction` and added the Vibe agents docs link; the per-project install note now covers any skill, not just `code-review`
+- AGENTS.md: layout lists `NOTICE.md` and `LICENSE.md`; new "Importing third-party skills" section (license gate, copied LICENSE, `metadata.source`, `docs/sources.md` + `NOTICE.md` logging) and "Keeping the README in sync" section (tables, count badges, credits); PRs are opened with the `create-pull-request` skill
+- GitHub repository description and topics refreshed
+
 ### Fixed
 
 - README: the Le Chat Prompts section no longer labels the prompts as "agents" — "Available Agents" is now "Available Prompts" (table header `Prompt`), with "Rules for the Frontend Prompts" and "Example Prompt Runs" renamed to match, so the table lists the Le Chat prompts (`FRONTEND-DEV.md`, `REVIEWER.md`) while the actual agents — the Vibe profiles `wp-reviewer`, `wp-frontend-builder`, `ux-designer`, `devops-oncall`, `release-manager` in `agents/` — are documented in the Vibe Agents section. The section also gained an intro sentence stating that Le Chat prompts are pasted into a Le Chat agent (no file access) while the Vibe agents run the skills on real files
