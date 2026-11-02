@@ -9,11 +9,11 @@ const out = process.argv[2] || 'pakhuis-section.svg';
 // ---------------- layout (metres) ----------------
 const B = { x0: 0, x1: 16, wall: 0.5, eave: 9, ridge: 13, roof: 0.35 };  // the existing warehouse
 const FLOORS = [3.2, 6.4];                                                 // the inserted floors
-const EXTENT = { x0: -2.5, x1: 20.5, top: 15.6, bottom: -1.6 };
+const EXTENT = { x0: -2.5, x1: 22.8, top: 15.6, bottom: -1.6 };
 
 const d = A.drawing({ width: 560, height: 400, extent: EXTENT, displayWidth: 533, prefix: 'ps-' });
 
-d.tree(18.4, { h: 9, layer: 'back' });
+d.tree(19.8, { h: 8, layer: 'back' });                 // clear of the cut wall at x 15.5..16
 d.ground(EXTENT.x0, EXTENT.x1);
 
 // cut walls, the cut roof with a skylight, and the floor slabs

@@ -471,6 +471,17 @@ ${body}
         if (coversX && t.cy0 < m.y1) warnings.push(`tree at x=${f(t.cx)} covers a corner of the mass ${f(m.x0)}..${f(m.x1)}; move it clear of the outline or use layer: 'back'`);
       }
     }
+    // A tree crossing a cut wall: in a section the space between the cut walls is open, so a tree
+    // behind the building shows through and its crown runs over the wall. Applies to trees on
+    // both layers.
+    for (const c of items.filter((i) => i.type === 'cut')) {
+      for (const t of items.filter((i) => i.type === 'tree')) {
+        if (t.x0 < c.x1 && t.x1 > c.x0 && t.cy0 < c.y1 && t.y1 > c.y0) {
+          warnings.push(`tree at x=${f(t.cx)} crosses the cut wall at x=${f(c.x0)}..${f(c.x1)}; in a section keep trees outside the cut walls`);
+          break;
+        }
+      }
+    }
     // Nothing but boats stands over the water beyond a quay edge.
     for (const q of items.filter((i) => i.type === 'quay')) {
       for (const it of items.filter((i) => ['figure', 'tree', 'mass', 'chimney'].includes(i.type))) {

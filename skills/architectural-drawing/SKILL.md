@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
   source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
 ---
 
@@ -195,6 +195,9 @@ Write absolute paths out in full.
 - **Something floating.** A mass or chimney that starts above the ground and does not stand on a
   mass or roof is an error.
 - **Trees over corners.** The kit warns when a front tree's crown covers a mass corner.
+- **Trees through a section.** Between the cut walls a section is open, so a tree behind the
+  building shows through and its crown crosses the wall. The kit warns; keep trees outside the
+  cut walls.
 - **Invalid SVG.** A repeated attribute makes the browser show an error page instead of the
   drawing. `check.mjs` catches it.
 
