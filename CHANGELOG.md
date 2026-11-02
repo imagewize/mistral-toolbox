@@ -5,6 +5,12 @@ All notable changes to the mistral-toolbox repository will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- README: the Le Chat Prompts section no longer labels the prompts as "agents" — "Available Agents" is now "Available Prompts" (table header `Prompt`), with "Rules for the Frontend Prompts" and "Example Prompt Runs" renamed to match, so the table lists the Le Chat prompts (`FRONTEND-DEV.md`, `REVIEWER.md`) while the actual agents — the Vibe profiles `wp-reviewer`, `wp-frontend-builder`, `ux-designer`, `devops-oncall`, `release-manager` in `agents/` — are documented in the Vibe Agents section
+
 ## [1.6.0] - 2026-11-02
 
 ### Added
