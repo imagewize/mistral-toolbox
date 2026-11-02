@@ -24,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated `docs/external-skills-sourcing-plan.md` to in-progress: Phase 0 marked done, source table updated with API-verified licenses (MIT confirmed for `mralaminahamed/wp-dev-skills`, `BagelHole/DevOps-Security-Agent-Skills`, `mustafakendiguzel/claude-code-ui-agents`; `WordPress/agent-skills` resolved as reference-only, NOASSERTION), and open question 1 closed with an action item to ask the WordPress org for a CC0/MIT LICENSE
 
+### Added
+
+- Added `skills/frontend-design/` — first imported Vibe skill: `/frontend-design` builds a frontend from one of eight aesthetic anchors locked to exact CSS tokens with real on-screen content, plus a WordPress note (`var(--wp--preset--*)`, theme.json, i18n) so designs convert cleanly to block patterns; MIT from `Ilm-Alan/frontend-design` @ `f8966e6c`, `LICENSE.txt` copied, `metadata.version` 1.0.0, logged in `docs/sources.md` and `NOTICE.md`
+- Added `skills/html-to-block-theme/` — `/html-to-block-theme` converts an HTML/CSS/JS design into a production-ready FSE block theme (theme.json v3 from design tokens, templates, parts, block patterns, Interactivity API, Block Bindings, optional WooCommerce); MIT from `siddik-web/wp-block-theme-converter` @ `0347e823`, `references/` (21 docs) and `LICENSE` included, slash commands/`doctor.mjs`/templates not imported and replaced with plain single commands; WordPress version claims verified against current stable 7.1.4; `metadata.version` 1.0.0
+- Added `docs/curation-2026-11-02.md` — Phase 1 curation notes for the first-wave sources (what was imported, skipped and why, queued candidates)
+- Updated README structure tree and skills table, and `NOTICE.md`, for the two new skills
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed

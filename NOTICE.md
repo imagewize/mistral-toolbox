@@ -18,5 +18,12 @@ Rules:
 
 ## Third-party material currently included
 
-None yet — Phase 0 of the sourcing plan (2026-11-02) created this register and
-`docs/sources.md`. Entries are added here as imports land.
+- `skills/frontend-design/` — from `github.com/Ilm-Alan/frontend-design`,
+  MIT (© upstream author, see the copied `LICENSE.txt`), pinned
+  `f8966e6cc9b90247aa102d71f7e675ec3462b419`
+- `skills/html-to-block-theme/` — from `github.com/siddik-web/wp-block-theme-converter`,
+  MIT (© upstream author, see the copied `LICENSE`), pinned
+  `0347e8237f0d68a05abf3715d7cd8e271d23598f`
+
+Full register with all approved sources: `docs/sources.md`. Entries are added here as
+imports land.
