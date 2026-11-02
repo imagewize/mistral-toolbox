@@ -26,16 +26,16 @@ mistral-toolbox/
 │   ├── devops-oncall.toml       # incident / on-call agent
 │   ├── release-manager.toml     # release & PR agent
 │   └── README.md                # wiring + usage docs
-├── prompts/                 # Le Chat prompts (flat .md) + example runs
-│   ├── FRONTEND-DEV.md      # Frontend Developer system prompt (WordPress-focused)
-│   ├── REVIEWER.md          # Frontend Code Reviewer system prompt
+├── prompts/                 # Le Chat prompts + example runs, one dir per agent
 │   ├── frontend-dev/
+│   │   ├── FRONTEND-DEV.md      # Frontend Developer system prompt (WordPress-focused)
 │   │   └── elayne-hero-block/
 │   │       ├── PROMPT.md        # Input prompt used
 │   │       ├── OUTPUT.md        # Raw agent output
 │   │       ├── FEEDBACK.md      # Review notes and issues found
 │   │       └── canvas.html      # Generated HTML canvas
 │   └── reviewer/
+│       ├── REVIEWER.md          # Frontend Code Reviewer system prompt
 │       └── elayne-hero-block/
 │           ├── PROMPT.md        # HTML input submitted for review
 │           ├── OUTPUT.md        # Structured review report (FAIL)
@@ -97,7 +97,7 @@ mistral-toolbox/
 
 ### Quick Start
 
-1. Copy any `.md` prompt file from the top of the `prompts/` directory (e.g., `prompts/FRONTEND-DEV.md`) — the flat `.md` files are the prompts, one per file, the same convention as Vibe's own `.vibe/prompts/` directory
+1. Copy the prompt file from an agent's directory under `prompts/` (e.g., `prompts/frontend-dev/FRONTEND-DEV.md`) — one `.md` system prompt per agent, kept next to its example runs
 2. Paste into Le Chat → **Agents** → New Agent → **System Prompt**
 3. Set model to `mistral-large-latest` or `devstral`
 4. Start chatting!
@@ -108,10 +108,10 @@ mistral-toolbox/
 
 | Agent | Role | Focus | Best For |
 |-------|------|-------|----------|
-| [FRONTEND-DEV.md](/prompts/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns | WordPress devs, theme authors |
-| [REVIEWER.md](/prompts/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance | Frontend devs, designers |
+| [FRONTEND-DEV.md](/prompts/frontend-dev/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns | WordPress devs, theme authors |
+| [REVIEWER.md](/prompts/reviewer/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance | Frontend devs, designers |
 
-**More roles are covered by the Vibe agents and skills** — see [Vibe Agents](#-vibe-agents) below: `devops-oncall` (incident / CI / k8s), `ux-designer` (UI/UX, accessibility via `/better-accessibility`), `wp-reviewer` (review & QA), while the `wordpress-*` skills cover PHP/WordPress backend work. New Le Chat prompts are still welcome — add them as `prompts/ROLE.md` with an example run under `prompts/<agent>/<run>/`.
+**More roles are covered by the Vibe agents and skills** — see [Vibe Agents](#-vibe-agents) below: `devops-oncall` (incident / CI / k8s), `ux-designer` (UI/UX, accessibility via `/better-accessibility`), `wp-reviewer` (review & QA), while the `wordpress-*` skills cover PHP/WordPress backend work. New Le Chat prompts are still welcome — add them as `prompts/<agent>/ROLE.md` with an example run under `prompts/<agent>/<run>/`.
 
 ### WordPress Context
 
@@ -135,7 +135,7 @@ They include full page builds with component extraction, developer handoff notes
 
 ### Example Agent Runs
 
-The `prompts/` directory holds the Le Chat prompt files (flat `.md` at the root, one prompt per file — Vibe's `.vibe/prompts/` convention) and real example runs under `prompts/<agent>/<run>/` — input prompt, raw output, canvas, and review feedback — so you can see how each agent performs in practice and what to watch out for.
+The `prompts/` directory holds the Le Chat prompts and their example runs, one directory per agent: `prompts/<agent>/ROLE.md` is the system prompt, and each `prompts/<agent>/<run>/` folder is a real run — input prompt, raw output, canvas, and review feedback — so you can see how the agent performs in practice and what to watch out for.
 
 | Run | Agent | Status |
 |-----|-------|--------|
@@ -289,7 +289,7 @@ Notes:
 
 ### A Le Chat prompt
 
-1. **Create**: New `.md` file at the top of the `prompts/` directory (e.g., `prompts/BACKEND-DEV.md`) — flat files only; example runs go in `prompts/<agent>/<run>/` subdirectories
+1. **Create**: New directory `prompts/<agent>/` with the prompt file inside (e.g., `prompts/backend-dev/BACKEND-DEV.md`); example runs go in `prompts/<agent>/<run>/` subdirectories
 2. **Name it well**: Use role-based naming like `ROLE-SPECIALIZATION.md`
 3. **Structure your prompt**:
    - Role description and scope
