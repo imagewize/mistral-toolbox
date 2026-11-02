@@ -23,6 +23,7 @@ mistral-toolbox/
 ├── agents/            # Le Chat agent system prompts
 ├── prompts/           # Example Le Chat runs: prompts/<agent>/<run>/
 ├── skills/            # Vibe skills: skills/<name>/SKILL.md
+├── docs/              # Plans and source notes: docs/<topic>.md
 ├── README.md
 └── CHANGELOG.md
 ```

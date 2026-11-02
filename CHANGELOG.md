@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `docs/anubhav-vibe-integration-plan.md`: plan for curating and adapting skills, agents and plugins from the external `anubhav-vibe` collection (CC BY-NC-SA 4.0) into this repo — format mapping, licensing analysis, WordPress-relevant shortlist, quality gates and phased execution
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed
