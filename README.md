@@ -65,6 +65,15 @@ mistral-toolbox/
 │   ├── better-accessibility/    # /better-accessibility — WCAG keyboard/ARIA/forms fixes (MIT, jakubkrehel)
 │   ├── better-colors/           # /better-colors — contrast, palettes, token naming (MIT, jakubkrehel)
 │   ├── interface-review/        # /interface-review — review a change for interface regressions (MIT, jakubkrehel)
+│   ├── incident/                # /incident — read-only SRE incident investigation (MIT, NotHarshhaa)
+│   ├── runbook/                 # /runbook — operational runbooks (MIT, NotHarshhaa)
+│   ├── observability-review/    # /observability-review — metrics/logs/traces/alerting review (MIT, NotHarshhaa)
+│   ├── security-review/         # /security-review — infra/app security posture review (MIT, NotHarshhaa)
+│   ├── pipeline-review/         # /pipeline-review — CI/CD pipeline review (MIT, NotHarshhaa)
+│   ├── release-readiness/       # /release-readiness — release gate checklist (MIT, NotHarshhaa)
+│   ├── git-workflow/            # /git-workflow — branching, PR and release patterns (MIT, BagelHole)
+│   ├── alerting-oncall/         # /alerting-oncall — alerting rules, on-call rotations (MIT, BagelHole)
+│   ├── kubernetes-ops/          # /kubernetes-ops — deploy/scale/troubleshoot k8s (MIT, BagelHole)
 │   └── create-pull-request/   # /create-pull-request — safe gh PR creation, no quoting accidents (authored here)
 ├── docs/                    # Plans and source notes
 │   ├── external-skills-sourcing-plan.md  # Import policy, phased plan, quality gates
@@ -178,6 +187,15 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [better-accessibility](/skills/better-accessibility/SKILL.md) | `/better-accessibility` | Fix keyboard/focus, ARIA, accessible names, forms, hit areas, motion/zoom, screen readers. MIT, adapted from `jakubkrehel/skills`. |
 | [better-colors](/skills/better-colors/SKILL.md) | `/better-colors` | Color formats, contrast, palette generation/structure and token naming. MIT, adapted from `jakubkrehel/skills`. |
 | [interface-review](/skills/interface-review/SKILL.md) | `/interface-review` | Review a branch/PR/change for the interface problems it introduces, scoped to what changed. MIT, adapted from `jakubkrehel/skills`. |
+| [incident](/skills/incident/SKILL.md) | `/incident` | Read-only, evidence-logged SRE incident investigation + blameless postmortem. MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [runbook](/skills/runbook/SKILL.md) | `/runbook` | Operational runbooks: symptom → diagnostic → mitigation → escalation. MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [observability-review](/skills/observability-review/SKILL.md) | `/observability-review` | Review metrics/logs/traces/dashboards/alerting/SLO coverage. MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [security-review](/skills/security-review/SKILL.md) | `/security-review` | Infra/app security posture review (IAM, secrets, network, deps). MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [pipeline-review](/skills/pipeline-review/SKILL.md) | `/pipeline-review` | CI/CD pipeline review: security, caching, flakiness, speed. MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [release-readiness](/skills/release-readiness/SKILL.md) | `/release-readiness` | Release gate: changelog, versioning, rollback, migrations, monitoring. MIT, adapted from `NotHarshhaa/devops-skills`. |
+| [git-workflow](/skills/git-workflow/SKILL.md) | `/git-workflow` | Branching strategies, PR workflows, release management. MIT, adapted from `BagelHole/DevOps-Security-Agent-Skills`. |
+| [alerting-oncall](/skills/alerting-oncall/SKILL.md) | `/alerting-oncall` | Alerting rules, on-call rotations, escalation. MIT, adapted from `BagelHole/DevOps-Security-Agent-Skills`. |
+| [kubernetes-ops](/skills/kubernetes-ops/SKILL.md) | `/kubernetes-ops` | Deploy, scale, manage and troubleshoot Kubernetes workloads. MIT, adapted from `BagelHole/DevOps-Security-Agent-Skills`. |
 
 ```
 /code-review                 # this branch against the default base branch
