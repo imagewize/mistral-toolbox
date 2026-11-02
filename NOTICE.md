@@ -44,6 +44,10 @@ Rules:
   `skills/observability-and-instrumentation/` — from `github.com/addyosmani/agent-skills`,
   MIT (© 2025 Addy Osmani, see the copied `LICENSE` in each), pinned
   `301b02b12bff98e4688e6984af6556802322bbde`
+- `skills/better-ui/`, `skills/better-accessibility/`, `skills/better-colors/` and
+  `skills/interface-review/` — from `github.com/jakubkrehel/skills`, MIT (© 2026 Jakub
+  Krehel, see the copied `LICENSE` in each), pinned
+  `60bf140e43c98b248e6594487384ec967e89d98a`
 - `skills/landing-page/`, `skills/no-ai-design-slop/` and
   `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
