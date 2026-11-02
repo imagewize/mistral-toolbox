@@ -15,6 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `docs/anubhav-vibe-integration-plan.md`: its source collection anubhav-vibe is CC BY-NC-SA 4.0, which conflicts with this repo's MIT license for imports — the collection stays reference-only and the new sourcing plan uses verified MIT/Apache-2.0/CC0 repositories instead
 
+### Added
+
+- Added `docs/sources.md`: source register for external material — permissive-license sources verified on 2026-11-02 by fetching LICENSE files and via the GitHub API, each with a pinned commit (`git ls-remote`); reference-only list (anubhav-vibe CC BY-NC-SA 4.0; `WordPress/agent-skills` and `dknauss/agent-skills` with no detectable license; `wpacademy/wordpress-dev-skills` GPL-2.0; Automattic repos without a repo-level license; `jorgerosal/wordpress-skills` pending a per-skill audit; `jiji262/claude-design-skill` as proprietary-derivative); recommended project-level tools/connectors that are never vendored (`humanmade/block-runner` GPL-2.0, `GLips/Figma-Context-MCP` MIT, `shadcn-ui/ui` MIT); and an import-log template
+- Added `NOTICE.md`: third-party source register per the sourcing plan's attribution rules (copy per-skill LICENSE files, record `metadata.source`, log every import) — empty until the first imports land
+
+### Changed
+
+- Updated `docs/external-skills-sourcing-plan.md` to in-progress: Phase 0 marked done, source table updated with API-verified licenses (MIT confirmed for `mralaminahamed/wp-dev-skills`, `BagelHole/DevOps-Security-Agent-Skills`, `mustafakendiguzel/claude-code-ui-agents`; `WordPress/agent-skills` resolved as reference-only, NOASSERTION), and open question 1 closed with an action item to ask the WordPress org for a CC0/MIT LICENSE
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed
