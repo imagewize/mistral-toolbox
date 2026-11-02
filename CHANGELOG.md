@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `skills/html-to-block-theme/` — `/html-to-block-theme` converts an HTML/CSS/JS design into a production-ready FSE block theme (theme.json v3 from design tokens, templates, parts, block patterns, Interactivity API, Block Bindings, optional WooCommerce); MIT from `siddik-web/wp-block-theme-converter` @ `0347e823`, `references/` (21 docs) and `LICENSE` included, slash commands/`doctor.mjs`/templates not imported and replaced with plain single commands; WordPress version claims verified against current stable 7.1.4; `metadata.version` 1.0.0
 - Added `docs/curation-2026-11-02.md` — Phase 1 curation notes for the first-wave sources (what was imported, skipped and why, queued candidates)
 - Updated README structure tree and skills table, and `NOTICE.md`, for the two new skills
+- Added `skills/wordpress-plugin-audit/` — `/wordpress-plugin-audit`, a read-only four-dimension plugin audit (metadata, naming/i18n, docs vs code, security) with file:line-verified findings; MIT from `mralaminahamed/wp-dev-skills` @ `762b7bc7`, `references/` and `LICENSE` included; stale version claims corrected against current stable WP 7.1.4, subagent and routing references adapted for Vibe, `metadata.version` 1.0.0
+- Added `skills/requesting-code-review/` and `skills/verification-before-completion/` — review-workflow skills from `obra/superpowers` @ `2ce8aa15` (MIT, `LICENSE` copied each); `$(…)` substitutions replaced with plain read-only git commands, reviewer subagent wording adapted, `code-reviewer.md` template included, `metadata.version` 1.0.0
+- Normalized PASS/FAIL markers (were emoji) in `html-to-block-theme` SKILL.md and references
+- Updated `docs/sources.md` import log and `NOTICE.md` with all three new imports; README structure tree and skills table extended
 
 ## [1.5.0] - 2026-11-02
 

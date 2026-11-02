@@ -228,14 +228,14 @@ Then provide:
 
 ```
 VERIFICATION:
-✅ theme.json validates against the v3 schema; `npx phpcs --standard=WordPress-Extra .` exits 0
-✅ Activate theme → Confirm no PHP errors in debug.log
-✅ Visit front page → Confirm visual match with source
-✅ Open Site Editor → Confirm all templates listed
-✅ Insert block → Confirm all patterns appear under correct categories
-✅ Run `npx phpcs --standard=WordPress-Extra .` → Confirm zero errors
-✅ Check browser console → Confirm zero JS errors
-✅ Run Lighthouse → Confirm accessibility score ≥ 90
+PASS theme.json validates against the v3 schema; `npx phpcs --standard=WordPress-Extra .` exits 0
+PASS Activate theme → Confirm no PHP errors in debug.log
+PASS Visit front page → Confirm visual match with source
+PASS Open Site Editor → Confirm all templates listed
+PASS Insert block → Confirm all patterns appear under correct categories
+PASS Run `npx phpcs --standard=WordPress-Extra .` → Confirm zero errors
+PASS Check browser console → Confirm zero JS errors
+PASS Run Lighthouse → Confirm accessibility score ≥ 90
 ```
 
 **If any verification step fails, loop back to the relevant phase and fix it before reporting done. Don't declare success past a failed check.**
@@ -248,7 +248,7 @@ If the user reports a problem with a generated theme, direct them to `/wp-debug`
 
 These rules apply to EVERY file generated. See `references/quality-rules.md` for full details.
 
-❌ **NEVER:**
+FAIL **NEVER:**
 
 - Inline `style=""` attributes in block markup
 - `<style>` or `<script>` tags inside templates/parts/patterns
@@ -262,7 +262,7 @@ These rules apply to EVERY file generated. See `references/quality-rules.md` for
 - Speculative features the user didn't ask for (Principle 2)
 - "Improving" code that isn't part of the current task (Principle 3)
 
-✅ **ALWAYS:**
+PASS **ALWAYS:**
 
 - Use semantic HTML via `tagName` attribute
 - Wrap user-facing strings in `__()`, `_e()`, `esc_html__()`, etc.

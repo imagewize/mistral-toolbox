@@ -420,10 +420,10 @@ WordPress 6.5+ requires PHP 7.0+ (officially). Best practice targets PHP 7.4+.
 **For PHP 7.4 compatibility:** Avoid named arguments, `match`, `?->`, enums, and PHP 8.0+ functions. Use arrow functions — they are PHP 7.4+.
 
 ```php
-// ✅ PHP 7.4+ compatible
+// PASS PHP 7.4+ compatible
 $slugs = array_map( fn( $block ) => str_replace( 'core/', '', $block ), $blocks );
 
-// ❌ PHP 8.0+ only
+// FAIL PHP 8.0+ only
 $value = match( $key ) {
     'a' => 1,
     'b' => 2,

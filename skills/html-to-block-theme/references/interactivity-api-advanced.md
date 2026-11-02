@@ -730,7 +730,7 @@ All async operations in the Interactivity API use generator functions with `yiel
 
 ```js
 actions: {
-    // ✅ Correct — generator function with yield
+    // PASS Correct — generator function with yield
     *fetchData() {
         state.isLoading = true;
         try {
@@ -742,7 +742,7 @@ actions: {
         }
     },
 
-    // ❌ Wrong — async/await is NOT supported
+    // FAIL Wrong — async/await is NOT supported
     async fetchData() {
         const response = await fetch( url ); // Will not work
     },

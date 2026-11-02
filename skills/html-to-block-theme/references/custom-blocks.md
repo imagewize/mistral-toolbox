@@ -656,16 +656,16 @@ registerBlockType( metadata, { edit: Edit, save, deprecated } );
 ### Manual Verification Checklist
 
 ```
-✅ Block appears in the inserter under the correct category
-✅ Block can be inserted and removed without errors
-✅ All attributes editable in the Editor (sidebar controls + toolbar)
-✅ save.js / render.php output is correct on the frontend
-✅ Block validation passes (no "Block contains unexpected content" error)
-✅ No JS errors in browser console (editor and frontend)
-✅ Block renders correctly in wide and full alignment
-✅ Keyboard navigation works (Tab, Enter, Arrow keys) inside the editor
-✅ render.php escapes all output — WP_DEBUG shows no PHP notices
-✅ PHPCS WordPress-Extra passes on render.php
+PASS Block appears in the inserter under the correct category
+PASS Block can be inserted and removed without errors
+PASS All attributes editable in the Editor (sidebar controls + toolbar)
+PASS save.js / render.php output is correct on the frontend
+PASS Block validation passes (no "Block contains unexpected content" error)
+PASS No JS errors in browser console (editor and frontend)
+PASS Block renders correctly in wide and full alignment
+PASS Keyboard navigation works (Tab, Enter, Arrow keys) inside the editor
+PASS render.php escapes all output — WP_DEBUG shows no PHP notices
+PASS PHPCS WordPress-Extra passes on render.php
 ```
 
 ### Automated Testing
