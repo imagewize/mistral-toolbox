@@ -60,6 +60,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `skills/brainstorming/`, `skills/writing-plans/`, `skills/systematic-debugging/`, `skills/test-driven-development/` and `skills/receiving-code-review/` — the remaining review/workflow skills from `obra/superpowers` @ `2ce8aa15` (MIT, `LICENSE` copied each, `metadata.version` 1.0.0): structured design questioning, spec-to-plan writing, four-phase root-cause debugging, red-green-refactor TDD, and review-feedback processing; cross-skill `superpowers:*` references re-routed to imported names or annotated as not imported, one `$(…)` snippet removed, dev artifacts/scripts not imported, reference docs included where relevant
 - Updated `docs/sources.md` import log and `NOTICE.md` with the five imports; README tree and skills table extended; `docs/curation-2026-11-02.md` records Round 7
 
+### Added
+
+- Added `skills/code-review-and-quality/`, `skills/security-and-hardening/`, `skills/performance-optimization/`, `skills/frontend-ui-engineering/` and `skills/observability-and-instrumentation/` — from `addyosmani/agent-skills` @ `301b02b1` (MIT, `LICENSE` copied each, `metadata.version` 1.0.0): multi-axis review, vulnerability hardening, performance optimization, accessible UI engineering, and observability; the upstream shared checklists (`security/performance/accessibility/observability-checklist.md`) were copied into each referencing skill's `references/` and cross-links rewritten to local paths; upstream's own `test-driven-development` skipped (name clashes with the superpowers import)
+- Updated `docs/sources.md` import log and `NOTICE.md` with the five imports; README tree and skills table extended; `docs/curation-2026-11-02.md` records Round 8
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed
