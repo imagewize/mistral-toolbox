@@ -34,31 +34,27 @@ mistral-toolbox/
 │           ├── PROMPT.md        # HTML input submitted for review
 │           ├── OUTPUT.md        # Structured review report (FAIL)
 │           └── FEEDBACK.md      # Review notes
-├── skills/                  # Mistral Vibe skills
-│   ├── code-review/
-│   │   └── SKILL.md         # /code-review for WordPress plugins, themes and sites
-│   ├── frontend-design/
-│   │   ├── SKILL.md         # /frontend-design — anchored HTML/CSS design (MIT, upstream Ilm-Alan/frontend-design)
-│   │   └── LICENSE.txt
-│   ├── html-to-block-theme/
-│   │   ├── SKILL.md         # /html-to-block-theme — HTML/CSS/JS design → FSE block theme (MIT, upstream siddik-web)
-│   │   ├── LICENSE
-│   │   └── references/      # 21 on-demand conversion workflow docs
-│   ├── wordpress-plugin-audit/
-│   │   ├── SKILL.md         # /wordpress-plugin-audit — read-only security/consistency audit (MIT, upstream mralaminahamed)
-│   │   ├── LICENSE
-│   │   └── references/      # 7 checklists: security, escaping, nonces, i18n, readme
-│   ├── requesting-code-review/
-│   │   ├── SKILL.md         # /requesting-code-review — dispatch reviewer subagent before merge (MIT, upstream obra/superpowers)
-│   │   ├── code-reviewer.md
-│   │   └── LICENSE
-│   └── verification-before-completion/
-│       ├── SKILL.md         # /verification-before-completion — evidence before claims (MIT, upstream obra/superpowers)
-│       └── LICENSE
+├── skills/                  # Mistral Vibe skills (16; imported ones carry LICENSE + metadata.source)
+│   ├── code-review/             # /code-review — review diffs, PRs, patterns in any WP project
+│   ├── frontend-design/         # /frontend-design — 8 aesthetic anchors → HTML/CSS (MIT, Ilm-Alan)
+│   ├── html-to-block-theme/     # /html-to-block-theme — HTML/CSS/JS → FSE block theme (MIT, siddik-web)
+│   ├── landing-page/            # /landing-page — high-conversion page structure + copy (MIT, MengTo)
+│   ├── no-ai-design-slop/       # /no-ai-design-slop — anti-generic-design quality gate (MIT, MengTo)
+│   ├── design-first-ui-prompting/ # /design-first-ui-prompting — spec-first UI prompting (MIT, MengTo)
+│   ├── ui-ux-pro-max/           # /ui-ux-pro-max — design intelligence + data/ catalogs (MIT, nextlevelbuilder)
+│   ├── ux-writing/              # /ux-writing — microcopy standards (MIT, content-designer)
+│   ├── wordpress-plugin-audit/  # /wordpress-plugin-audit — 4-dimension plugin audit (MIT, mralaminahamed)
+│   ├── wordpress-coding-standards/ # /wordpress-coding-standards — PHPCS + WPCS (MIT, mralaminahamed)
+│   ├── wordpress-woocommerce/   # /wordpress-woocommerce — WC gateways, HPOS, blocks (MIT, mralaminahamed)
+│   ├── wordpress-plugin-testing/   # /wordpress-plugin-testing — PHPUnit/Brain Monkey/wp-browser (MIT, mralaminahamed)
+│   ├── wordpress-i18n-workflow/    # /wordpress-i18n-workflow — POT/PO/MO/JSON + GlotPress (MIT, mralaminahamed)
+│   ├── wordpress-database/      # /wordpress-database — dbDelta, $wpdb CRUD, migrations (MIT, mralaminahamed)
+│   ├── requesting-code-review/  # /requesting-code-review — reviewer subagent before merge (MIT, obra)
+│   └── verification-before-completion/ # /verification-before-completion — evidence before claims (MIT, obra)
 ├── docs/                    # Plans and source notes
-│   ├── external-skills-sourcing-plan.md
+│   ├── external-skills-sourcing-plan.md  # Import policy, phased plan, quality gates
 │   ├── sources.md           # Verified external sources, licenses, pinned commits, import log
-│   └── curation-2026-11-02.md
+│   └── curation-2026-11-02.md  # Per-round curation notes (what was imported/skipped and why)
 ├── README.md
 ├── CHANGELOG.md
 ├── NOTICE.md                # Third-party sources included in this repo
@@ -142,6 +138,8 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 | [landing-page](/skills/landing-page/SKILL.md) | `/landing-page` | Designs a high-converting landing page — one offer, one audience, one primary action — with structure, layout types, conversion strategies, copy templates and SEO/AEO; ships a WordPress block-pattern handoff section so HTML/CSS output converts cleanly to patterns. MIT, adapted from `MengTo/Skills`. |
 | [no-ai-design-slop](/skills/no-ai-design-slop/SKILL.md) | `/no-ai-design-slop` | Passive quality gate against generic AI-design defaults: quality gates, a removal test and a full slop catalog, preserving the chosen art direction. MIT, adapted from `MengTo/Skills`. |
 | [design-first-ui-prompting](/skills/design-first-ui-prompting/SKILL.md) | `/design-first-ui-prompting` | Turns fuzzy ideas into a tight design-first spec (prompt skeleton, constraints, single-variable variants, reference pack) for consistent UI generation. MIT, adapted from `MengTo/Skills`. |
+| [ui-ux-pro-max](/skills/ui-ux-pro-max/SKILL.md) | `/ui-ux-pro-max` | UI/UX design intelligence: searchable local catalogs (`data/` — styles, palettes, font pairings, 119 UX guidelines, icons, motion, charts, 22 stacks) plus full rule references; synthesizes a design system for new pages and answers targeted UX/stack questions. MIT, adapted from `nextlevelbuilder/ui-ux-pro-max-skill`. |
+| [ux-writing](/skills/ux-writing/SKILL.md) | `/ux-writing` | User-centered microcopy (buttons, labels, errors, empty states, onboarding) with voice/tone frameworks, error patterns and accessibility guidance; WordPress i18n note included. MIT, adapted from `content-designer/ux-writing-skill`. |
 | [wordpress-plugin-audit](/skills/wordpress-plugin-audit/SKILL.md) | `/wordpress-plugin-audit` | Read-only audit of a WordPress plugin across four dimensions (metadata, naming/i18n, docs vs code, conventions/security) with file:line-verified findings. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
 | [wordpress-coding-standards](/skills/wordpress-coding-standards/SKILL.md) | `/wordpress-coding-standards` | Sets up and enforces PHPCS with the WordPress Coding Standards: `phpcs.xml.dist`, running `phpcs`/`phpcbf`, CI and pre-commit integration, inline suppressions, common sniff fixes. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
 | [wordpress-woocommerce](/skills/wordpress-woocommerce/SKILL.md) | `/wordpress-woocommerce` | Build or debug WooCommerce extensions: payment gateways, shipping methods, CRUD via WC classes, HPOS compatibility, REST/Store API, cart/checkout blocks, hooks. MIT, adapted from `mralaminahamed/wp-dev-skills`. |
@@ -157,6 +155,23 @@ Skills run inside your project with Vibe's tools. They are invoked as slash comm
 /code-review hero            # audit the block or pattern named "hero"
 /code-review --help          # usage and valid targets
 ```
+
+### Design → HTML/CSS → block patterns
+
+The design skills form a pipeline for FSE themes such as Elayne and Aviendha:
+
+```
+brief → /landing-page + /design-first-ui-prompting   (structure, copy, spec)
+      → /frontend-design or /ui-ux-pro-max           (anchored HTML/CSS, token-locked)
+      → /no-ai-design-slop                            (quality gate on the output)
+      → /html-to-block-theme                          (HTML/CSS/JS → theme + patterns)
+```
+
+The design skills emit one self-contained HTML file per page with semantic sections
+marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties
+(`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern
+without renaming fixes. `/ux-writing` covers the on-screen copy; `/html-to-block-theme`
+does the conversion.
 
 ### Install
 

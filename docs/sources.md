@@ -84,3 +84,5 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/landing-page/` (SKILL.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/web-design/landing-page | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
 | 2026-11-02 | `skills/no-ai-design-slop/` (SKILL.md + ARTICLE.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/ui/no-ai-design-slop | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
 | 2026-11-02 | `skills/design-first-ui-prompting/` (SKILL.md + REFERENCES.md + LICENSE) | `github.com/MengTo/Skills` agent-skills/ui/design-first-ui-prompting | MIT | `ef5f85130d083d33e08cb19f6ee23cdde2d406ab` | 1.0.0 |
+| 2026-11-02 | `skills/ui-ux-pro-max/` (SKILL.md + references/ + data/ catalogs + LICENSE) | `github.com/nextlevelbuilder/ui-ux-pro-max-skill` .claude/skills/ui-ux-pro-max | MIT | `3a13158ff1f32156cbe144108de48eda2ecaed9a` | 1.0.0 |
+| 2026-11-02 | `skills/ux-writing/` (SKILL.md + LICENSE) | `github.com/content-designer/ux-writing-skill` SKILL.md | MIT | `98cacde4ba2dd10ed28df43a8d53eef1e321c539` | 1.0.0 |

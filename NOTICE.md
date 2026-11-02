@@ -41,6 +41,12 @@ Rules:
   `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
   `ef5f85130d083d33e08cb19f6ee23cdde2d406ab`
+- `skills/ui-ux-pro-max/` — from `github.com/nextlevelbuilder/ui-ux-pro-max-skill`,
+  MIT (© 2024 Next Level Builder, see the copied `LICENSE`), pinned
+  `3a13158ff1f32156cbe144108de48eda2ecaed9a`
+- `skills/ux-writing/` — from `github.com/content-designer/ux-writing-skill`, MIT
+  (© 2026 Christopher Greer, see the copied `LICENSE`), pinned
+  `98cacde4ba2dd10ed28df43a8d53eef1e321c539`
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.

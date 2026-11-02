@@ -47,6 +47,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Appended a shared WordPress block-pattern handoff section to all three: preset-named CSS custom properties (`--wp--preset--color--<slug>` etc. with exact `var()` matching, no `--wp--preset--border-radius--*`), sectioned semantic markup marked with HTML comments so each `<section>` maps to a block pattern, no hardcoded `url()` backgrounds (flag for Cover), buttons as inner blocks, i18n-ready copy
 - Updated `docs/sources.md` import log and `NOTICE.md` with the three imports; README skills table extended; `docs/curation-2026-11-02.md` records Round 5
 
+### Added
+
+- Added `skills/ui-ux-pro-max/` — `/ui-ux-pro-max`: UI/UX design intelligence with searchable local catalogs under `data/` (79 styles, 192 palettes, 74 font pairings, 119 UX guidelines, icons, motion presets, charts, 22 stacks) plus `references/` rule docs; MIT from `nextlevelbuilder/ui-ux-pro-max-skill` @ `3a13158f`, `LICENSE` included; upstream `scripts/search.py` not imported — the skill now reads/greps the CSV catalogs directly per the plain-command gate, and the huge upstream font/icon dumps (`google-fonts.csv`, `google-font-licenses.json`, `phosphor-icons-upstream.json`) are not vendored (web search instead); `metadata.version` 1.0.0
+- Added `skills/ux-writing/` — `/ux-writing`: user-centered microcopy (buttons, labels, errors, empty states, onboarding) with voice/tone, error patterns and accessibility guidance; MIT from `content-designer/ux-writing-skill` @ `98cacde`, `LICENSE` included, vendor-compat chatter removed, demo media/`build-skill.sh` not imported; `metadata.version` 1.0.0
+- Appended the shared WordPress block-pattern handoff section to `ui-ux-pro-max` and a WordPress i18n note to `ux-writing`
+- Updated `docs/sources.md` import log and `NOTICE.md` with the two imports; README restructured (full skills tree, skills table, design-to-pattern pipeline); `docs/curation-2026-11-02.md` records Round 6
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed
