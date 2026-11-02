@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
 ---
 
@@ -18,6 +18,11 @@ true scale, with people and trees for size and one accent colour. The drawing is
 small script that calls the kit in `scripts/arch.mjs`. You describe the building in metres; the
 kit turns metres into SVG with one scale, draws every line at the right weight and checks the
 result.
+
+**Building sizes are facts.** The width, height, storeys and roof of a building come from the brief
+or the project. Never change them to make a drawing fit or to get a larger scale. To make a drawing
+read better, trim the surroundings (trees, boats, quay), tighten the extent or change the drawing's
+size, and say so in your reply.
 
 Never write SVG coordinates by hand. Hand-placed coordinates drift: roofs come out crooked, windows
 overlap and a planter ends up as tall as a wall. Everything in this skill is in metres, so a door
@@ -82,6 +87,8 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 - **A set at one scale:** list every drawing's extent and compute the scale once with
   `A.sharedScale([ext1, ext2, ...], { width, height })`, then pass that `scale` to every
   `drawing()`. The largest building fills its drawing and the others keep their true size.
+  The widest drawing sets the scale for all of them: if that makes the set too small, trim that
+  drawing's surroundings or give the set a wider aspect ratio. Never shrink the building.
 - **`displayWidth`:** the CSS width the drawing will be shown at, for example 330 for a card in a
   three-column grid. The kit then warns when people or labels get too small to read.
 - **`labels: false`:** leaves out dimension and level text. Use it for drawings shown under about
@@ -92,7 +99,8 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 | `d.ground(x0, x1, { depth, hatch })` | Ground line with an earth hatch |
 | `d.quay(x, x1, { level })` | A cut quay wall at `x` and water from `x` to `x1` at `level` |
 | `d.mass(x0, x1, h, { base, fill: 'paper' \| 'tint' })` | A building block in elevation |
-| `d.gableRoof(x0, x1, eave, ridge)` | A gable seen end-on |
+| `d.gableRoof(x0, x1, eave, ridge, { cut })` | A gable seen end-on. In a section, `cut: 0.35` draws the roof as a cut band of that thickness. Returns the roof, for `roofWindow()` |
+| `d.roofWindow(roof, { side, at, len, accent })` | A skylight on one slope: `side` `left` or `right`, `at` 0..1 from eave to ridge |
 | `d.stepGable(x0, x1, eave, ridge, { steps })` | A Dutch stepped gable (trapgevel) |
 | `d.sawtoothRoof(x0, x1, eave, toothH, count)` | A sawtooth (shed) roof with glazing |
 | `d.flatRoof(x0, x1, h, { parapet })` | A parapet with coping |
@@ -104,8 +112,9 @@ and 1–2 m above the highest point (2.5–3 m if there is a dimension line).
 | `d.chimney(cx, base, { w, h })` | A chimney with a cap, standing on a roof or mass at height `base` |
 | `d.floorLines(x0, x1, levels, { dashed })` | Floor levels; dashed on an elevation, solid in a section |
 | `d.cut(x0, y0, x1, y1)`, `d.slab(x0, x1, level, { t })` | Section poche: cut walls and slabs |
+| `d.cutOpening(x0, x1, sill, head, { glass })` | A window or door in a cut wall (`x0..x1` is the wall thickness); call it after the `cut()`. For a door: `sill` 0, `glass: false` |
 | `d.stair(x0, y0, x1, y1, { steps })` | A stair in section |
-| `d.figure(x, { h, pose, accent })` | A person, 1.75 m by default, with arms and legs. `pose`: `stand`, `walk`, `stand-left`, `walk-left`; vary them across a drawing |
+| `d.figure(x, { h, pose, base, accent })` | A person, 1.75 m by default, with arms and legs. `pose`: `stand`, `walk`, `stand-left`, `walk-left`; vary them across a drawing. `base` puts the person on a floor, for sections |
 | `d.tree(x, { h, type: 'round' \| 'poplar', layer: 'front' \| 'back' })` | A tree: solid trunk, scalloped crown, branches; `back` draws it faint and unfilled, behind buildings |
 | `d.barge(x0, x1, level, { accent })` | A moored barge with a wheelhouse |
 | `d.dimension(x0, x1, y, label, { from })` | A dimension line; `from` drops extension lines to that height (the ridge or eave). Labels use a decimal comma for Dutch sites |
@@ -130,8 +139,12 @@ building fills, building lines, details (coursing before openings, so openings c
 - **A set of drawings** (for example six project cards) shares `width`, `height`, one scale from
   `sharedScale`, the palette and the annotation style, so the buildings compare at one size.
 - **Cards:** a drawing in a card is shown small. Match the card's image frame to the drawing's
-  aspect ratio (480x300 is 16:10) so no white bands appear, pass `displayWidth`, and use
-  `labels: false` when the kit says labels are too small.
+  aspect ratio so no white bands appear, pass `displayWidth`, and use `labels: false` when the
+  kit says labels are too small. Elevations are wide and low: a 2:1 drawing (for example 480x240)
+  usually fills a card better than 16:10.
+- **Sections:** cut walls, slabs and a cut roof in solid poche; openings in the cut walls with
+  `cutOpening()`; a stair; people on several floors with `figure({ base })`. See
+  `examples/pakhuis-section.gen.mjs`.
 
 ## Workflow
 
@@ -140,7 +153,8 @@ Write absolute paths out in full.
 
 1. **Brief.** For each drawing, write down the building type, width and height in metres, the
    storeys, the roof, the openings per floor, the context and which element gets the accent.
-2. **Generator.** Copy `examples/pakhuis-quay.gen.mjs` into the project, for example to
+2. **Generator.** Copy `examples/pakhuis-quay.gen.mjs` (an elevation) or
+   `examples/pakhuis-section.gen.mjs` (a section) into the project, for example to
    `scripts/<name>.gen.mjs`. Change its import to the absolute path of `scripts/arch.mjs`, and
    replace the layout table at the top with your building in metres.
 3. **Run it:** `node scripts/<name>.gen.mjs images/<name>.svg`. It prints the scale and the checks.
@@ -174,6 +188,10 @@ Write absolute paths out in full.
   Pass one `scale` from `sharedScale`.
 - **Too small to read.** A loose extent or a large shared scale leaves the building small in its
   card: people become pins and labels vanish. Tighten the extents, then recompute `sharedScale`.
+- **Resized buildings.** Shrinking a building to fit a shared scale changes a project fact.
+  Trim the surroundings instead.
+- **People in the water.** A person, tree, mass or chimney past a quay edge is an error; only
+  boats belong on the water.
 - **Something floating.** A mass or chimney that starts above the ground and does not stand on a
   mass or roof is an error.
 - **Trees over corners.** The kit warns when a front tree's crown covers a mass corner.
@@ -185,7 +203,8 @@ Write absolute paths out in full.
 - [ ] The generator prints `PASS`, and every `WARN` is understood or fixed.
 - [ ] `check.mjs` prints `PASS`.
 - [ ] One hero building; context on both sides; the ground line runs the full width.
-- [ ] At least one person at 1.75 m near the entrance.
+- [ ] Building sizes match the brief; nothing was resized to fit the scale.
+- [ ] At least one person at 1.75 m near the entrance; nobody stands in the water.
 - [ ] Openings align in bays and floors; none overlap.
 - [ ] One or two accent elements.
 - [ ] At most one dimension line or level mark.

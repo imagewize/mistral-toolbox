@@ -127,7 +127,7 @@ export function drawing(opts = {}) {
         wv += line(xx, yy, xx + 0.8, yy);
       }
       path('ground', wv, W.FAINT);
-      rec('quay', x - wall, bottom, x1, 0, { level });
+      rec('quay', x - wall, bottom, x1, 0, { level, water0: x, water1: x1 });
     },
 
     // A building block in elevation: paper fill (hides what is behind) and a profile outline.
@@ -144,12 +144,41 @@ export function drawing(opts = {}) {
       path('detail', c, W.FAINT, palette.mid);
     },
 
-    gableRoof(x0, x1, eave, ridge, { overhang = 0.3, fill = 'paper' } = {}) {
+    // A gable seen end-on. In a section pass cut: t (metres) to draw the roof as a cut band of that
+    // thickness. Returns the roof geometry, for roofWindow().
+    gableRoof(x0, x1, eave, ridge, { overhang = 0.3, fill = 'paper', cut = 0 } = {}) {
       const xm = (x0 + x1) / 2;
       const d1 = `M${X(x0 - overhang)} ${Y(eave)}L${X(xm)} ${Y(ridge)}L${X(x1 + overhang)} ${Y(eave)}Z`;
       fillPath('fill', d1, fill === 'tint' ? palette.tint : palette.paper);
-      path('lines', `M${X(x0 - overhang)} ${Y(eave)}L${X(xm)} ${Y(ridge)}L${X(x1 + overhang)} ${Y(eave)}`, W.PROFILE);
-      rec('roof', x0 - overhang, eave, x1 + overhang, ridge);
+      if (cut > 0) {
+        // the band's vertical depth keeps its true thickness on the slope
+        const slope = Math.atan2(ridge - eave, xm - (x0 - overhang));
+        const dv = cut / Math.cos(slope);
+        const band = `M${X(x0 - overhang)} ${Y(eave)}L${X(xm)} ${Y(ridge)}L${X(x1 + overhang)} ${Y(eave)}L${X(x1 + overhang)} ${Y(eave - dv)}L${X(xm)} ${Y(ridge - dv)}L${X(x0 - overhang)} ${Y(eave - dv)}Z`;
+        fillPath('lines', band, palette.ink);
+      } else {
+        path('lines', `M${X(x0 - overhang)} ${Y(eave)}L${X(xm)} ${Y(ridge)}L${X(x1 + overhang)} ${Y(eave)}`, W.PROFILE);
+      }
+      rec('roof', x0 - overhang, eave - (cut > 0 ? cut * 2 : 0), x1 + overhang, ridge);
+      return { x0: x0 - overhang, x1: x1 + overhang, xm, eave, ridge, cut };
+    },
+
+    // A skylight on one slope of a gableRoof() (pass the object it returns): a frame raised off
+    // the slope with a glass line. side 'left' or 'right', at 0..1 from eave to ridge, len in metres.
+    roofWindow(roof, { side = 'left', at = 0.5, len = 1.4, raise = 0.22, accent = false } = {}) {
+      const ex = side === 'left' ? roof.x0 : roof.x1;
+      const vx = roof.xm - ex, vy = roof.ridge - roof.eave;
+      const vl = Math.hypot(vx, vy);
+      const ux = vx / vl, uy = vy / vl;
+      const nx = side === 'left' ? -uy : uy, ny = side === 'left' ? ux : -ux;   // outward normal
+      const ax = ex + vx * at, ay = roof.eave + vy * at;
+      const bx = ax + ux * len, by = ay + uy * len;
+      const col = useAccent(accent, 'roof window');
+      const q = `M${X(ax)} ${Y(ay)}L${X(ax + nx * raise)} ${Y(ay + ny * raise)}L${X(bx + nx * raise)} ${Y(by + ny * raise)}L${X(bx)} ${Y(by)}`;
+      fillPath('detail', q + 'Z', palette.paper);
+      path('detail', q, W.EDGE);
+      path('detail', line(ax + nx * raise * 0.55 + ux * 0.12, ay + ny * raise * 0.55 + uy * 0.12, bx + nx * raise * 0.55 - ux * 0.12, by + ny * raise * 0.55 - uy * 0.12), W.DETAIL, col);
+      rec('roofwindow', Math.min(ax, bx), Math.min(ay, by), Math.max(ax, bx), Math.max(by, ay) + raise);
     },
 
     // A Dutch stepped gable (trapgevel) on a block from x0 to x1, from eave to ridge.
@@ -269,6 +298,17 @@ export function drawing(opts = {}) {
     },
     slab(x0, x1, level, { t = 0.3 } = {}) { d.cut(x0, level - t, x1, level); },
 
+    // A window or door in a cut wall (x0..x1 is the wall thickness), seen in section: the opening
+    // clears the poche, with frame lines at sill and head and glass in the middle. Draw it after
+    // the cut(). For a door, pass sill 0 and glass: false.
+    cutOpening(x0, x1, sill, head, { glass = true, accent = false } = {}) {
+      const col = useAccent(accent, 'section opening');
+      fillPath('detail', rectD(x0, sill, x1, head), palette.paper);
+      path('detail', line(x0, sill, x1, sill) + line(x0, head, x1, head), W.EDGE);
+      if (glass) path('detail', line((x0 + x1) / 2, sill, (x0 + x1) / 2, head), W.DETAIL, col);
+      return rec('opening', x0, sill, x1, head, { kind: 'section opening' });
+    },
+
     // A straight stair in section from (x0, y0) to (x1, y1).
     stair(x0, y0, x1, y1, { steps } = {}) {
       const n = steps ?? Math.max(3, Math.round((y1 - y0) / 0.18));
@@ -281,29 +321,32 @@ export function drawing(opts = {}) {
 
     // A person, 1.75 m by default: the scale reference every drawing needs.
     // pose: 'stand', 'walk' (legs apart, facing +x) or 'stand-left' / 'walk-left' (facing -x).
-    figure(x, { h = 1.75, accent = false, layer = 'front', pose = 'stand' } = {}) {
+    figure(x, { h = 1.75, accent = false, layer = 'front', pose = 'stand', base = 0 } = {}) {
       if (!inRange(h, RANGES.figure.h)) warnings.push(`figure at x=${f(x)}: height ${f(h)} m is implausible`);
       const k = h / 1.75;
+      // base lifts the person onto a floor, e.g. a slab in a section
+      const Yb = (y) => Y(base + y);
+      const lineB = (ax, ay, bx, by) => line(ax, base + ay, bx, base + by);
       const col = useAccent(accent, 'figure');
       const dir = pose.endsWith('-left') ? -1 : 1;
       const walk = pose.startsWith('walk');
       const head = 0.115 * k;
       const sh = h - 2.2 * head;          // shoulders
       const hip = 0.92 * k;
-      layers[layer].push(`<circle cx="${X(x + 0.02 * dir * k)}" cy="${Y(h - head)}" r="${L(head)}" fill="${col}" stroke="none"/>`);
+      layers[layer].push(`<circle cx="${X(x + 0.02 * dir * k)}" cy="${Yb(h - head)}" r="${L(head)}" fill="${col}" stroke="none"/>`);
       // torso: shoulders to hips, slightly narrower at the hips
-      const torso = `M${X(x - 0.2 * k)} ${Y(sh)}L${X(x + 0.2 * k)} ${Y(sh)}L${X(x + 0.15 * k)} ${Y(hip)}L${X(x - 0.15 * k)} ${Y(hip)}Z`;
+      const torso = `M${X(x - 0.2 * k)} ${Yb(sh)}L${X(x + 0.2 * k)} ${Yb(sh)}L${X(x + 0.15 * k)} ${Yb(hip)}L${X(x - 0.15 * k)} ${Yb(hip)}Z`;
       layers[layer].push(`<path d="${torso}" fill="${col}" stroke="none"/>`);
       // legs and arms as strokes, so a figure stays readable at small sizes
       const lw = Math.max(L(0.13 * k), 0.9).toFixed(2);
       const aw = Math.max(L(0.09 * k), 0.7).toFixed(2);
       const step = walk ? 0.22 * k : 0.07 * k;
-      const legs = line(x - 0.07 * k, hip, x - 0.07 * k - step * dir, 0) + line(x + 0.07 * k, hip, x + 0.07 * k + step * dir, 0);
+      const legs = lineB(x - 0.07 * k, hip, x - 0.07 * k - step * dir, 0) + lineB(x + 0.07 * k, hip, x + 0.07 * k + step * dir, 0);
       const swing = walk ? 0.16 * k : 0.04 * k;
-      const arms = line(x - 0.19 * k, sh - 0.04 * k, x - 0.2 * k + swing * dir, hip - 0.05 * k) + line(x + 0.19 * k, sh - 0.04 * k, x + 0.2 * k - swing * dir, hip - 0.05 * k);
+      const arms = lineB(x - 0.19 * k, sh - 0.04 * k, x - 0.2 * k + swing * dir, hip - 0.05 * k) + lineB(x + 0.19 * k, sh - 0.04 * k, x + 0.2 * k - swing * dir, hip - 0.05 * k);
       layers[layer].push(`<path data-part="figure" d="${legs}" fill="none" stroke="${col}" stroke-width="${lw}" stroke-linecap="round"/>`);
       layers[layer].push(`<path data-part="figure" d="${arms}" fill="none" stroke="${col}" stroke-width="${aw}" stroke-linecap="round"/>`);
-      rec('figure', x - 0.25 * k, 0, x + 0.25 * k, h);
+      rec('figure', x - 0.25 * k, base, x + 0.25 * k, base + h, { base });
     },
 
     // A tree: a solid trunk into a scalloped crown, with faint branches inside the crown.
@@ -413,10 +456,10 @@ ${body}
       }
     }
     // Openings must sit inside a mass or a roof (a window in a gable).
-    const hosts = items.filter((i) => i.type === 'mass' || i.type === 'roof');
+    const hosts = items.filter((i) => i.type === 'mass' || i.type === 'roof' || i.type === 'cut');
     for (const o of ops) {
       if (!hosts.some((m) => o.x0 >= m.x0 - 0.01 && o.x1 <= m.x1 + 0.01 && o.y0 >= m.y0 - 0.01 && o.y1 <= m.y1 + 0.01)) {
-        errors.push(`${o.kind} at x=${f((o.x0 + o.x1) / 2)} is not inside any mass() or roof`);
+        errors.push(`${o.kind} at x=${f((o.x0 + o.x1) / 2)} is not inside any mass(), roof or cut()`);
       }
     }
     if (!items.some((i) => i.type === 'figure')) warnings.push('no figure(): add at least one 1.75 m person as a scale reference');
@@ -426,6 +469,12 @@ ${body}
       for (const t of crowns) {
         const coversX = (t.x0 < m.x0 && t.x1 > m.x0 + 0.3) || (t.x0 < m.x1 - 0.3 && t.x1 > m.x1);
         if (coversX && t.cy0 < m.y1) warnings.push(`tree at x=${f(t.cx)} covers a corner of the mass ${f(m.x0)}..${f(m.x1)}; move it clear of the outline or use layer: 'back'`);
+      }
+    }
+    // Nothing but boats stands over the water beyond a quay edge.
+    for (const q of items.filter((i) => i.type === 'quay')) {
+      for (const it of items.filter((i) => ['figure', 'tree', 'mass', 'chimney'].includes(i.type))) {
+        if (it.x1 > q.water0 + 0.05 && it.x0 < q.water1) errors.push(`${it.type} at x=${f((it.x0 + it.x1) / 2)} stands over the water (quay edge at x=${f(q.water0)}); move it onto the quay`);
       }
     }
     // Masses and chimneys must stand on the ground or on something.
