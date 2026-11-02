@@ -34,9 +34,11 @@ Rules:
   `skills/wordpress-i18n-workflow/`, `skills/wordpress-database/` — from
   `github.com/mralaminahamed/wp-dev-skills`, MIT (© upstream author, see the copied
   `LICENSE` in each), pinned `762b7bc76443c7103623d11322a250910dfd8326`
-- `skills/requesting-code-review/` and `skills/verification-before-completion/` — from
-  `github.com/obra/superpowers`, MIT (© 2025 Jesse Vincent, see the copied `LICENSE`),
-  pinned `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
+- `skills/requesting-code-review/`, `skills/verification-before-completion/`,
+  `skills/brainstorming/`, `skills/writing-plans/`, `skills/systematic-debugging/`,
+  `skills/test-driven-development/` and `skills/receiving-code-review/` — from
+  `github.com/obra/superpowers`, MIT (© 2025 Jesse Vincent, see the copied `LICENSE` in
+  each), pinned `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
 - `skills/landing-page/`, `skills/no-ai-design-slop/` and
   `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
