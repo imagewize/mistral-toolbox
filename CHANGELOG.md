@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `skills/requesting-code-review/` and `skills/verification-before-completion/` — review-workflow skills from `obra/superpowers` @ `2ce8aa15` (MIT, `LICENSE` copied each); `$(…)` substitutions replaced with plain read-only git commands, reviewer subagent wording adapted, `code-reviewer.md` template included, `metadata.version` 1.0.0
 - Normalized PASS/FAIL markers (were emoji) in `html-to-block-theme` SKILL.md and references
 - Updated `docs/sources.md` import log and `NOTICE.md` with all three new imports; README structure tree and skills table extended
+- Added `skills/wordpress-coding-standards/` — `/wordpress-coding-standards`: PHPCS + WPCS setup, `phpcs.xml.dist` configuration, running `phpcs`/`phpcbf`, CI (GitHub Actions) and pre-commit integration, inline suppressions and common sniff fixes; MIT from `mralaminahamed/wp-dev-skills` @ `762b7bc7`, `references/` (3 docs) and `LICENSE` included, `evals/` not imported; stale "WPCS 3.1 is current" claim corrected (3.4.1, released 2026-07-27, is current as of 2026-11-02 — re-verify on Packagist), WPCS 3.x `minimum_wp_version` config key applied in place of the removed `minimum_supported_wp_version`, unverifiable "short array syntax allowed since WP 5.5" claim reworded, `$(…)` pre-commit snippet replaced with plain single commands, vendor model names generalized; `metadata.version` 1.0.0
+- Updated `docs/sources.md` import log and `NOTICE.md` with the new import; README skills table extended; `docs/curation-2026-11-02.md` records Round 3 (respira-press queue found fully MCP-coupled and skipped; `wp-coding-standards` imported)
 
 ## [1.5.0] - 2026-11-02
 

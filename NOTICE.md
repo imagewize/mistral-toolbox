@@ -27,6 +27,9 @@ Rules:
 - `skills/wordpress-plugin-audit/` — from `github.com/mralaminahamed/wp-dev-skills`,
   MIT (© upstream author, see the copied `LICENSE`), pinned
   `762b7bc76443c7103623d11322a250910dfd8326`
+- `skills/wordpress-coding-standards/` — from `github.com/mralaminahamed/wp-dev-skills`,
+  MIT (© upstream author, see the copied `LICENSE`), pinned
+  `762b7bc76443c7103623d11322a250910dfd8326`
 - `skills/requesting-code-review/` and `skills/verification-before-completion/` — from
   `github.com/obra/superpowers`, MIT (© 2025 Jesse Vincent, see the copied `LICENSE`),
   pinned `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b`
