@@ -55,8 +55,8 @@ Rules:
 - `skills/git-workflow/`, `skills/alerting-oncall/` and `skills/kubernetes-ops/` — from
   `github.com/BagelHole/DevOps-Security-Agent-Skills`, MIT (© 2026 Toby Miller, see the
   copied `LICENSE` in each), pinned `0365f57a079b1332f95cf26e31dd5d2332a8399f`
-- `skills/landing-page/`, `skills/no-ai-design-slop/` and
-  `skills/design-first-ui-prompting/` — from `github.com/MengTo/Skills`, MIT (© 2026
+- `skills/landing-page/`, `skills/no-ai-design-slop/`,
+  `skills/design-first-ui-prompting/` and `skills/illustration-isometric-mono/` — from `github.com/MengTo/Skills`, MIT (© 2026
   Meng To, see the copied `LICENSE` in each), pinned
   `ef5f85130d083d33e08cb19f6ee23cdde2d406ab`
 - `skills/ui-ux-pro-max/` — from `github.com/nextlevelbuilder/ui-ux-pro-max-skill`,
