@@ -77,3 +77,7 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/requesting-code-review/` (SKILL.md + code-reviewer.md + LICENSE) | `github.com/obra/superpowers` skills/requesting-code-review | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
 | 2026-11-02 | `skills/verification-before-completion/` (SKILL.md + LICENSE) | `github.com/obra/superpowers` skills/verification-before-completion | MIT | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 1.0.0 |
 | 2026-11-02 | `skills/wordpress-coding-standards/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-coding-standards | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/wordpress-woocommerce/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-woocommerce | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/wordpress-plugin-testing/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-plugin-testing | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/wordpress-i18n-workflow/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-i18n-workflow | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
+| 2026-11-02 | `skills/wordpress-database/` (SKILL.md + references/ + LICENSE) | `github.com/mralaminahamed/wp-dev-skills` skills/wp-database | MIT | `762b7bc76443c7103623d11322a250910dfd8326` | 1.0.0 |
