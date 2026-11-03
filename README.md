@@ -92,7 +92,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/architectural-drawing`](skills/architectural-drawing/SKILL.md) | Architectural elevations and sections as SVG, built in metres with a bundled kit (`arch.mjs`): one scale, a fixed line-weight hierarchy, people and trees for scale, with proportion, overlap and file checks. | Imagewize |
 | [`/illustration-isometric-mono`](skills/illustration-isometric-mono/SKILL.md) | True-isometric SVG dioramas built with a bundled scene kit (`iso.mjs`) instead of hand-written coordinates, with lint and colour checks and a render-and-critique loop. | MengTo |
 | [`/ui-ux-pro-max`](skills/ui-ux-pro-max/SKILL.md) | Design intelligence with local catalogs (styles, palettes, font pairings, 119 UX guidelines, icons, motion, charts, 22 stacks). | nextlevelbuilder |
-| [`/design-system-library`](skills/design-system-library/SKILL.md) | Named design systems by vertical from a 2,144-entry catalog; 76 specs vendored (Music & Audio, Retro & Nostalgic, Retail) — each a `DESIGN.md` with tokens + rationale to apply. | plugin87 |
+| [`/design-system-library`](skills/design-system-library/SKILL.md) | Named design systems by vertical from a 2,144-entry catalog; 76 specs vendored (Music & Audio, Retro & Nostalgic, Retail) — each a `DESIGN.md` with tokens + rationale, adapted to the client rather than copied. | plugin87 |
 | [`/design-md`](skills/design-md/SKILL.md) | Author a `DESIGN.md` visual-identity spec from reference sites in a vertical and validate it with `npx @google/design.md lint`. | google-labs-code |
 | [`/ux-writing`](skills/ux-writing/SKILL.md) | Microcopy — buttons, labels, errors, empty states, onboarding — with voice/tone and accessibility guidance. | content-designer |
 | [`/frontend-ui-engineering`](skills/frontend-ui-engineering/SKILL.md) | Production-quality accessible, responsive UIs: semantic markup, keyboard/focus states. | addyosmani |
@@ -156,15 +156,17 @@ vibe --agent wp-maintainer               # same round, with debugging and verifi
 The design skills form a pipeline for FSE themes such as Elayne:
 
 ```
-brief → /landing-page + /design-first-ui-prompting + /design-md   (structure, copy, identity spec)
-      → /frontend-design or /ui-ux-pro-max or /design-system-library   (anchored HTML/CSS, token-locked)
-      → /architectural-drawing or /illustration-isometric-mono   (SVG drawings from a kit, not hand-written)
-      → /no-ai-design-slop                           (quality gate on the output)
-      → /html-page-review                            (rendered review → REVIEW.md → change requests)
-      → /html-to-block-theme                         (HTML/CSS/JS → theme + patterns)
+brief → /landing-page + /design-first-ui-prompting         (structure, copy, spec)
+      → /frontend-design                                   (anchored HTML/CSS, token-locked)
+        or, for a vertical: /design-system-library         (a named system, adapted; /ui-ux-pro-max if none fits)
+        + /design-md                                       (optional: pin the look in DESIGN.md and lint it)
+      → /architectural-drawing or /illustration-isometric-mono   (SVG drawings from a kit)
+      → /no-ai-design-slop                                 (quality gate on the output)
+      → /html-page-review                                  (rendered review → REVIEW.md → change requests)
+      → /html-to-block-theme                               (HTML/CSS/JS → theme + patterns)
 ```
 
-The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. `/ux-writing` covers the on-screen copy. Drawings come from a kit, not hand-written SVG: `/architectural-drawing` draws buildings as elevations and sections in metres at one shared scale, and `/illustration-isometric-mono` draws technical and product scenes. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
+The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. A page uses one look: a `/frontend-design` anchor, or for a vertical brief a named system from `/design-system-library`. `/ux-writing` covers the on-screen copy. Drawings come from a kit, not hand-written SVG: `/architectural-drawing` draws buildings as elevations and sections in metres at one shared scale, and `/illustration-isometric-mono` draws technical and product scenes. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
 
 ### Install
 
@@ -315,7 +317,7 @@ Contributions are welcome — for any domain, not just WordPress.
 
 ## 🙏 Credits
 
-Imported skills are adapted from these MIT-licensed collections; each keeps its upstream license, and [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md) record the pinned commits.
+Imported skills are adapted from these collections — all MIT except `google-labs-code/design.md` (Apache-2.0); each keeps its upstream license, and [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md) record the pinned commits.
 
 [obra/superpowers](https://github.com/obra/superpowers) ·
 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
@@ -339,6 +341,6 @@ Imported skills are adapted from these MIT-licensed collections; each keeps its 
 
 ## 📄 License
 
-[MIT](LICENSE.md) © Imagewize. Third-party skills keep their own MIT licenses — see [NOTICE.md](NOTICE.md).
+[MIT](LICENSE.md) © Imagewize. Third-party skills keep their own licenses (MIT, one Apache-2.0) — see [NOTICE.md](NOTICE.md).
 
 <div align="center"><sub>Created and maintained by <a href="https://imagewize.com">Imagewize</a>.</sub></div>
