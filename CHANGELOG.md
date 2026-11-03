@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-03
+
 ### Added
 
 - `wp-update-round` skill 1.0.0 (Imagewize): complete WordPress update round workflow — preflight, sync local, before/after screenshots via `wp-ops update-snapshot`, pixel diff via `wp-ops update-compare`, human review, a production backup step (always on shared hosts, which have no atomic rollback), production deploy, production verification, and logging. Shows both the wp-ops CLI and the wp-ops MCP tool call shapes. Supports Trellis/Bedrock (Composer) and shared-host (WP-CLI/SSH) sites. Reads per-site `update-manifest.yml` for host config, page lists, and skip lists
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `html-page-review` 1.0.1 and `architectural-drawing`: the screenshot commands add `--force-prefers-reduced-motion` (page) or `--virtual-time-budget` (SVG file). Headless Chrome freezes animated SVG images at their first frame, so page screenshots showed animated drawings blank
+- AGENTS.md (Working on Vibe skills): no client-identifiable data in skills or agent profiles (the repository is public), command examples checked against the tool's real `--help` and MCP schemas, and shared-hosting examples that keep passwords off the command line, never write dumps on the remote server and make the production backup its own step. Came out of the review of the `wp-update-round` PR
 
 ## [1.7.0] - 2026-11-02
 
