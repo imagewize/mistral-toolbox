@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-03
+
 ### Added
 
 - `design-system-library` skill 1.0.1, imported from `plugin87/ux-ui-agent-skills` (MIT, pinned `def84a70fadc3490d80901295a4f1951fdb2cc69`): the catalog of 2,144 named design systems (`design-systems/catalog.md`, searchable by vertical category) plus 76 vendored `DESIGN.md` specs for Music & Audio (24), Retro & Nostalgic (4), Retail & E-commerce (39) and E-commerce & Retail (9) — each tokens plus rationale — and the upstream Library Contract (`references/aesthetic-systems.md`). A record-shop brief can now apply e.g. `bandcamp`, `soundcloud` or `vintage` instead of inventing a look. The remaining ~2,000 specs stay upstream at the pinned commit and are read by URL on demand; never from memory. SKILL.md gives the full raw URL, says to ignore the vendored catalog header (its scripts and MCP tool are not shipped), and requires adapting a brand spec to the client instead of copying the brand
