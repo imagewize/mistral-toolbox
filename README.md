@@ -140,6 +140,18 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 /code-review --help          # usage and valid targets
 ```
 
+### `/wp-update-round` usage
+
+The skill needs two things outside this repository:
+
+- **[wp-ops](https://github.com/imagewize/wp-ops) 5.42.0+** for `update-snapshot` and `update-compare` (plus Playwright Chromium and ImageMagick 7).
+- **A per-site `update-manifest.yml`**, kept private in the site's own repository (e.g. `.vibe/update-manifest.yml`) or in a private manifests folder. It holds the facts the skill must not guess and this public repository must not contain: host type (Trellis or shared host), PHP/MySQL versions, local and production URLs, SSH target, the pages to screenshot, CSS selectors to mask, packages to skip and the cache to purge. Without one, the skill asks for these before starting. See the [manifest example](skills/wp-update-round/SKILL.md#the-update-manifestyml).
+
+```
+/wp-update-round                         # reads .vibe/update-manifest.yml, lists updates, stops at each approval
+vibe --agent wp-maintainer               # same round, with debugging and verification skills enabled
+```
+
 ### Design → HTML/CSS → block patterns
 
 The design skills form a pipeline for FSE themes such as Elayne:
