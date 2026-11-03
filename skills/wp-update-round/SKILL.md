@@ -12,6 +12,8 @@ metadata:
 
 > **Model note:** Update rounds involve running shell commands against live servers. Always verify commands before executing, and never proceed without explicit user approval for destructive or production-affecting operations.
 
+Setup (requirements, manifest fields, example files, a dry run for a new site): [README.md](README.md).
+
 Complete workflow for running WordPress updates safely: before/after screenshots, pixel diff comparison, human review, and production deployment. Uses `wp-ops update-snapshot` and `wp-ops update-compare` from the [wp-ops](https://github.com/imagewize/wp-ops) toolkit.
 
 ## When to use
