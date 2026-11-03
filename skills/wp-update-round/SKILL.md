@@ -197,10 +197,10 @@ wp-ops db-backup example.com production
 ```
 MCP: `db_backup(site="example.com", env="production")`.
 
-**Shared host:** there is no atomic rollback. Always take both before applying, and confirm the files exist locally:
+**Shared host:** there is no atomic rollback. Always take both before applying (fill in the date and time in the file names), and confirm the files exist locally:
 ```bash
-ssh user@example.com 'mysqldump --single-transaction DBNAME' | gzip > backups/example.com-$(date +%F-%H%M).sql.gz
-ssh user@example.com 'tar -czf - -C public_html wp-content/plugins wp-content/themes' > backups/example.com-code-$(date +%F-%H%M).tar.gz
+ssh user@example.com 'mysqldump --single-transaction DBNAME' > backups/example.com-YYYY-MM-DD-HHMM.sql
+ssh user@example.com 'tar -czf - -C public_html wp-content/plugins wp-content/themes' > backups/example.com-code-YYYY-MM-DD-HHMM.tar.gz
 ```
 
 ### 8. Apply to production
@@ -250,7 +250,7 @@ Restore the DB backup from step 7 only if a migration ran.
 
 **Shared-host rollback:** restore the step-7 backups:
 ```bash
-gunzip -c backups/example.com-YYYY-MM-DD-HHMM.sql.gz | ssh user@example.com 'mysql DBNAME'
+ssh user@example.com 'mysql DBNAME' < backups/example.com-YYYY-MM-DD-HHMM.sql
 ssh user@example.com 'tar -xzf - -C public_html' < backups/example.com-code-YYYY-MM-DD-HHMM.tar.gz
 ```
 
