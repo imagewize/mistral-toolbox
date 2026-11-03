@@ -39,7 +39,8 @@ MIT, Apache-2.0, CC0-1.0, BSD-2/3-Clause, Unlicense or public domain may be impo
 | `jakubkrehel/skills` | MIT | LICENSE fetched | `60bf140e43c98b248e6594487384ec967e89d98a` (main) | interface-building skills |
 | `content-designer/ux-writing-skill` | MIT | LICENSE fetched | `98cacde4ba2dd10ed28df43a8d53eef1e321c539` (main) | UX writing / content design |
 | `nextlevelbuilder/ui-ux-pro-max-skill` | MIT | LICENSE fetched | `3a13158ff1f32156cbe144108de48eda2ecaed9a` (main) | UI/UX design intelligence |
-| `plugin87/ux-ui-agent-skills` | MIT | LICENSE fetched | `def84a70fadc3490d80901295a4f1951fdb2cc69` (main) | DTCG tokens, WCAG 2.2, hard quality gates |
+| `plugin87/ux-ui-agent-skills` | MIT | LICENSE fetched; re-verified 2026-11-03 at the pinned commit | `def84a70fadc3490d80901295a4f1951fdb2cc69` (main) | DTCG tokens, WCAG 2.2, 2,144-system design library, hard quality gates |
+| `google-labs-code/design.md` | Apache-2.0 | LICENSE fetched at pinned commit + GitHub API, 2026-11-03 | `6e5da5382f41edbba9d73b2c62f33f32e9971f15` (main) | DESIGN.md visual-identity format spec, linter CLI, examples |
 | `sergekostenchuk/ui-ux-agent-skill-system` | Apache-2.0 | LICENSE fetched | `ddaedd712a37d7523f0ce99f556abe68ded7a315` (main) | vendor-neutral UI/UX skill system |
 | `mustafakendiguzel/claude-code-ui-agents` | MIT | GitHub API | pin at import (main) | UI/UX agent prompts |
 
@@ -105,3 +106,5 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/git-workflow/` (SKILL.md + LICENSE) | `github.com/BagelHole/DevOps-Security-Agent-Skills` devops/release/git-workflow | MIT | `0365f57a079b1332f95cf26e31dd5d2332a8399f` | 1.0.0 |
 | 2026-11-02 | `skills/alerting-oncall/` (SKILL.md + LICENSE) | `github.com/BagelHole/DevOps-Security-Agent-Skills` devops/observability/alerting-oncall | MIT | `0365f57a079b1332f95cf26e31dd5d2332a8399f` | 1.0.0 |
 | 2026-11-02 | `skills/kubernetes-ops/` (SKILL.md + references/ + assets/ + LICENSE) | `github.com/BagelHole/DevOps-Security-Agent-Skills` devops/orchestration/kubernetes-ops | MIT | `0365f57a079b1332f95cf26e31dd5d2332a8399f` | 1.0.0 |
+| 2026-11-03 | `skills/design-system-library/` (SKILL.md + LICENSE + design-systems/catalog.md + 76 vendored library specs + references/aesthetic-systems.md) | `github.com/plugin87/ux-ui-agent-skills` design-systems/ + taste/aesthetic-systems.md | MIT | `def84a70fadc3490d80901295a4f1951fdb2cc69` | 1.0.0 |
+| 2026-11-03 | `skills/design-md/` (SKILL.md + LICENSE + references/spec.md + examples/) | `github.com/google-labs-code/design.md` docs/spec.md + examples/ | Apache-2.0 | `6e5da5382f41edbba9d73b2c62f33f32e9971f15` | 1.0.0 |

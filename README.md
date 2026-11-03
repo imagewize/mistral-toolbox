@@ -12,7 +12,7 @@
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
-[![Skills](https://img.shields.io/badge/skills-44-brightgreen)](#-vibe-skills)
+[![Skills](https://img.shields.io/badge/skills-46-brightgreen)](#-vibe-skills)
 [![Agents](https://img.shields.io/badge/agents-6-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
@@ -30,7 +30,7 @@ Reusable AI instructions in three kinds:
 | 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
 | 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 39 of the 43 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 41 of the 46 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
 
 ---
 
@@ -92,6 +92,8 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/architectural-drawing`](skills/architectural-drawing/SKILL.md) | Architectural elevations and sections as SVG, built in metres with a bundled kit (`arch.mjs`): one scale, a fixed line-weight hierarchy, people and trees for scale, with proportion, overlap and file checks. | Imagewize |
 | [`/illustration-isometric-mono`](skills/illustration-isometric-mono/SKILL.md) | True-isometric SVG dioramas built with a bundled scene kit (`iso.mjs`) instead of hand-written coordinates, with lint and colour checks and a render-and-critique loop. | MengTo |
 | [`/ui-ux-pro-max`](skills/ui-ux-pro-max/SKILL.md) | Design intelligence with local catalogs (styles, palettes, font pairings, 119 UX guidelines, icons, motion, charts, 22 stacks). | nextlevelbuilder |
+| [`/design-system-library`](skills/design-system-library/SKILL.md) | Named design systems by vertical from a 2,144-entry catalog; 76 specs vendored (Music & Audio, Retro & Nostalgic, Retail) — each a `DESIGN.md` with tokens + rationale to apply. | plugin87 |
+| [`/design-md`](skills/design-md/SKILL.md) | Author a `DESIGN.md` visual-identity spec from reference sites in a vertical and validate it with `npx @google/design.md lint`. | google-labs-code |
 | [`/ux-writing`](skills/ux-writing/SKILL.md) | Microcopy — buttons, labels, errors, empty states, onboarding — with voice/tone and accessibility guidance. | content-designer |
 | [`/frontend-ui-engineering`](skills/frontend-ui-engineering/SKILL.md) | Production-quality accessible, responsive UIs: semantic markup, keyboard/focus states. | addyosmani |
 | [`/better-ui`](skills/better-ui/SKILL.md) | Polish surfaces, icons and motion with exact values. | jakubkrehel |
@@ -154,8 +156,8 @@ vibe --agent wp-maintainer               # same round, with debugging and verifi
 The design skills form a pipeline for FSE themes such as Elayne:
 
 ```
-brief → /landing-page + /design-first-ui-prompting   (structure, copy, spec)
-      → /frontend-design or /ui-ux-pro-max           (anchored HTML/CSS, token-locked)
+brief → /landing-page + /design-first-ui-prompting + /design-md   (structure, copy, identity spec)
+      → /frontend-design or /ui-ux-pro-max or /design-system-library   (anchored HTML/CSS, token-locked)
       → /architectural-drawing or /illustration-isometric-mono   (SVG drawings from a kit, not hand-written)
       → /no-ai-design-slop                           (quality gate on the output)
       → /html-page-review                            (rendered review → REVIEW.md → change requests)
@@ -200,7 +202,7 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 | Agent | Role | Skills it loads |
 |-------|------|-----------------|
 | [`wp-reviewer`](agents/wp-reviewer.toml) | Reviews WordPress diffs, PRs, plugins and patterns | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
-| [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono |
+| [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, ui-ux-pro-max, design-system-library, design-md, ux-writing, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono |
 | [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
@@ -325,7 +327,9 @@ Imported skills are adapted from these MIT-licensed collections; each keeps its 
 [Ilm-Alan/frontend-design](https://github.com/Ilm-Alan/frontend-design) ·
 [siddik-web/wp-block-theme-converter](https://github.com/siddik-web/wp-block-theme-converter) ·
 [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) ·
-[content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill)
+[content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) ·
+[plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) ·
+[google-labs-code/design.md](https://github.com/google-labs-code/design.md)
 
 ## 🔗 Resources
 

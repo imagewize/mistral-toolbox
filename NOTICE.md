@@ -65,6 +65,15 @@ Rules:
 - `skills/ux-writing/` — from `github.com/content-designer/ux-writing-skill`, MIT
   (© 2026 Christopher Greer, see the copied `LICENSE`), pinned
   `98cacde4ba2dd10ed28df43a8d53eef1e321c539`
+- `skills/design-system-library/` — from `github.com/plugin87/ux-ui-agent-skills`, MIT
+  (© 2026 Thientan Soparat, see the copied `LICENSE`), pinned
+  `def84a70fadc3490d80901295a4f1951fdb2cc69`. Only the 76 Music & Audio, Retro &
+  Nostalgic, Retail & E-commerce and E-commerce & Retail specs are vendored; the rest
+  of the 2,144-system library stays upstream at the pinned commit
+- `skills/design-md/` — from `github.com/google-labs-code/design.md`, Apache-2.0
+  (© 2026 Google LLC, see the copied `LICENSE`), pinned
+  `6e5da5382f41edbba9d73b2c62f33f32e9971f15`. The SKILL.md is authored for this
+  repository around the upstream `docs/spec.md` and `examples/`
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.
