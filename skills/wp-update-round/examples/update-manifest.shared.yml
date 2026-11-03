@@ -1,0 +1,19 @@
+# Example update manifest for a site on shared hosting (no Trellis, no atomic rollback).
+# Copy to a private location, e.g. ~/code/site-manifests/example.com/update-manifest.yml,
+# and replace every value.
+site: example.com
+host: shared
+webserver: apache
+php: "8.4"                # pin the sandbox to match: valet isolate php@8.4
+mysql: "8.0"
+local: ~/code/example-sandbox
+local_url: http://example.test
+prod_url: https://example.com
+ssh: user@example.com
+wp_root: public_html      # WordPress root on the server, relative to the SSH home
+skip: [page-builder, page-builder-woocommerce]   # never auto-update, e.g. a page builder whose next major can't read old data
+cache: wp-rocket          # page cache to purge after the update
+pages_file: update-pages.txt
+mask: [.cookie-button, .latest-posts]
+snapshots: snapshots      # one folder per round: update-round-YYYY-MM-DD/
+backups: backups          # step 7 writes the DB dump and plugins/themes archive here

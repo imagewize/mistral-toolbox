@@ -4,7 +4,7 @@ description: "Use when running a WordPress update round — orchestrating before
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/imagewize/mistral-toolbox skills/wp-update-round (Imagewize, MIT)"
 ---
 
@@ -271,7 +271,13 @@ Append to the site's update log. For Trellis/Bedrock, the commit message is part
 
 ## The update-manifest.yml
 
-Each site has a manifest that tells the round how to run. Example for a shared-host site (placeholders — keep real hosts, users and skip lists in your own private manifests, never in this skill):
+Each site has a manifest that tells the round how to run. Ready-to-copy examples (placeholders — keep real hosts, users and skip lists in your own private manifests, never in this skill):
+
+- [`examples/update-manifest.trellis.yml`](examples/update-manifest.trellis.yml) — Trellis/Bedrock site
+- [`examples/update-manifest.shared.yml`](examples/update-manifest.shared.yml) — shared-host site
+- [`examples/update-pages.txt`](examples/update-pages.txt) — page list for `--pages-file`
+
+The shared-host example, inline:
 
 ```yaml
 site: example.com
@@ -289,6 +295,8 @@ cache: wp-rocket          # purge after update
 pages: [/, /products/, /about/, /contact/, /shop/, /cart/]
 mask: [.cookie-button, .latest-posts]
 ```
+
+Optional fields: `pages_file` (a page list file instead of `pages`), `composer_dir` and `theme_build` (Trellis: where Composer runs and which theme to rebuild), `snapshots` and `backups` (where a round writes its folders), `rollback` (the exact rollback command).
 
 The skill uses it to:
 - Pick the host-specific commands (Trellis vs shared host)

@@ -145,7 +145,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 The skill needs two things outside this repository:
 
 - **[wp-ops](https://github.com/imagewize/wp-ops) 5.42.0+** for `update-snapshot` and `update-compare` (plus Playwright Chromium and ImageMagick 7).
-- **A per-site `update-manifest.yml`**, kept private in the site's own repository (e.g. `.vibe/update-manifest.yml`) or in a private manifests folder. It holds the facts the skill must not guess and this public repository must not contain: host type (Trellis or shared host), PHP/MySQL versions, local and production URLs, SSH target, the pages to screenshot, CSS selectors to mask, packages to skip and the cache to purge. Without one, the skill asks for these before starting. See the [manifest example](skills/wp-update-round/SKILL.md#the-update-manifestyml).
+- **A per-site `update-manifest.yml`**, kept private in the site's own repository (e.g. `.vibe/update-manifest.yml`) or in a private manifests folder. It holds the facts the skill must not guess and this public repository must not contain: host type (Trellis or shared host), PHP/MySQL versions, local and production URLs, SSH target, the pages to screenshot, CSS selectors to mask, packages to skip and the cache to purge. Without one, the skill asks for these before starting. Copy one of the examples to start: [Trellis/Bedrock](skills/wp-update-round/examples/update-manifest.trellis.yml), [shared host](skills/wp-update-round/examples/update-manifest.shared.yml), plus a [page list](skills/wp-update-round/examples/update-pages.txt).
 
 ```
 /wp-update-round                         # reads .vibe/update-manifest.yml, lists updates, stops at each approval

@@ -1,0 +1,9 @@
+# Page list for wp-ops update-snapshot (--pages-file).
+# One path per line; "name|/path/" sets the file name; # starts a comment.
+# Pick pages that cover each template: home, a service page, a listing, a post, the form page.
+home|/
+cases|/cases/
+contact|/contact/
+service|/services/example-service/
+listing|/themes/
+post|/a-recent-post/

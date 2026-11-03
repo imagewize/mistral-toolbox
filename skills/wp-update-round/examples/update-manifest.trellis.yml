@@ -1,0 +1,23 @@
+# Example update manifest for a Trellis/Bedrock site.
+# Copy to the site's own (private) repository, e.g. .vibe/update-manifest.yml,
+# and replace every value. Run the snapshot commands from the repository root.
+site: example.com
+host: trellis
+webserver: nginx
+php: "8.4"                # check both: `trellis vm shell -- php --version` and production
+mysql: "mariadb-10.11"    # a patch-level difference is fine; note it
+local: ~/code/example.com
+local_url: http://example.test
+prod_url: https://example.com
+ssh: web@example.com
+composer_dir: site        # composer outdated/update run here (Bedrock), not in trellis/
+theme_build: site/web/app/themes/example-theme   # rebuild on the host after a theme update (the VM has no npm)
+skip:                     # packages never updated in a round, each with the reason
+  - cweagans/composer-patches            # dev tooling major
+  - squizlabs/php_codesniffer            # dev tooling major
+  - vendor/abandoned-block               # abandoned but still rendered; needs a content migration first
+cache: redis-cache        # object cache only: `wp cache flush`; name the page-cache plugin here if there is one
+pages_file: .vibe/update-pages.txt
+mask: [.cookie-preferences-toggle]       # cookie button; the CF7 CAPTCHA is masked by default
+snapshots: .playwright/screenshots       # gitignored; one folder per round: update-round-YYYY-MM-DD/
+rollback: trellis rollback production example.com

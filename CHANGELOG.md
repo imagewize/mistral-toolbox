@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `wp-update-round` 1.0.1: example files in `skills/wp-update-round/examples/` — `update-manifest.trellis.yml` (generalized from a real Trellis round), `update-manifest.shared.yml` and `update-pages.txt`. SKILL.md links them and documents the optional manifest fields (`pages_file`, `composer_dir`, `theme_build`, `snapshots`, `backups`, `rollback`). The README gained a `/wp-update-round` usage section explaining why each site needs a private manifest
+
 ## [1.8.0] - 2026-11-03
 
 ### Added
