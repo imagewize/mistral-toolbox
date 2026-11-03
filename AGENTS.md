@@ -69,6 +69,18 @@ mistral-toolbox/
   project's `.vibe/config.toml`, and a project allowlist replaces the user-level one.
 - Keep skills generic. Project-specific rules belong in the project — for `code-review`, in the
   project's `.agents/code-review.md` — not in this repository.
+- No client-identifiable data in a skill or agent profile: no real hostnames, SSH users, IP
+  allowlists, credential hints or per-client skip lists. This repository is public. Use
+  `example.com` / `user@example.com` placeholders; real values live in private per-site files
+  (for `wp-update-round`, the site's `update-manifest.yml`).
+- Write command examples from the tool's real interface: check them against its `--help` output
+  and, for MCP tools, the server's tool schemas. wp-ops CLI commands are hyphenated
+  (`wp-ops db-backup`); its MCP tools are underscored and take structured arguments
+  (`wp_cli(site, env, args=[...])`, argv without `wp`, `env` one of
+  `development`/`staging`/`production`). There is no `wp-ops wp_cli`.
+- Shared-hosting examples: never put a database password on a command line (other users see it
+  in `ps`), never write dumps to the remote server, stream them to the local machine. Shared
+  hosts have no atomic rollback, so a production backup is its own step before deploying.
 - Verify every WordPress claim against core or a real project before adding it. A rule that is
   wrong for one project floods reviews there with false positives.
 - Commands a skill prescribes are plain single commands that fit an allowlist: no shell loops, no

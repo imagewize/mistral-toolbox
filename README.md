@@ -12,8 +12,8 @@
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
-[![Skills](https://img.shields.io/badge/skills-43-brightgreen)](#-vibe-skills)
-[![Agents](https://img.shields.io/badge/agents-5-brightgreen)](#-vibe-agents)
+[![Skills](https://img.shields.io/badge/skills-44-brightgreen)](#-vibe-skills)
+[![Agents](https://img.shields.io/badge/agents-6-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
 [Quick start](#-quick-start) · [Skills](#-vibe-skills) · [Agents](#-vibe-agents) · [Le Chat prompts](#-le-chat-prompts) · [Contributing](#-contributing)
@@ -79,6 +79,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/wordpress-i18n-workflow`](skills/wordpress-i18n-workflow/SKILL.md) | Text domain, i18n functions, `wp i18n make-pot`/`make-mo`/`make-json`, JS translations, GlotPress. | mralaminahamed |
 | [`/wordpress-database`](skills/wordpress-database/SKILL.md) | Custom tables: `dbDelta` rules, versioned upgrades, prepared `$wpdb` CRUD, migrations, uninstall cleanup. | mralaminahamed |
 | [`/wordpress-woocommerce`](skills/wordpress-woocommerce/SKILL.md) | WooCommerce extensions: gateways, shipping, WC CRUD, HPOS, REST/Store API, cart/checkout blocks. | mralaminahamed |
+| [`/wp-update-round`](skills/wp-update-round/SKILL.md) | WordPress update rounds: before/after screenshots, pixel diff, human approval, production deployment for plugins/themes/core. Uses wp-ops commands. | Imagewize |
 
 ### Design & frontend
 
@@ -194,6 +195,7 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 | [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
+| [`wp-maintainer`](agents/wp-maintainer.toml) | WordPress update rounds: screenshots, diffs, approval, deployment | wp-update-round, systematic-debugging, verification-before-completion, security-review |
 
 ```bash
 vibe --agent wp-reviewer                    # interactive review session
