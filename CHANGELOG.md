@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-05
+
 ### Added
 
 - 13 SEO and content marketing skills (Imagewize original, MIT): `seo-audit` (on-page/technical audit checklist), `ai-seo` (AEO/GEO/LLMO for AI search citations), `serp-check` (pre-draft SERP competition analysis), `keyword-gap-analysis` (competitor keyword gaps prioritized by volume/difficulty/relevance), `schema` (JSON-LD structured data for WordPress with validation rules), `first-hand-proof` (inject original tests/data/decisions into content), `copywriting` (PAS+AIDA marketing copy framework), `competitors` (four comparison page formats), `cro` (conversion audit framework), `publish-hygiene` (invisible Unicode strip + image metadata check), `cold-email` (B2B outbound sequences), `linkedin-comment-queue` (manual LinkedIn soft-funnel), `product-marketing` (product context document for other skills to reference)
