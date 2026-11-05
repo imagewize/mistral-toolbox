@@ -12,8 +12,8 @@
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
-[![Skills](https://img.shields.io/badge/skills-46-brightgreen)](#-vibe-skills)
-[![Agents](https://img.shields.io/badge/agents-6-brightgreen)](#-vibe-agents)
+[![Skills](https://img.shields.io/badge/skills-59-brightgreen)](#-vibe-skills)
+[![Agents](https://img.shields.io/badge/agents-7-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
 [Quick start](#-quick-start) · [Skills](#-vibe-skills) · [Agents](#-vibe-agents) · [Le Chat prompts](#-le-chat-prompts) · [Contributing](#-contributing)
@@ -30,7 +30,7 @@ Reusable AI instructions in three kinds:
 | 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
 | 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 41 of the 46 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 41 of the 59 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
 
 ---
 
@@ -133,6 +133,36 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/git-workflow`](skills/git-workflow/SKILL.md) | Branching strategies, PR workflows and release management. | BagelHole |
 | [`/create-pull-request`](skills/create-pull-request/SKILL.md) | Opens/edits PRs with `gh` safely — body via `--body-file`, single-quoted titles, verified with `gh pr view`. | Imagewize |
 
+### SEO & content marketing
+
+| Skill | What it does | Source |
+|-------|--------------|--------|
+| [`/seo-audit`](skills/seo-audit/SKILL.md) | On-page/technical SEO audit: keywords, title, meta, headings, internal links, images, crawlability — run before publishing. | Imagewize |
+| [`/ai-seo`](skills/ai-seo/SKILL.md) | AEO/GEO/LLMO — optimize content for AI search engines (ChatGPT, Perplexity, Claude, Gemini) and zero-click answers. | Imagewize |
+| [`/serp-check`](skills/serp-check/SKILL.md) | Pre-draft SERP analysis: who ranks on page 1, search intent, winnable angle, content brief. | Imagewize |
+| [`/keyword-gap-analysis`](skills/keyword-gap-analysis/SKILL.md) | Competitor keyword gaps scored by volume/difficulty/relevance, tied to your services. | Imagewize |
+| [`/schema`](skills/schema/SKILL.md) | JSON-LD structured data for WordPress — FAQPage, Article, Service, Organization, BreadcrumbList — with validation rules. | Imagewize |
+| [`/first-hand-proof`](skills/first-hand-proof/SKILL.md) | Inject original tests, data, decisions and stories into content so competitors can't copy it. | Imagewize |
+| [`/copywriting`](skills/copywriting/SKILL.md) | PAS+AIDA marketing copy for any page — headlines, heroes, CTAs, value propositions. | Imagewize |
+| [`/competitors`](skills/competitors/SKILL.md) | Competitor comparison pages: "X alternative", "X vs Y", battle cards — four formats. | Imagewize |
+| [`/cro`](skills/cro/SKILL.md) | Conversion rate audit: above-the-fold, CTAs, forms, trust signals, performance — prioritized fix list. | Imagewize |
+| [`/publish-hygiene`](skills/publish-hygiene/SKILL.md) | Pre-publish hygiene: strip invisible Unicode from drafts, check images for C2PA/AI/EXIF metadata. | Imagewize |
+| [`/cold-email`](skills/cold-email/SKILL.md) | B2B cold email sequences — subject lines, hooks, multi-touch follow-ups, personalization. | Imagewize |
+| [`/linkedin-comment-queue`](skills/linkedin-comment-queue/SKILL.md) | Manual LinkedIn soft-funnel: find posts to comment on, draft comments, decide follow/connect. | Imagewize |
+| [`/product-marketing`](skills/product-marketing/SKILL.md) | Product marketing context document (`.claude/product-marketing.md`) that other marketing skills reference. | Imagewize |
+
+### Content workflow
+
+The SEO and content skills form a pipeline for blog posts, landing pages and outreach:
+
+```
+product-marketing → keyword-gap-analysis / serp-check → first-hand-proof → draft
+  → seo-audit + schema + ai-seo → publish-hygiene → publish
+  → cro (on the landing page) / cold-email + linkedin-comment-queue (outreach)
+```
+
+The [`seo-content-marketer`](agents/seo-content-marketer.toml) agent runs this pipeline end to end.
+
 ### `/code-review` usage
 
 ```
@@ -209,6 +239,7 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
 | [`wp-maintainer`](agents/wp-maintainer.toml) | WordPress update rounds: screenshots, diffs, approval, deployment | wp-update-round, systematic-debugging, verification-before-completion, security-review |
+| [`seo-content-marketer`](agents/seo-content-marketer.toml) | Full content/SEO workflow: research → draft → audit → publish → CRO + outreach | seo-audit, ai-seo, serp-check, keyword-gap-analysis, schema, first-hand-proof, copywriting, competitors, cro, publish-hygiene, cold-email, linkedin-comment-queue, product-marketing |
 
 ```bash
 vibe --agent wp-reviewer                    # interactive review session
