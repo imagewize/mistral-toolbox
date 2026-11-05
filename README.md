@@ -247,6 +247,8 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 vibe --agent wp-reviewer                    # interactive review session
 vibe --agent wp-reviewer -p "review the diff against main"
 vibe --agent devops-oncall -p "triage this alert"
+vibe --agent seo-content-writer             # plan and draft a post, then hand it to:
+vibe --agent seo-publish-reviewer -p "audit drafts/my-post.md before publishing"
 ```
 
 - Wire them in with `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents` (see [Quick start](#-quick-start)). If you use `agent_paths` instead, give an absolute path: Vibe expands `~` in `skill_paths` but not in `agent_paths`, so a `~/…` entry is silently skipped and `vibe --agent NAME` reports the agent as not found.

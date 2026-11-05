@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `agents/README.md` lists the three SEO agents; README agent examples show the writer → reviewer hand-off
+
 ## [1.10.0] - 2026-11-05
 
 ### Added

@@ -18,6 +18,9 @@ prompts — those live in [`prompts/`](../prompts/) together with their example 
 | [devops-oncall.toml](devops-oncall.toml) | `devops-oncall` | Incidents, on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [release-manager.toml](release-manager.toml) | `release-manager` | Release gates, CI, git flow, PRs | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
 | [wp-maintainer.toml](wp-maintainer.toml) | `wp-maintainer` | WordPress update rounds: screenshots, diffs, approval, deployment | wp-update-round, systematic-debugging, verification-before-completion, security-review |
+| [seo-content-writer.toml](seo-content-writer.toml) | `seo-content-writer` | Plans and drafts SEO content: context, keyword gaps, SERP check, first-hand proof, copy, comparison pages | product-marketing, keyword-gap-analysis, serp-check, first-hand-proof, copywriting, competitors |
+| [seo-publish-reviewer.toml](seo-publish-reviewer.toml) | `seo-publish-reviewer` | Independent pre-publish gate: SEO audit, schema, AI-search citability, hygiene, CRO | seo-audit, schema, ai-seo, publish-hygiene, cro |
+| [outreach-marketer.toml](outreach-marketer.toml) | `outreach-marketer` | Drafts cold email sequences and the manual LinkedIn comment queue; never sends | product-marketing, cold-email, linkedin-comment-queue |
 
 ## Wiring them into any repository
 
