@@ -75,6 +75,10 @@ vibe --agent wp-reviewer -p "review the diff against main"
 vibe --agent release-manager -p "is main ready for release?"
 ```
 
+A live run — `wp-reviewer` reviewing the latest commit in this repo, loading the `code-review` skill on demand and ending with a `file:line` verdict:
+
+![Terminal recording of vibe --agent wp-reviewer reviewing the latest commit in mistral-toolbox: the agent loads the code-review skill, runs git checks and reports an OVERALL ASSESSMENT](docs/assets/vibe-agent-demo.gif)
+
 **3. Or, in Le Chat**, paste [`prompts/frontend-dev/FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-DEV.md) into **Agents → New Agent → System Prompt**.
 
 Per-project install, approval allowlists and AGENTS.md vs system prompt: [docs/install.md](docs/install.md).

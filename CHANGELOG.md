@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README quick start embeds `docs/assets/vibe-agent-demo.gif` (800px wide, 27s, 1.7 MB): a terminal recording of `vibe --agent wp-reviewer` reviewing the latest commit in this repo — the agent loads the `code-review` skill on demand, runs the checks and ends with an `OVERALL ASSESSMENT` verdict. Recorded with a VHS tape, cut to GIF with `mp4-to-gif.sh` (frozen stretches sped up via `--detect` segments), size-optimized with `gifsicle -O3 --colors 32 --lossy=120`
+
 ### Changed
 
 - README shortened to an overview (what is inside, quick start, design principles, doc map). The skills tables and workflows moved to `docs/skills.md`; agents, Le Chat prompts, install and contributing each have their own page in `docs/`. AGENTS.md sync rules point at the new files
