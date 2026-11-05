@@ -5,7 +5,7 @@ user-invocable: true
 license: MIT
 metadata:
   version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  source: "imagewize/mistral-toolbox (original; method borrows from aaron-he-zhu/aaron-marketing-skills serp-analysis, Apache-2.0, no text or code copied)"
 ---
 
 # SERP Check

@@ -4,8 +4,8 @@ description: "Structured data (JSON-LD) for WordPress sites — FAQPage, Article
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  version: "1.0.1"
+  source: "github.com/coreyhaines31/marketingskills skills/schema @ 88c79f6528a9347420e57ceb1fff9a60de651768 (MIT; adapted and condensed for Vibe)"
 ---
 
 # Schema / Structured Data
@@ -30,6 +30,7 @@ Add and validate JSON-LD structured data on WordPress pages for search engines a
 - Validate with validator.schema.org
 
 ### Article / BlogPosting (blog posts)
+- **Check first what the site already emits.** Many SEO plugins, themes and mu-plugins output Article JSON-LD automatically. Fetch the live page (`curl -s URL`) and count the `"@type":"Article"` blocks. A published post must have exactly one; do not add a manual block if one exists.
 - headline, author (Person), publisher (Organization), datePublished, dateModified
 - image is recommended — use a verified upload URL, never guess
 
@@ -49,6 +50,7 @@ Add and validate JSON-LD structured data on WordPress pages for search engines a
 - **One logo URL** — use the same verified Organization logo everywhere
 - **Validate after adding** — use validator.schema.org or Google Rich Results Test
 - In WordPress, embed JSON-LD in a `wp:html` block or via the SEO plugin
+- Exactly one block per type per page: duplicate Article or FAQPage blocks (manual plus plugin) confuse crawlers
 
 ## Validation checklist
 1. Parse the JSON-LD (no syntax errors)

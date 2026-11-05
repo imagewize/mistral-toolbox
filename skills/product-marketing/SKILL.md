@@ -1,11 +1,11 @@
 ---
 name: product-marketing
-description: "Create or update the product marketing context document (.claude/product-marketing.md) — product description, target audience, ICP, positioning. Use at the start of any new project before other marketing skills so foundational info doesn't need repeating."
+description: "Create or update the product marketing context document (.agents/product-marketing.md) — product description, target audience, ICP, positioning. Use at the start of any new project before other marketing skills so foundational info doesn't need repeating."
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  version: "1.0.1"
+  source: "github.com/coreyhaines31/marketingskills skills/product-marketing @ 88c79f6528a9347420e57ceb1fff9a60de651768 (MIT; adapted and condensed for Vibe)"
 ---
 
 # Product Marketing Context
@@ -22,7 +22,7 @@ Create a product marketing context document that other marketing skills referenc
 
 ## What to create
 
-Write `.claude/product-marketing.md` in the project root with:
+Write `.agents/product-marketing.md` in the project root with:
 
 ### 1. Product/service overview
 - What it is, in one paragraph

@@ -4,8 +4,8 @@ description: "Pre-publish hygiene for drafts and images — strips invisible Uni
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  version: "1.0.1"
+  source: "github.com/guillaumemeyer/watermarks-remover skills/clean-user-facing-text @ 5a62be6338d2812372b1da440e55c82922f97d53 (MIT; rewrite, stylometry and detector scripts removed)"
 ---
 
 # Publish Hygiene
@@ -21,26 +21,32 @@ Clean drafts and check images before publishing.
 
 ## Invisible Unicode cleanup
 
-Scan text for and remove:
-- Zero-width spaces (U+200B)
-- Zero-width non-joiners (U+200C) and joiners (U+200D)
-- Word joiners (U+2060)
-- Byte order marks (U+FEFF)
-- Bidirectional marks: LTR (U+200E), RTL (U+200F), pop (U+202C)
-- Soft hyphens (U+00AD)
-- Space homoglyphs (non-breaking space U+00A0 used where regular space expected)
-- Any character in the Cf (format) Unicode category
+Characters to find and remove:
+- Zero-width space, non-joiner and joiner (U+200B, U+200C, U+200D), word joiner (U+2060), BOM (U+FEFF)
+- Bidirectional marks (U+200E, U+200F, U+202A–U+202E), soft hyphen (U+00AD)
+- Non-breaking space (U+00A0) where a regular space is expected
 
-Apply to: blog post HTML, Markdown drafts, LinkedIn/Mastodon posts, meta descriptions.
+Keep U+200D when it joins an emoji sequence, and keep U+00A0 when it is intentional (e.g. before a unit). Review the hits before cleaning.
+
+Apply to blog post HTML, Markdown drafts, LinkedIn/Mastodon posts and meta descriptions. Run the sequence inspect → clean → inspect, one file per command:
+
+1. Inspect (prints matching lines with line numbers; no output means clean):
+   `rg -n "[\x{200B}-\x{200F}\x{202A}-\x{202E}\x{2060}\x{FEFF}\x{00AD}\x{00A0}]" path/to/draft.md`
+2. Clean (edits the file in place; commit or copy it first):
+   `perl -CSD -pi -e 's/[\x{200B}-\x{200F}\x{202A}-\x{202E}\x{2060}\x{FEFF}\x{00AD}]//g' path/to/draft.md`
+3. Inspect again and confirm there is no output.
 
 ## Image metadata check
 
-Before uploading featured images, social cards, or posters:
-- Check for C2PA (Content Authenticity Initiative) manifests
-- Check for XMP AI training opt-out tags
-- Strip EXIF data (GPS coordinates, camera info, timestamps)
-- Verify image dimensions match the intended use
-- Check file size (compress if over target)
+For featured images, social cards and posters before upload:
+
+1. Inspect all metadata (EXIF, XMP, C2PA/JUMBF entries are listed when present):
+   `exiftool -a -G1 -s path/to/image.jpg`
+2. Look for GPS coordinates, camera and software tags, timestamps, XMP AI-generation or training tags, and C2PA/Content Credentials entries.
+3. Strip EXIF and XMP: `exiftool -all= -overwrite_original path/to/image.jpg`. Then re-run step 1: if C2PA/JUMBF data is still listed, re-export the image from an editor instead of keeping the file.
+4. Check dimensions and file size against the intended use (`exiftool -ImageSize -FileSize path/to/image.jpg`) and compress if over target.
+
+If `exiftool` or `rg` is missing, say so and ask the user to install them rather than skipping the check.
 
 ## What this does NOT do
 

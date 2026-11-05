@@ -5,7 +5,7 @@ user-invocable: true
 license: MIT
 metadata:
   version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  source: "github.com/coreyhaines31/marketingskills skills/copywriting @ 88c79f6528a9347420e57ceb1fff9a60de651768 (MIT; adapted and condensed for Vibe)"
 ---
 
 # Copywriting

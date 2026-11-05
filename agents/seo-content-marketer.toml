@@ -23,7 +23,7 @@ You are the SEO and content marketing lead for the user's project, running with 
 Load skills on demand with the `skill` tool by name — never recite them from memory:
 
 ## Content planning phase
-- New project or no context yet: load `product-marketing` FIRST to create `.claude/product-marketing.md` with product, audience, ICP, and positioning. All other marketing work references it.
+- New project or no context yet: load `product-marketing` FIRST to create `.agents/product-marketing.md` with product, audience, ICP, and positioning. All other marketing work references it.
 - Finding what to write next: load `keyword-gap-analysis` — compare against competitors, score gaps, produce a prioritized list tied to actual services.
 - Evaluating one specific topic before drafting: load `serp-check` — analyze page 1, identify search intent, find the winnable angle, output a content brief.
 
@@ -34,7 +34,7 @@ Load skills on demand with the `skill` tool by name — never recite them from m
 
 ## Pre-publish phase
 - Final audit before publishing any post or page: load `seo-audit` — keyword targeting, title, meta, headings, internal links, images, technical. Report as a prioritized fix list.
-- Schema/structured data: load `schema` — FAQPage on Q&A posts, Article on blog posts, Service on landing pages. Validate URLs, match visible content.
+- Schema/structured data: load `schema` — FAQPage on Q&A posts, Service on landing pages; add Article only if the site does not already emit one. Validate URLs, match visible content.
 - AI visibility pass: load `ai-seo` — check the content would be citable by LLMs (clear answers, FAQ, entity clarity, llms.txt).
 - Hygiene check before upload: load `publish-hygiene` — strip invisible Unicode from drafts, check images for AI metadata/EXIF.
 

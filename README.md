@@ -30,7 +30,7 @@ Reusable AI instructions in three kinds:
 | 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
 | 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 41 of the 59 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 49 of the 59 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
 
 ---
 
@@ -138,18 +138,18 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | Skill | What it does | Source |
 |-------|--------------|--------|
 | [`/seo-audit`](skills/seo-audit/SKILL.md) | On-page/technical SEO audit: keywords, title, meta, headings, internal links, images, crawlability — run before publishing. | Imagewize |
-| [`/ai-seo`](skills/ai-seo/SKILL.md) | AEO/GEO/LLMO — optimize content for AI search engines (ChatGPT, Perplexity, Claude, Gemini) and zero-click answers. | Imagewize |
+| [`/ai-seo`](skills/ai-seo/SKILL.md) | AEO/GEO/LLMO — optimize content for AI search engines (ChatGPT, Perplexity, Claude, Gemini) and zero-click answers. | coreyhaines31 |
 | [`/serp-check`](skills/serp-check/SKILL.md) | Pre-draft SERP analysis: who ranks on page 1, search intent, winnable angle, content brief. | Imagewize |
 | [`/keyword-gap-analysis`](skills/keyword-gap-analysis/SKILL.md) | Competitor keyword gaps scored by volume/difficulty/relevance, tied to your services. | Imagewize |
-| [`/schema`](skills/schema/SKILL.md) | JSON-LD structured data for WordPress — FAQPage, Article, Service, Organization, BreadcrumbList — with validation rules. | Imagewize |
+| [`/schema`](skills/schema/SKILL.md) | JSON-LD structured data for WordPress — FAQPage, Article, Service, Organization, BreadcrumbList — with validation rules. | coreyhaines31 |
 | [`/first-hand-proof`](skills/first-hand-proof/SKILL.md) | Inject original tests, data, decisions and stories into content so competitors can't copy it. | Imagewize |
-| [`/copywriting`](skills/copywriting/SKILL.md) | PAS+AIDA marketing copy for any page — headlines, heroes, CTAs, value propositions. | Imagewize |
-| [`/competitors`](skills/competitors/SKILL.md) | Competitor comparison pages: "X alternative", "X vs Y", battle cards — four formats. | Imagewize |
-| [`/cro`](skills/cro/SKILL.md) | Conversion rate audit: above-the-fold, CTAs, forms, trust signals, performance — prioritized fix list. | Imagewize |
-| [`/publish-hygiene`](skills/publish-hygiene/SKILL.md) | Pre-publish hygiene: strip invisible Unicode from drafts, check images for C2PA/AI/EXIF metadata. | Imagewize |
-| [`/cold-email`](skills/cold-email/SKILL.md) | B2B cold email sequences — subject lines, hooks, multi-touch follow-ups, personalization. | Imagewize |
+| [`/copywriting`](skills/copywriting/SKILL.md) | PAS+AIDA marketing copy for any page — headlines, heroes, CTAs, value propositions. | coreyhaines31 |
+| [`/competitors`](skills/competitors/SKILL.md) | Competitor comparison pages: "X alternative", "X vs Y", battle cards — four formats. | coreyhaines31 |
+| [`/cro`](skills/cro/SKILL.md) | Conversion rate audit: above-the-fold, CTAs, forms, trust signals, performance — prioritized fix list. | coreyhaines31 |
+| [`/publish-hygiene`](skills/publish-hygiene/SKILL.md) | Pre-publish hygiene: strip invisible Unicode from drafts, check images for C2PA/AI/EXIF metadata. | guillaumemeyer |
+| [`/cold-email`](skills/cold-email/SKILL.md) | B2B cold email sequences — subject lines, hooks, multi-touch follow-ups, personalization. | coreyhaines31 |
 | [`/linkedin-comment-queue`](skills/linkedin-comment-queue/SKILL.md) | Manual LinkedIn soft-funnel: find posts to comment on, draft comments, decide follow/connect. | Imagewize |
-| [`/product-marketing`](skills/product-marketing/SKILL.md) | Product marketing context document (`.claude/product-marketing.md`) that other marketing skills reference. | Imagewize |
+| [`/product-marketing`](skills/product-marketing/SKILL.md) | Product marketing context document (`.agents/product-marketing.md`) that other marketing skills reference. | coreyhaines31 |
 
 ### Content workflow
 
@@ -348,7 +348,7 @@ Contributions are welcome — for any domain, not just WordPress.
 
 ## 🙏 Credits
 
-Imported skills are adapted from these collections — all MIT except `google-labs-code/design.md` (Apache-2.0); each keeps its upstream license, and [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md) record the pinned commits.
+Imported skills are adapted from these collections — all MIT except `google-labs-code/design.md` (Apache-2.0); `aaron-he-zhu/aaron-marketing-skills` (Apache-2.0) is a method reference only; each keeps its upstream license, and [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md) record the pinned commits.
 
 [obra/superpowers](https://github.com/obra/superpowers) ·
 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
@@ -362,7 +362,10 @@ Imported skills are adapted from these collections — all MIT except `google-la
 [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) ·
 [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) ·
 [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) ·
-[google-labs-code/design.md](https://github.com/google-labs-code/design.md)
+[google-labs-code/design.md](https://github.com/google-labs-code/design.md) ·
+[coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) ·
+[guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) ·
+[aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 
 ## 🔗 Resources
 

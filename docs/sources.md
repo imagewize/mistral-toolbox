@@ -41,6 +41,9 @@ MIT, Apache-2.0, CC0-1.0, BSD-2/3-Clause, Unlicense or public domain may be impo
 | `nextlevelbuilder/ui-ux-pro-max-skill` | MIT | LICENSE fetched | `3a13158ff1f32156cbe144108de48eda2ecaed9a` (main) | UI/UX design intelligence |
 | `plugin87/ux-ui-agent-skills` | MIT | LICENSE fetched; re-verified 2026-11-03 at the pinned commit | `def84a70fadc3490d80901295a4f1951fdb2cc69` (main) | DTCG tokens, WCAG 2.2, 2,144-system design library, hard quality gates |
 | `google-labs-code/design.md` | Apache-2.0 | LICENSE fetched at pinned commit + GitHub API, 2026-11-03 | `6e5da5382f41edbba9d73b2c62f33f32e9971f15` (main) | DESIGN.md visual-identity format spec, linter CLI, examples |
+| `coreyhaines31/marketingskills` | MIT | LICENSE fetched at pinned commit, 2026-11-05 | `88c79f6528a9347420e57ceb1fff9a60de651768` (main) | marketing, SEO, CRO, copywriting |
+| `guillaumemeyer/watermarks-remover` | MIT | LICENSE fetched at pinned commit, 2026-11-05 | `5a62be6338d2812372b1da440e55c82922f97d53` (main) | invisible Unicode / AI-mark handling |
+| `aaron-he-zhu/aaron-marketing-skills` | Apache-2.0 | LICENSE fetched at pinned commit, 2026-11-05 | `a285188d99663e2825dc79832ba898ca890f39a1` (main) | reference only: serp-analysis method |
 | `sergekostenchuk/ui-ux-agent-skill-system` | Apache-2.0 | LICENSE fetched | `ddaedd712a37d7523f0ce99f556abe68ded7a315` (main) | vendor-neutral UI/UX skill system |
 | `mustafakendiguzel/claude-code-ui-agents` | MIT | GitHub API | pin at import (main) | UI/UX agent prompts |
 
@@ -108,3 +111,6 @@ One row per imported artifact; the artifact's `metadata.source` must match the r
 | 2026-11-02 | `skills/kubernetes-ops/` (SKILL.md + references/ + assets/ + LICENSE) | `github.com/BagelHole/DevOps-Security-Agent-Skills` devops/orchestration/kubernetes-ops | MIT | `0365f57a079b1332f95cf26e31dd5d2332a8399f` | 1.0.0 |
 | 2026-11-03 | `skills/design-system-library/` (SKILL.md + LICENSE + design-systems/catalog.md + 76 vendored library specs + references/aesthetic-systems.md) | `github.com/plugin87/ux-ui-agent-skills` design-systems/ + taste/aesthetic-systems.md | MIT | `def84a70fadc3490d80901295a4f1951fdb2cc69` | 1.0.0 |
 | 2026-11-03 | `skills/design-md/` (SKILL.md + LICENSE + references/spec.md + examples/) | `github.com/google-labs-code/design.md` docs/spec.md + examples/ | Apache-2.0 | `6e5da5382f41edbba9d73b2c62f33f32e9971f15` | 1.0.0 |
+| 2026-11-05 | `skills/ai-seo/`, `skills/cold-email/`, `skills/competitors/`, `skills/copywriting/`, `skills/cro/`, `skills/schema/`, `skills/product-marketing/` (SKILL.md + LICENSE each; adapted and condensed) | `github.com/coreyhaines31/marketingskills` skills/<same name> (first imported May 2026 from an earlier revision; commit is upstream HEAD at 2026-11-05) | MIT | `88c79f6528a9347420e57ceb1fff9a60de651768` | 1.0.0 (`schema`, `product-marketing` 1.0.1) |
+| 2026-11-05 | `skills/publish-hygiene/` (SKILL.md + LICENSE; rewrite and scripts removed) | `github.com/guillaumemeyer/watermarks-remover` skills/clean-user-facing-text | MIT | `5a62be6338d2812372b1da440e55c82922f97d53` | 1.0.1 |
+| 2026-11-05 | `skills/serp-check/` (original; method reference only, nothing copied) | `github.com/aaron-he-zhu/aaron-marketing-skills` serp-analysis | Apache-2.0 | `a285188d99663e2825dc79832ba898ca890f39a1` | 1.0.0 |
