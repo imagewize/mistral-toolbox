@@ -74,6 +74,18 @@ Rules:
   (© 2026 Google LLC, see the copied `LICENSE`), pinned
   `6e5da5382f41edbba9d73b2c62f33f32e9971f15`. The SKILL.md is authored for this
   repository around the upstream `docs/spec.md` and `examples/`
+- `skills/ai-seo/`, `skills/cold-email/`, `skills/competitors/`, `skills/copywriting/`,
+  `skills/cro/`, `skills/schema/` and `skills/product-marketing/` — adapted and condensed
+  from `github.com/coreyhaines31/marketingskills`, MIT (© 2025 Corey Haines, see the copied
+  `LICENSE` in each), upstream commit `88c79f6528a9347420e57ceb1fff9a60de651768` recorded at 2026-11-05; the
+  skills were first imported from an earlier revision in May 2026
+- `skills/publish-hygiene/` — adapted from `skills/clean-user-facing-text` in
+  `github.com/guillaumemeyer/watermarks-remover`, MIT (© 2026 Guillaume Meyer and
+  contributors, see the copied `LICENSE`), upstream commit `5a62be6338d2812372b1da440e55c82922f97d53`; the
+  rewrite, stylometry and detector scripts were removed
+- `skills/serp-check/` is original; its method borrows from the `serp-analysis` skill in
+  `github.com/aaron-he-zhu/aaron-marketing-skills`, Apache-2.0, upstream commit `a285188d99663e2825dc79832ba898ca890f39a1`.
+  No text or code was copied
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.
