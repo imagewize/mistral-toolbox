@@ -2,7 +2,8 @@
 
 # 🧰 Mistral Toolbox
 
-**Mistral Vibe skills, Vibe agent profiles and Le Chat prompts for WordPress development.**
+**Production-tested skills, agent profiles and prompts for [Mistral Vibe](https://docs.mistral.ai/vibe/) and [Le Chat](https://chat.mistral.ai).**<br>
+Built for WordPress engineering work, written to be adapted to any codebase.
 
 [![Latest release](https://img.shields.io/github/v/release/imagewize/mistral-toolbox?label=release&color=orange)](https://github.com/imagewize/mistral-toolbox/releases/latest)
 [![License: MIT](https://img.shields.io/github/license/imagewize/mistral-toolbox?color=blue)](LICENSE.md)
@@ -10,39 +11,56 @@
 <br>
 [![Mistral Vibe](https://img.shields.io/badge/Mistral-Vibe-FA520F)](https://docs.mistral.ai/vibe/)
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
-[![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
-<br>
-[![Skills](https://img.shields.io/badge/skills-59-brightgreen)](#-vibe-skills)
-[![Agents](https://img.shields.io/badge/agents-9-brightgreen)](#-vibe-agents)
-[![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
+[![Skills](https://img.shields.io/badge/skills-59-brightgreen)](docs/skills.md)
+[![Agents](https://img.shields.io/badge/agents-9-brightgreen)](docs/agents.md)
+[![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](docs/le-chat-prompts.md)
 
-[Quick start](#-quick-start) · [Skills](#-vibe-skills) · [Agents](#-vibe-agents) · [Le Chat prompts](#-le-chat-prompts) · [Contributing](#-contributing)
+[Quick start](#-quick-start) · [What's inside](#-whats-inside) · [Design principles](#-design-principles) · [Docs](#-documentation) · [Contributing](docs/contributing.md)
 
 </div>
 
 ---
 
-Reusable AI instructions in three kinds:
+## ✨ What's inside
 
-| Kind | Lives in | Runs in | What it does |
-|------|----------|---------|--------------|
-| 🛠 **Vibe skills** | [`skills/`](skills/) | [Mistral Vibe](https://docs.mistral.ai/vibe/), inside your project | [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) invoked as slash commands — they read your files, run git and linters, and report (e.g. `/code-review`) |
-| 🤖 **Vibe agents** | [`agents/`](agents/) | Mistral Vibe, any repository | TOML role profiles you select with `vibe --agent NAME`; each loads the skills it needs on demand |
-| 💬 **Le Chat prompts** | [`prompts/`](prompts/) | [Mistral Le Chat](https://chat.mistral.ai) | System prompts you paste into a Le Chat agent — no file or shell access, they work on what you paste in |
+| Kind | Count | Runs in | What it is |
+|------|:-----:|---------|------------|
+| 🛠 **[Vibe skills](docs/skills.md)** | 59 | Mistral Vibe | [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) (`SKILL.md`) invoked as slash commands: they read your files, run git and linters, and report |
+| 🤖 **[Vibe agents](docs/agents.md)** | 9 | Mistral Vibe | TOML role profiles for `vibe --agent NAME`; each scopes and loads its skills on demand |
+| 💬 **[Le Chat prompts](docs/le-chat-prompts.md)** | 2 | Le Chat | System prompts for agents with no shell or file access, each with recorded example runs |
 
-Imagewize built these for its own WordPress work — the **Elayne** block theme, the **Nynaeve** Sage theme and the **Aludra** block plugin — but they adapt to other projects. Use as-is, extend, or fork. 49 of the 59 skills are curated from permissively licensed open-source collections; see [Credits](#-credits).
+### Start with these
+
+| Try | What you get |
+|-----|--------------|
+| [`/code-review`](skills/code-review/SKILL.md) | Reviews a branch, PR or path. Detects the project type and lint commands, applies the project's own rules, and labels every finding CONFIRMED or PLAUSIBLE with a failure scenario |
+| [`wp-reviewer`](agents/wp-reviewer.toml) | The review skills bundled as an agent, with a read-only second-opinion subagent for large diffs |
+| [`/wp-update-round`](skills/wp-update-round/SKILL.md) | A full WordPress update round: before/after screenshots, pixel diff, human approval, production deploy |
+| [`/html-to-block-theme`](skills/html-to-block-theme/SKILL.md) | HTML/CSS/JS design to a production FSE block theme with `theme.json` v3 |
+| [`seo-content-writer`](agents/seo-content-writer.toml) → [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) | Plan and draft content, then hand it to an independent reviewer before publishing |
+| [`devops-oncall`](agents/devops-oncall.toml) | Incident triage that starts read-only and logs its evidence |
+
+Skills by area (full tables in [docs/skills.md](docs/skills.md)):
+
+| Area | Skills |
+|------|:------:|
+| WordPress development | 9 |
+| Design & frontend | 16 |
+| Development workflow & quality | 10 |
+| DevOps & release | 11 |
+| SEO & content marketing | 13 |
 
 ---
 
 ## 🚀 Quick start
 
-**1. Wire the toolbox into Vibe once** — skills in `~/.vibe/config.toml`:
+**1. Wire the toolbox into Vibe once.** Skills go in `~/.vibe/config.toml`:
 
 ```toml
 skill_paths = ["~/code/mistral-toolbox/skills"]
 ```
 
-and the agents by linking them into Vibe's own agents folder, which it searches without any config:
+Agents are linked into Vibe's own agents folder, which it searches without any config:
 
 ```bash
 ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents
@@ -59,326 +77,54 @@ vibe --agent release-manager -p "is main ready for release?"
 
 **3. Or, in Le Chat**, paste [`prompts/frontend-dev/FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-DEV.md) into **Agents → New Agent → System Prompt**.
 
-More install options in [Install](#install).
+Per-project install, approval allowlists and AGENTS.md vs system prompt: [docs/install.md](docs/install.md).
 
 ---
 
-## 🛠 Vibe skills
+## 🧭 Design principles
 
-Skills run inside your project with Vibe's tools and are invoked as slash commands. **Source** shows where a skill came from — imported skills keep their upstream `LICENSE` and record the pinned commit in `metadata.source`.
+What makes these different from a pile of prompts:
 
-### WordPress development
-
-| Skill | What it does | Source |
-|-------|--------------|--------|
-| [`/code-review`](skills/code-review/SKILL.md) | Reviews a branch diff, a GitHub PR, or a block, pattern, template or path in place, in any WordPress plugin, theme or site. Detects project type, minimum PHP/WordPress and lint commands, and applies the project's own rules from `.agents/code-review.md`. | Imagewize |
-| [`/html-to-block-theme`](skills/html-to-block-theme/SKILL.md) | Converts an HTML/CSS/JS design into a production-ready FSE block theme: theme.json v3 from design tokens, templates, parts, patterns, Interactivity API, optional WooCommerce. | siddik-web |
-| [`/wordpress-plugin-audit`](skills/wordpress-plugin-audit/SKILL.md) | Read-only plugin audit across metadata, naming/i18n, docs vs code and conventions/security, with file:line-verified findings. | mralaminahamed |
-| [`/wordpress-coding-standards`](skills/wordpress-coding-standards/SKILL.md) | Sets up and enforces PHPCS + WPCS: `phpcs.xml.dist`, `phpcs`/`phpcbf`, CI and pre-commit, common sniff fixes. | mralaminahamed |
-| [`/wordpress-plugin-testing`](skills/wordpress-plugin-testing/SKILL.md) | WP_UnitTestCase, Brain Monkey/WP_Mock, factories, AJAX/multisite, wp-browser acceptance tests, CI matrices. | mralaminahamed |
-| [`/wordpress-i18n-workflow`](skills/wordpress-i18n-workflow/SKILL.md) | Text domain, i18n functions, `wp i18n make-pot`/`make-mo`/`make-json`, JS translations, GlotPress. | mralaminahamed |
-| [`/wordpress-database`](skills/wordpress-database/SKILL.md) | Custom tables: `dbDelta` rules, versioned upgrades, prepared `$wpdb` CRUD, migrations, uninstall cleanup. | mralaminahamed |
-| [`/wordpress-woocommerce`](skills/wordpress-woocommerce/SKILL.md) | WooCommerce extensions: gateways, shipping, WC CRUD, HPOS, REST/Store API, cart/checkout blocks. | mralaminahamed |
-| [`/wp-update-round`](skills/wp-update-round/SKILL.md) | WordPress update rounds: before/after screenshots, pixel diff, human approval, production deployment for plugins/themes/core. Uses wp-ops commands. | Imagewize |
-
-### Design & frontend
-
-| Skill | What it does | Source |
-|-------|--------------|--------|
-| [`/frontend-design`](skills/frontend-design/SKILL.md) | One of eight aesthetic anchors locked to exact CSS tokens, real content instead of filler; output uses `var(--wp--preset--*)` so it converts to block patterns. | Ilm-Alan |
-| [`/landing-page`](skills/landing-page/SKILL.md) | High-converting landing pages — structure, layouts, conversion strategy, copy templates, SEO/AEO — with a block-pattern handoff. | MengTo |
-| [`/design-first-ui-prompting`](skills/design-first-ui-prompting/SKILL.md) | Turns fuzzy ideas into a design-first spec: prompt skeleton, constraints, single-variable variants, reference pack. | MengTo |
-| [`/no-ai-design-slop`](skills/no-ai-design-slop/SKILL.md) | Quality gate against generic AI-design defaults: removal test and full slop catalog. | MengTo |
-| [`/architectural-drawing`](skills/architectural-drawing/SKILL.md) | Architectural elevations and sections as SVG, built in metres with a bundled kit (`arch.mjs`): one scale, a fixed line-weight hierarchy, people and trees for scale, with proportion, overlap and file checks. | Imagewize |
-| [`/illustration-isometric-mono`](skills/illustration-isometric-mono/SKILL.md) | True-isometric SVG dioramas built with a bundled scene kit (`iso.mjs`) instead of hand-written coordinates, with lint and colour checks and a render-and-critique loop. | MengTo |
-| [`/ui-ux-pro-max`](skills/ui-ux-pro-max/SKILL.md) | Design intelligence with local catalogs (styles, palettes, font pairings, 119 UX guidelines, icons, motion, charts, 22 stacks). | nextlevelbuilder |
-| [`/design-system-library`](skills/design-system-library/SKILL.md) | Named design systems by vertical from a 2,144-entry catalog; 76 specs vendored (Music & Audio, Retro & Nostalgic, Retail) — each a `DESIGN.md` with tokens + rationale, adapted to the client rather than copied. | plugin87 |
-| [`/design-md`](skills/design-md/SKILL.md) | Author a `DESIGN.md` visual-identity spec from reference sites in a vertical and validate it with `npx @google/design.md lint`. | google-labs-code |
-| [`/ux-writing`](skills/ux-writing/SKILL.md) | Microcopy — buttons, labels, errors, empty states, onboarding — with voice/tone and accessibility guidance. | content-designer |
-| [`/frontend-ui-engineering`](skills/frontend-ui-engineering/SKILL.md) | Production-quality accessible, responsive UIs: semantic markup, keyboard/focus states. | addyosmani |
-| [`/better-ui`](skills/better-ui/SKILL.md) | Polish surfaces, icons and motion with exact values. | jakubkrehel |
-| [`/better-colors`](skills/better-colors/SKILL.md) | Color formats, contrast, palette generation and token naming. | jakubkrehel |
-| [`/better-accessibility`](skills/better-accessibility/SKILL.md) | Keyboard/focus, ARIA, accessible names, forms, hit areas, motion/zoom, screen readers. | jakubkrehel |
-| [`/interface-review`](skills/interface-review/SKILL.md) | Reviews a branch/PR for the interface problems it introduces, scoped to what changed. | jakubkrehel |
-| [`/html-page-review`](skills/html-page-review/SKILL.md) | Reviews a rendered HTML/CSS page: headless-Chrome layout probe at three widths, then brief fit, consistency and copy; writes numbered fix notes to `REVIEW.md`. | Imagewize |
-
-### Development workflow & quality
-
-| Skill | What it does | Source |
-|-------|--------------|--------|
-| [`/brainstorming`](skills/brainstorming/SKILL.md) | Turns a rough idea into a formed design through structured questioning. | obra |
-| [`/writing-plans`](skills/writing-plans/SKILL.md) | Spec → step-by-step implementation plan with exact paths and verification steps. | obra |
-| [`/test-driven-development`](skills/test-driven-development/SKILL.md) | Red-green-refactor: failing test first, minimum implementation, refactor. | obra |
-| [`/systematic-debugging`](skills/systematic-debugging/SKILL.md) | Four-phase root-cause debugging — no fix before the cause is found. | obra |
-| [`/verification-before-completion`](skills/verification-before-completion/SKILL.md) | Evidence before claims: run the proving command fresh, read the output, then claim. | obra |
-| [`/requesting-code-review`](skills/requesting-code-review/SKILL.md) | Dispatches a read-only reviewer subagent before merging. | obra |
-| [`/receiving-code-review`](skills/receiving-code-review/SKILL.md) | Verifies each review suggestion against the code; accept, adapt or push back with evidence. | obra |
-| [`/code-review-and-quality`](skills/code-review-and-quality/SKILL.md) | Multi-axis review — correctness, readability, maintainability, performance, security, tests. | addyosmani |
-| [`/security-and-hardening`](skills/security-and-hardening/SKILL.md) | Hardening against vulnerabilities with attack-scenario verification. | addyosmani |
-| [`/performance-optimization`](skills/performance-optimization/SKILL.md) | Profile-first performance work; re-measure after every fix. | addyosmani |
-
-### DevOps & release
-
-| Skill | What it does | Source |
-|-------|--------------|--------|
-| [`/incident`](skills/incident/SKILL.md) | Read-only, evidence-logged incident investigation and blameless postmortem. | NotHarshhaa |
-| [`/runbook`](skills/runbook/SKILL.md) | Operational runbooks: symptom → diagnostic → mitigation → escalation. | NotHarshhaa |
-| [`/alerting-oncall`](skills/alerting-oncall/SKILL.md) | Alerting rules, on-call rotations and escalation. | BagelHole |
-| [`/observability-review`](skills/observability-review/SKILL.md) | Reviews metrics, logs, traces, dashboards, alerting and SLO coverage. | NotHarshhaa |
-| [`/observability-and-instrumentation`](skills/observability-and-instrumentation/SKILL.md) | Structured logging, metrics, tracing and alerting so production is diagnosable. | addyosmani |
-| [`/security-review`](skills/security-review/SKILL.md) | Infra/app security posture review: IAM, secrets, network, dependencies. | NotHarshhaa |
-| [`/pipeline-review`](skills/pipeline-review/SKILL.md) | CI/CD review: security, caching, flakiness, speed. | NotHarshhaa |
-| [`/kubernetes-ops`](skills/kubernetes-ops/SKILL.md) | Deploy, scale, manage and troubleshoot Kubernetes workloads. | BagelHole |
-| [`/release-readiness`](skills/release-readiness/SKILL.md) | Release gate: changelog, versioning, rollback, migrations, monitoring. | NotHarshhaa |
-| [`/git-workflow`](skills/git-workflow/SKILL.md) | Branching strategies, PR workflows and release management. | BagelHole |
-| [`/create-pull-request`](skills/create-pull-request/SKILL.md) | Opens/edits PRs with `gh` safely — body via `--body-file`, single-quoted titles, verified with `gh pr view`. | Imagewize |
-
-### SEO & content marketing
-
-| Skill | What it does | Source |
-|-------|--------------|--------|
-| [`/seo-audit`](skills/seo-audit/SKILL.md) | On-page/technical SEO audit: keywords, title, meta, headings, internal links, images, crawlability — run before publishing. | Imagewize |
-| [`/ai-seo`](skills/ai-seo/SKILL.md) | AEO/GEO/LLMO — optimize content for AI search engines (ChatGPT, Perplexity, Claude, Gemini) and zero-click answers. | coreyhaines31 |
-| [`/serp-check`](skills/serp-check/SKILL.md) | Pre-draft SERP analysis: who ranks on page 1, search intent, winnable angle, content brief. | Imagewize |
-| [`/keyword-gap-analysis`](skills/keyword-gap-analysis/SKILL.md) | Competitor keyword gaps scored by volume/difficulty/relevance, tied to your services. | Imagewize |
-| [`/schema`](skills/schema/SKILL.md) | JSON-LD structured data for WordPress — FAQPage, Article, Service, Organization, BreadcrumbList — with validation rules. | coreyhaines31 |
-| [`/first-hand-proof`](skills/first-hand-proof/SKILL.md) | Inject original tests, data, decisions and stories into content so competitors can't copy it. | Imagewize |
-| [`/copywriting`](skills/copywriting/SKILL.md) | PAS+AIDA marketing copy for any page — headlines, heroes, CTAs, value propositions. | coreyhaines31 |
-| [`/competitors`](skills/competitors/SKILL.md) | Competitor comparison pages: "X alternative", "X vs Y", battle cards — four formats. | coreyhaines31 |
-| [`/cro`](skills/cro/SKILL.md) | Conversion rate audit: above-the-fold, CTAs, forms, trust signals, performance — prioritized fix list. | coreyhaines31 |
-| [`/publish-hygiene`](skills/publish-hygiene/SKILL.md) | Pre-publish hygiene: strip invisible Unicode from drafts, check images for C2PA/AI/EXIF metadata. | guillaumemeyer |
-| [`/cold-email`](skills/cold-email/SKILL.md) | B2B cold email sequences — subject lines, hooks, multi-touch follow-ups, personalization. | coreyhaines31 |
-| [`/linkedin-comment-queue`](skills/linkedin-comment-queue/SKILL.md) | Manual LinkedIn soft-funnel: find posts to comment on, draft comments, decide follow/connect. | Imagewize |
-| [`/product-marketing`](skills/product-marketing/SKILL.md) | Product marketing context document (`.agents/product-marketing.md`) that other marketing skills reference. | coreyhaines31 |
-
-### Content workflow
-
-The SEO and content skills form a pipeline for blog posts, landing pages and outreach:
-
-```
-product-marketing → keyword-gap-analysis / serp-check → first-hand-proof → draft
-  → seo-audit + schema + ai-seo → publish-hygiene → publish
-  → cro (on the landing page) / cold-email + linkedin-comment-queue (outreach)
-```
-
-Three agents split the pipeline: [`seo-content-writer`](agents/seo-content-writer.toml) (research and drafting), [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) (pre-publish gate) and [`outreach-marketer`](agents/outreach-marketer.toml) (cold email and LinkedIn).
-
-### `/code-review` usage
-
-```
-/code-review                 # this branch against the default base branch
-/code-review 51              # GitHub PR #51
-/code-review hero            # audit the block or pattern named "hero"
-/code-review --help          # usage and valid targets
-```
-
-### `/wp-update-round` usage
-
-Needs [wp-ops](https://github.com/imagewize/wp-ops) 5.42.0+ and a private `update-manifest.yml` per site (host type, versions, pages to screenshot, skip list). Requirements, manifest fields, example files and a dry run for a new site: [skills/wp-update-round/README.md](skills/wp-update-round/README.md).
-
-```
-/wp-update-round                         # reads .vibe/update-manifest.yml, lists updates, stops at each approval
-vibe --agent wp-maintainer               # same round, with debugging and verification skills enabled
-```
-
-### Design → HTML/CSS → block patterns
-
-The design skills form a pipeline for FSE themes such as Elayne:
-
-```
-brief → /landing-page + /design-first-ui-prompting         (structure, copy, spec)
-      → /frontend-design                                   (anchored HTML/CSS, token-locked)
-        or, for a vertical: /design-system-library         (a named system, adapted; /ui-ux-pro-max if none fits)
-        + /design-md                                       (optional: pin the look in DESIGN.md and lint it)
-      → /architectural-drawing or /illustration-isometric-mono   (SVG drawings from a kit)
-      → /no-ai-design-slop                                 (quality gate on the output)
-      → /html-page-review                                  (rendered review → REVIEW.md → change requests)
-      → /html-to-block-theme                               (HTML/CSS/JS → theme + patterns)
-```
-
-The design skills emit one self-contained HTML file per page, with sections marked by `<!-- ===== Section ===== -->` comments and preset-named CSS custom properties (`--wp--preset--color--<slug>` etc.), so each section converts to a valid block pattern without renaming fixes. A page uses one look: a `/frontend-design` anchor, or for a vertical brief a named system from `/design-system-library`. `/ux-writing` covers the on-screen copy. Drawings come from a kit, not hand-written SVG: `/architectural-drawing` draws buildings as elevations and sections in metres at one shared scale, and `/illustration-isometric-mono` draws technical and product scenes. The [`wp-frontend-builder`](agents/wp-frontend-builder.toml) agent runs the build steps; the [`ux-designer`](agents/ux-designer.toml) agent reviews the result with `/html-page-review`, and the builder applies the numbered notes from `REVIEW.md`.
-
-### Install
-
-**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and link `agents/` to `~/.vibe/agents`, as in [Quick start](#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
-
-**For one project** — put the same lines in that project's `.vibe/config.toml` (the folder must be trusted), or copy individual skill directories (e.g. `skills/code-review/`) into the project's `.agents/skills/` so everyone on the project gets them. Copies carry `metadata.version`, so you can compare them with this repository.
-
-<details>
-<summary><strong>Project rules for <code>/code-review</code></strong></summary>
-
-The skill's generic checks are the same everywhere; what catches most regressions is the project's own rules. Add them to `.agents/code-review.md` in the project — facts, named audit targets, files to skip, lint commands, and rules with the failure each one prevents. The file format is documented at the end of [SKILL.md](skills/code-review/SKILL.md). For a plugin or theme, keep `.agents/` and `.vibe/` out of release zips (`.distignore`, `.gitattributes` `export-ignore`).
-
-</details>
-
-<details>
-<summary><strong>Fewer approval prompts</strong></summary>
-
-Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a skill's `allowed-tools`. Put the commands the skill runs in the project's `.vibe/config.toml` so everyone on the project gets the same approvals. A project allowlist **replaces** the one in `~/.vibe/config.toml`, so include the read-only basics too — the **Setup** section of [code-review's SKILL.md](skills/code-review/SKILL.md) has a starting list.
-
-</details>
-
-<details>
-<summary><strong>Project instructions: AGENTS.md, not a system prompt</strong></summary>
-
-Vibe loads `AGENTS.md` files on top of its built-in system prompt; that is the place for project rules. `system_prompt_id` in `config.toml` *replaces* the built-in prompt — tool use, planning and editing instructions included — and is rarely what you want. See [Mistral Vibe: AGENTS.md vs a custom system prompt](https://imagewize.com/mistral-vibe-agents-md-vs-custom-system-prompt/).
-
-</details>
+- **Vibe-native, not ported.** Skills follow the Agent Skills format with `metadata.version`, so copies in projects can be compared. Agents are plain TOML with scoped `enabled_skills`. Commands are written from each tool's real interface (checked against `--help` and MCP schemas).
+- **Allowlist-friendly.** Skills prescribe plain single commands: no shell loops, no `$(…)`, no one-liner interpreters. A project can approve them once in `[tools.bash] allowlist` and stop seeing prompts.
+- **Evidence before claims.** Review output carries `file:line` references and a failure scenario per finding; completion requires running the proving command fresh. False positives are treated as a defect.
+- **Project rules live in the project.** Skills stay generic. Per-repo rules go in `.agents/` files such as `.agents/code-review.md`, so one skill serves many codebases.
+- **Honest provenance.** 49 of the 59 skills are adapted from permissively licensed open-source collections. Each keeps its upstream `LICENSE`, records the pinned commit in `metadata.source`, and is logged in [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md).
+- **Public-safe.** No client hostnames, credentials or per-client lists; real values live in private per-site files.
+- **Le Chat prompts are tested.** Each prompt ships with recorded runs (input, raw output, review feedback), including failures, so you can see how it behaves before pasting it.
 
 ---
 
-## 🤖 Vibe agents
+## 📚 Documentation
 
-Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --agent NAME`, in this repository or any other. Each profile's `instructions` say which skill to load for which task; the model loads them on demand through Vibe's `skill` tool, and `enabled_skills` scopes what the agent may load.
-
-| Agent | Role | Skills it loads |
-|-------|------|-----------------|
-| [`wp-reviewer`](agents/wp-reviewer.toml) | Reviews WordPress diffs, PRs, plugins and patterns | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
-| [`wp-frontend-builder`](agents/wp-frontend-builder.toml) | Builds FSE frontends: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, ui-ux-pro-max, design-system-library, design-md, ux-writing, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono |
-| [`ux-designer`](agents/ux-designer.toml) | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
-| [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
-| [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
-| [`wp-maintainer`](agents/wp-maintainer.toml) | WordPress update rounds: screenshots, diffs, approval, deployment | wp-update-round, systematic-debugging, verification-before-completion, security-review |
-| [`seo-content-writer`](agents/seo-content-writer.toml) | Plans and drafts SEO content: context, keyword gaps, SERP check, first-hand proof, copy, comparison pages | product-marketing, keyword-gap-analysis, serp-check, first-hand-proof, copywriting, competitors |
-| [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) | Independent pre-publish gate: SEO audit, schema, AI-search citability, hygiene, CRO | seo-audit, schema, ai-seo, publish-hygiene, cro |
-| [`outreach-marketer`](agents/outreach-marketer.toml) | Drafts cold email sequences and the manual LinkedIn comment queue; never sends | product-marketing, cold-email, linkedin-comment-queue |
-
-```bash
-vibe --agent wp-reviewer                    # interactive review session
-vibe --agent wp-reviewer -p "review the diff against main"
-vibe --agent devops-oncall -p "triage this alert"
-vibe --agent seo-content-writer             # plan and draft a post, then hand it to:
-vibe --agent seo-publish-reviewer -p "audit drafts/my-post.md before publishing"
-```
-
-- Wire them in with `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents` (see [Quick start](#-quick-start)). If you use `agent_paths` instead, give an absolute path: Vibe expands `~` in `skill_paths` but not in `agent_paths`, so a `~/…` entry is silently skipped and `vibe --agent NAME` reports the agent as not found.
-- The agent name is the TOML file stem; `vibe --agent NAME` fails with the reason if a profile is invalid.
-- Skills are **not** auto-loaded — the agent loads them via the `skill` tool when the task calls for it. Remove `enabled_skills` from a profile to let it load any skill the session can see.
-- Set `agent_type = "subagent"` in a copy of a profile to make it spawnable by the model as a subagent.
-- See [`agents/README.md`](agents/README.md) for wiring details and the [Vibe agents docs](https://docs.mistral.ai/vibe/code/cli/agents).
-
----
-
-## 💬 Le Chat prompts
-
-System prompts you paste into a [Mistral Le Chat](https://chat.mistral.ai) agent. Le Chat has no file or shell access, so these work on what you paste in — to work on real files, use the [Vibe agents](#-vibe-agents).
-
-1. Copy a prompt file, e.g. [`prompts/frontend-dev/FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-DEV.md)
-2. In Le Chat open **Agents → New Agent** and paste it into **System Prompt**
-3. Pick a model such as `mistral-large-latest` or `devstral`, and start chatting
-
-| Prompt | Role | Focus |
-|--------|------|-------|
-| [FRONTEND-DEV.md](prompts/frontend-dev/FRONTEND-DEV.md) | Senior Frontend Developer | WordPress themes, HTML/CSS, block patterns |
-| [REVIEWER.md](prompts/reviewer/REVIEWER.md) | Frontend Code Reviewer | HTML/CSS output analysis, FSE compliance |
-
-The prompts are tailored to these Imagewize projects:
-
-| Project | Type | Tech stack |
-|---------|------|------------|
-| **Elayne** | FSE block theme | Gutenberg, theme.json, patterns |
-| **Nynaeve** | Sage 11 hybrid theme | Blade, ACF Composer, React blocks |
-| **imagewize.com** | Site | Enterprise WordPress |
-
-The frontend prompts require production-ready, mobile-first output with realistic content — no placeholders, no lorem ipsum, and no centered overlay heroes (the most common failure pattern).
-
-### Example runs
-
-Each `prompts/<name>/<run>/` folder is a real run — `PROMPT.md` (input), `OUTPUT.md` (raw response), `canvas.html` (generated HTML, frontend runs) and `FEEDBACK.md` (what worked, what failed) — so you can see how a prompt performs in practice.
-
-| Run | Prompt | Result |
-|-----|--------|--------|
-| [frontend-dev/elayne-hero-block](prompts/frontend-dev/elayne-hero-block/) | FRONTEND-DEV | Reviewed — see FEEDBACK.md |
-| [reviewer/elayne-hero-block](prompts/reviewer/elayne-hero-block/) | REVIEWER | FAIL — CSS variable namespace + dash syntax errors |
-
----
-
-## 📂 Repository structure
+| Doc | Contents |
+|-----|----------|
+| [docs/skills.md](docs/skills.md) | Every skill by area with source, plus the `/code-review`, `/wp-update-round`, design and content workflows |
+| [docs/agents.md](docs/agents.md) | Agent profiles, the skills each loads, wiring and subagents |
+| [docs/le-chat-prompts.md](docs/le-chat-prompts.md) | The Le Chat prompts, how to use them, example runs |
+| [docs/install.md](docs/install.md) | User-wide and per-project install, project rules, approvals |
+| [docs/contributing.md](docs/contributing.md) | Adding a skill, agent or prompt |
+| [docs/sources.md](docs/sources.md) · [NOTICE.md](NOTICE.md) | Source register, pinned commits, third-party licenses |
+| [AGENTS.md](AGENTS.md) · [CHANGELOG.md](CHANGELOG.md) | Rules for agents working in this repo · release history |
 
 ```
 mistral-toolbox/
-├── skills/        # Vibe skills: skills/<name>/SKILL.md (+ LICENSE for imported skills)
-├── agents/        # Vibe agent profiles: agents/<name>.toml + README.md
-├── prompts/       # Le Chat prompts: prompts/<name>/ROLE.md + example runs in prompts/<name>/<run>/
-├── docs/          # Sourcing plan, source register, curation notes
-├── .vibe/         # Vibe project settings for this repository
-├── AGENTS.md      # Instructions for coding agents working in this repository
-├── CHANGELOG.md
-├── NOTICE.md      # Third-party material included in this repository
-└── LICENSE.md
+├── skills/    # Vibe skills: skills/<name>/SKILL.md (+ LICENSE for imported skills)
+├── agents/    # Vibe agent profiles: agents/<name>.toml
+├── prompts/   # Le Chat prompts + example runs
+└── docs/      # User docs, sourcing plan, source register
 ```
-
----
-
-## 📝 Contributing
-
-Contributions are welcome — for any domain, not just WordPress.
-
-1. Fork the repository and create a branch
-2. Add your prompt, skill or agent profile following [AGENTS.md](AGENTS.md)
-3. Update this README (tables and the count badges) and `CHANGELOG.md` under `[Unreleased]`
-4. Open a pull request with a semantic title (`feat:`, `fix:`, `docs:` …)
-
-<details>
-<summary><strong>Adding a Vibe skill</strong></summary>
-
-1. Create `skills/<name>/SKILL.md` — `name` is lowercase letters, digits and hyphens.
-2. Frontmatter: `name` and `description` are required; add `user-invocable: true` for a slash command and `metadata.version` so copies in projects can be compared.
-3. Keep it generic — project-specific rules belong in the project, not in the skill.
-4. Prescribe allowlist-friendly commands: plain single commands, no shell loops or one-liners; read files with `read_file`.
-5. Importing from elsewhere? Only MIT, Apache-2.0, CC0, BSD or public-domain sources — copy the upstream `LICENSE`, record `metadata.source` with the pinned commit, and log it in [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md).
-
-</details>
-
-<details>
-<summary><strong>Adding a Vibe agent profile</strong></summary>
-
-1. Create `agents/<name>.toml` — the file stem is the name used with `vibe --agent <name>`.
-2. Required keys: `display_name` and `description`; then `instructions` (the role plus which skill to load for which task) and optionally `agent_type` (`"agent"` by default, `"subagent"` for a model-spawned subagent).
-3. Scope the skills with `enabled_skills = ["code-review", ...]` so the agent only loads what it needs.
-
-</details>
-
-<details>
-<summary><strong>Adding a Le Chat prompt</strong></summary>
-
-1. Create `prompts/<name>/` with one system prompt file named by role — `ROLE.md` or `ROLE-SPECIALIZATION.md` (e.g. `prompts/backend-dev/BACKEND-DEV.md`).
-2. Structure it as: role and scope, critical rules (do's and don'ts), output format, examples of expected output. Keep it project-agnostic where possible.
-3. Add at least one example run in `prompts/<name>/<run>/`.
-
-</details>
 
 ---
 
 ## 🙏 Credits
 
-Imported skills are adapted from these collections — all MIT except `google-labs-code/design.md` (Apache-2.0); `aaron-he-zhu/aaron-marketing-skills` (Apache-2.0) is a method reference only; each keeps its upstream license, and [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md) record the pinned commits.
+Adapted from [obra/superpowers](https://github.com/obra/superpowers) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mralaminahamed/wp-dev-skills](https://github.com/mralaminahamed/wp-dev-skills) · [NotHarshhaa/devops-skills](https://github.com/NotHarshhaa/devops-skills) · [jakubkrehel/skills](https://github.com/jakubkrehel/skills) · [MengTo/Skills](https://github.com/MengTo/Skills) · [BagelHole/DevOps-Security-Agent-Skills](https://github.com/BagelHole/DevOps-Security-Agent-Skills) · [Ilm-Alan/frontend-design](https://github.com/Ilm-Alan/frontend-design) · [siddik-web/wp-block-theme-converter](https://github.com/siddik-web/wp-block-theme-converter) · [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) · [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) · [google-labs-code/design.md](https://github.com/google-labs-code/design.md) · [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) · [guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) · [aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills) (method reference only)
 
-[obra/superpowers](https://github.com/obra/superpowers) ·
-[addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) ·
-[mralaminahamed/wp-dev-skills](https://github.com/mralaminahamed/wp-dev-skills) ·
-[NotHarshhaa/devops-skills](https://github.com/NotHarshhaa/devops-skills) ·
-[jakubkrehel/skills](https://github.com/jakubkrehel/skills) ·
-[MengTo/Skills](https://github.com/MengTo/Skills) ·
-[BagelHole/DevOps-Security-Agent-Skills](https://github.com/BagelHole/DevOps-Security-Agent-Skills) ·
-[Ilm-Alan/frontend-design](https://github.com/Ilm-Alan/frontend-design) ·
-[siddik-web/wp-block-theme-converter](https://github.com/siddik-web/wp-block-theme-converter) ·
-[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) ·
-[content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) ·
-[plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) ·
-[google-labs-code/design.md](https://github.com/google-labs-code/design.md) ·
-[coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) ·
-[guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) ·
-[aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills)
-
-## 🔗 Resources
-
-- [Mistral Vibe](https://docs.mistral.ai/vibe/) · [Vibe skills](https://docs.mistral.ai/vibe/code/cli/skills) · [Vibe agents](https://docs.mistral.ai/vibe/code/cli/agents)
-- [Mistral Le Chat](https://chat.mistral.ai) · [Mistral Agents docs](https://docs.mistral.ai/agents/introduction)
-- [Imagewize](https://imagewize.com)
+All MIT except `google-labs-code/design.md` and `aaron-he-zhu/aaron-marketing-skills` (Apache-2.0). Resources: [Mistral Vibe docs](https://docs.mistral.ai/vibe/) · [Vibe skills](https://docs.mistral.ai/vibe/code/cli/skills) · [Vibe agents](https://docs.mistral.ai/vibe/code/cli/agents) · [Le Chat](https://chat.mistral.ai)
 
 ## 📄 License
 
-[MIT](LICENSE.md) © Imagewize. Third-party skills keep their own licenses (MIT, one Apache-2.0) — see [NOTICE.md](NOTICE.md).
+[MIT](LICENSE.md) © Imagewize. Third-party skills keep their own licenses (MIT, one Apache-2.0); see [NOTICE.md](NOTICE.md).
 
 <div align="center"><sub>Created and maintained by <a href="https://imagewize.com">Imagewize</a>.</sub></div>

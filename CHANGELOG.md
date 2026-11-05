@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- README shortened to an overview (what is inside, quick start, design principles, doc map). The skills tables and workflows moved to `docs/skills.md`; agents, Le Chat prompts, install and contributing each have their own page in `docs/`. AGENTS.md sync rules point at the new files
 - `agents/README.md` lists the three SEO agents; README agent examples show the writer → reviewer hand-off
 
 ## [1.10.0] - 2026-11-05
