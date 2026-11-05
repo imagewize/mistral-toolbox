@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 13 SEO and content marketing skills. Adapted from `coreyhaines31/marketingskills` (MIT): `ai-seo` (AEO/GEO/LLMO), `cold-email`, `competitors`, `copywriting`, `cro`, `schema` and `product-marketing`. Adapted from `guillaumemeyer/watermarks-remover` (MIT): `publish-hygiene` (invisible Unicode strip + image metadata check, with runnable `rg`/`perl`/`exiftool` commands). Imagewize originals: `seo-audit`, `keyword-gap-analysis`, `first-hand-proof`, `linkedin-comment-queue`, and `serp-check` (method borrows from `aaron-he-zhu/aaron-marketing-skills`, Apache-2.0, nothing copied). Upstream licenses are copied into each adapted skill and logged in `NOTICE.md` and `docs/sources.md`
 - `schema` checks what the site already emits before adding Article JSON-LD, so a plugin plus a manual block does not duplicate it; the product context file lives at `.agents/product-marketing.md`
-- `seo-content-marketer` agent profile: orchestrates the full content workflow — product-marketing → keyword-gap-analysis/serp-check → first-hand-proof → draft → seo-audit + schema + ai-seo → publish-hygiene → cro — with all 13 skills in `enabled_skills`
+- Three agent profiles split the SEO pipeline: `seo-content-writer` (product-marketing, keyword-gap-analysis, serp-check, first-hand-proof, copywriting, competitors), `seo-publish-reviewer` (seo-audit, schema, ai-seo, publish-hygiene, cro; an independent pre-publish gate) and `outreach-marketer` (product-marketing, cold-email, linkedin-comment-queue; drafts only, never sends)
 
 ## [1.9.0] - 2026-11-03
 

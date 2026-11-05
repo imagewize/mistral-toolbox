@@ -13,7 +13,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-FSE%20%7C%20Sage-21759B?logo=wordpress&logoColor=white)](https://wordpress.org)
 <br>
 [![Skills](https://img.shields.io/badge/skills-59-brightgreen)](#-vibe-skills)
-[![Agents](https://img.shields.io/badge/agents-7-brightgreen)](#-vibe-agents)
+[![Agents](https://img.shields.io/badge/agents-9-brightgreen)](#-vibe-agents)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](#-le-chat-prompts)
 
 [Quick start](#-quick-start) · [Skills](#-vibe-skills) · [Agents](#-vibe-agents) · [Le Chat prompts](#-le-chat-prompts) · [Contributing](#-contributing)
@@ -161,7 +161,7 @@ product-marketing → keyword-gap-analysis / serp-check → first-hand-proof →
   → cro (on the landing page) / cold-email + linkedin-comment-queue (outreach)
 ```
 
-The [`seo-content-marketer`](agents/seo-content-marketer.toml) agent runs this pipeline end to end.
+Three agents split the pipeline: [`seo-content-writer`](agents/seo-content-writer.toml) (research and drafting), [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) (pre-publish gate) and [`outreach-marketer`](agents/outreach-marketer.toml) (cold email and LinkedIn).
 
 ### `/code-review` usage
 
@@ -239,7 +239,9 @@ Agent profiles in [`agents/`](agents/) are TOML files you select with `vibe --ag
 | [`devops-oncall`](agents/devops-oncall.toml) | Incidents (read-only first), on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [`release-manager`](agents/release-manager.toml) | Release gates, CI review, git flow, PR creation | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
 | [`wp-maintainer`](agents/wp-maintainer.toml) | WordPress update rounds: screenshots, diffs, approval, deployment | wp-update-round, systematic-debugging, verification-before-completion, security-review |
-| [`seo-content-marketer`](agents/seo-content-marketer.toml) | Full content/SEO workflow: research → draft → audit → publish → CRO + outreach | seo-audit, ai-seo, serp-check, keyword-gap-analysis, schema, first-hand-proof, copywriting, competitors, cro, publish-hygiene, cold-email, linkedin-comment-queue, product-marketing |
+| [`seo-content-writer`](agents/seo-content-writer.toml) | Plans and drafts SEO content: context, keyword gaps, SERP check, first-hand proof, copy, comparison pages | product-marketing, keyword-gap-analysis, serp-check, first-hand-proof, copywriting, competitors |
+| [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) | Independent pre-publish gate: SEO audit, schema, AI-search citability, hygiene, CRO | seo-audit, schema, ai-seo, publish-hygiene, cro |
+| [`outreach-marketer`](agents/outreach-marketer.toml) | Drafts cold email sequences and the manual LinkedIn comment queue; never sends | product-marketing, cold-email, linkedin-comment-queue |
 
 ```bash
 vibe --agent wp-reviewer                    # interactive review session
