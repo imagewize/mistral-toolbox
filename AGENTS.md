@@ -50,12 +50,26 @@ mistral-toolbox/
   `agents/` is safe.
 - Required keys: `display_name` and `description`; then `instructions` and optionally
   `agent_type` (`"agent"` by default, `"subagent"` for a model-spawned subagent).
+- Every base profile also has a **generated** copy `agents/<name>-subagent.toml` with
+  `agent_type = "subagent"`, so the model can spawn it via `agents.spawn` with
+  `config_name = "<name>-subagent"` (plain `"agent"` profiles are rejected by spawn with
+  `subagent_type_not_found`). Never edit a `-subagent.toml` by hand: change the base
+  profile, then regenerate all copies with the loop in `agents/README.md` ("Spawnable
+  subagent copies") and commit both. Subagent files are discovered at session start, so a
+  running session needs `/reload` to see new ones.
 - Scope the skills the agent may load with `enabled_skills = [...]` (same patterns as
   `config.toml`); the agent loads skills on demand via the `skill` tool — the profile never
   auto-loads them, so the `instructions` must say which skill to load for which task.
-- Wire the directory in with `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents`, which Vibe
-  searches without config. `agent_paths` needs an absolute path: Vibe does not expand `~`
-  there, unlike in `skill_paths`. Validate a new profile by parsing it as TOML and checking the keys above.
+- Wire the directory in by syncing the files into Vibe's agents folder:
+  `mkdir -p ~/.vibe/agents && rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/`
+  (re-run after `git pull`; no `--delete` if you keep private profiles there). Vibe searches
+  `~/.vibe/agents` without config. A symlink (`ln -s … ~/.vibe/agents`) is the alternative —
+  it stays current automatically but dangles silently if the repo moves, and private
+  profiles added there land in this public repo. `agent_paths` also works but lives in user
+  config, needs an absolute path (Vibe does not expand `~` there, unlike in `skill_paths`),
+  and a `~/…` entry is silently skipped. Either way, if profiles go missing,
+  `vibe --agent NAME` fails with `Agent 'NAME' not found`. Validate a new profile by parsing
+  it as TOML and checking the keys above.
 
 ## Working on Vibe skills
 

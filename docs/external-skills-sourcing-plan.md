@@ -12,7 +12,7 @@ Can we improve mistral-toolbox with external collections of skills, agents, plug
 **Yes — from permissively licensed sources only.** This repo is MIT and used commercially by Imagewize, so anything we import must come from an MIT-, Apache-2.0-, CC0-, BSD- or public-domain-licensed source. The SKILL.md-based formats line up well:
 
 - **Skills** (`skills/<name>/SKILL.md` in the Agent Skills open standard) map directly onto our Vibe skills with mechanical adaptation.
-- **Agents / personas** (single-file role markdown) map onto our Le Chat prompts (`prompts/<name>/ROLE.md`); tool-using agent definitions map onto Vibe agent profiles (`agents/<name>.toml`, linked to `~/.vibe/agents`).
+- **Agents / personas** (single-file role markdown) map onto our Le Chat prompts (`prompts/<name>/ROLE.md`); tool-using agent definitions map onto Vibe agent profiles (`agents/<name>.toml`, copied into `~/.vibe/agents/`).
 - **Plugin marketplaces** (Claude Code format) convert to native Agent Plugins 1.0 under a new `plugins/` dir.
 - **MCP servers** (e.g. Figma) are not vendored into this repo — they belong to the consuming project's Vibe config; we document them as recommended connectors.
 

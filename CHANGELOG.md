@@ -10,11 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - README quick start embeds `docs/assets/vibe-agent-demo.gif` (800px wide, 27s, 1.7 MB): a terminal recording of `vibe --agent wp-reviewer` reviewing the latest commit in this repo — the agent loads the `code-review` skill on demand, runs the checks and ends with an `OVERALL ASSESSMENT` verdict. Recorded with a VHS tape, cut to GIF with `mp4-to-gif.sh` (frozen stretches sped up via `--detect` segments), size-optimized with `gifsicle -O3 --colors 32 --lossy=120`
+- Nine generated `agents/<name>-subagent.toml` copies (`agent_type = "subagent"`) so every profile can also be spawned by the model in a running session: `agents.spawn({ config_name: "<name>-subagent", … })`. Plain `"agent"` profiles are selectable with `--agent` but rejected by spawn with `subagent_type_not_found` ("Unknown subagent type"); subagent profiles are discovered at session start (`/reload` to pick up new ones) and cannot be selected with `--agent`. Copies are generated — after editing a base profile, regenerate all copies with the loop in `agents/README.md` and commit both. Verified with a fresh `vibe -p` smoke test that spawned `seo-content-writer-subagent` and got a reply
 
 ### Changed
 
 - README shortened to an overview (what is inside, quick start, design principles, doc map). The skills tables and workflows moved to `docs/skills.md`; agents, Le Chat prompts, install and contributing each have their own page in `docs/`. AGENTS.md sync rules point at the new files
 - `agents/README.md` lists the three SEO agents; README agent examples show the writer → reviewer hand-off
+- Agent wiring docs (README quick start, `agents/README.md`, `docs/agents.md`, `docs/install.md`, AGENTS.md) now recommend syncing `agents/` into `~/.vibe/agents/` with `rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/` (re-run after `git pull`, no `--delete` when private profiles live there) instead of symlinking. The symlink remains documented as an alternative with its failure mode: it dangles silently when the repo moves, after which `vibe --agent NAME` fails with `Agent 'NAME' not found` and spawn fails with `subagent_type_not_found`; it also leaks private profiles added to `~/.vibe/agents` into this public repo. `agent_paths` needs an absolute path — Vibe does not expand `~` there. Skills are unaffected and need no copy: `skill_paths` expands `~`, so pointing it at this repo's `skills/` works directly
+- Agent docs (`docs/agents.md`, `agents/README.md`) now spell out the two profile kinds and the spawn semantics: `config_name` is the file stem of a `subagent`-type profile, how to check the wiring when profiles go missing, and the `/reload` requirement for new profiles in a running session
 
 ## [1.10.0] - 2026-11-05
 

@@ -1,6 +1,6 @@
 # Install
 
-**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and link `agents/` to `~/.vibe/agents`, as in [Quick start](../README.md#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
+**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and sync `agents/` into `~/.vibe/agents/` with rsync, as in [Quick start](../README.md#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
 
 **For one project** — put the same lines in that project's `.vibe/config.toml` (the folder must be trusted), or copy individual skill directories (e.g. `skills/code-review/`) into the project's `.agents/skills/` so everyone on the project gets them. Copies carry `metadata.version`, so you can compare them with this repository.
 

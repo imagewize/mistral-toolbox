@@ -24,13 +24,26 @@ prompts — those live in [`prompts/`](../prompts/) together with their example 
 
 ## Wiring them into any repository
 
-Vibe always searches `~/.vibe/agents/` for agent profiles, with no config needed. Link
-this directory there once, so the profiles work in every project and stay current with
-`git pull`:
+Vibe always searches `~/.vibe/agents/` for agent profiles, with no config needed. **Sync
+the TOML files there** — the recommended wiring, because copies survive the repo moving
+and keep private profiles of your own out of this public repository:
 
 ```bash
-ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents
+mkdir -p ~/.vibe/agents
+rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/
 ```
+
+Syncs go stale, so re-run the `rsync` after every `git pull` of this repository. Don't add
+`--delete` unless `~/.vibe/agents/` holds only toolbox profiles — it would delete private
+ones. (`rsync` is not in a base macOS install; `brew install rsync` if it's missing, or
+fall back to `cp ~/code/mistral-toolbox/agents/*.toml ~/.vibe/agents/`.) Changed only one
+profile? Syncing is not needed — copy that single file (after regenerating its
+`-subagent` copy, see below): `cp ~/code/mistral-toolbox/agents/<name>*.toml ~/.vibe/agents/`.
+
+Skills are wired differently and need **no** copy or symlink: `skill_paths` (below) expands
+`~`, so pointing it at this repository's `skills/` works as is. The copy/symlink caveats
+above apply to agent directories only, because `~/.vibe/agents` is a searched directory,
+not a config path, and `agent_paths` does not expand `~`.
 
 Add the skills the profiles load to `~/.vibe/config.toml` (user-level, so it applies in
 every project):
@@ -39,15 +52,24 @@ every project):
 skill_paths = ["~/code/mistral-toolbox/skills"]
 ```
 
-The symlink makes `~/.vibe/agents` *this* directory, so a private profile you add there
-lands in the repository. To keep your own profiles next to these, make `~/.vibe/agents` a
-real directory and link the individual `.toml` files into it instead.
+**Symlink alternative, and its pitfall.** `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents`
+works and stays current with `git pull` on its own, but it dangles silently if the repo
+moves or is renamed, and anything that replaces the link with a real directory makes every
+profile in this repo disappear without a word: `vibe --agent NAME` fails with
+`Agent 'NAME' not found`, and spawning one fails with `subagent_type_not_found`. It also
+means a private profile you add to `~/.vibe/agents` lands in this public repository. If you
+symlink, verify with `ls -la ~/.vibe/agents` (must show the link) and
+`vibe --agent wp-reviewer -p "say hi"`.
 
 **`agent_paths` alternative:** Vibe also reads profiles from directories listed in
-`agent_paths`, but it does not expand `~` there (it does in `skill_paths`). A
-`~/code/...` entry is treated as a path relative to the working directory, silently
-skipped, and `vibe --agent NAME` then fails with `Agent 'NAME' not found`. Use an absolute
-path, and keep it in your own `~/.vibe/config.toml` rather than a committed project config.
+`agent_paths`, but it does not expand `~` there (it does in `skill_paths`). A `~/code/...`
+entry is treated as a path relative to the working directory and silently skipped, so use
+an **absolute** path (`/Users/.../code/mistral-toolbox/agents`) in your own
+`~/.vibe/config.toml` — a repository cannot register itself this way, since the setting is
+user config.
+
+Profiles are discovered when a session starts, so after adding or changing a profile in a
+running interactive session, run `/reload` before using it.
 
 Then, from any repository:
 
@@ -60,12 +82,49 @@ vibe --agent devops-oncall -p "triage alert X"
 Vibe discovers only `*.toml` files in its agent directories, so this README is ignored by
 the loader. The agent name is the file stem.
 
+## Spawnable subagent copies
+
+Vibe has two kinds of profiles. `agent_type = "agent"` (the default) profiles are
+user-facing: selectable with `vibe --agent NAME`, but **not spawnable** — calling
+`agents.spawn` with their `config_name` fails with `subagent_type_not_found` ("Unknown
+subagent type"). Only `agent_type = "subagent"` profiles are offered to the model for
+spawning, and those cannot be selected with `--agent`.
+
+So every base profile has a generated copy next to it, `agents/<name>-subagent.toml`,
+identical except `agent_type = "subagent"` and a ` (subagent)` suffix in `display_name`.
+Spawn one from a running session by its file stem:
+
+```ts
+await tools.agents.spawn({
+  name: "draft-post",
+  config_name: "seo-content-writer-subagent",
+  message: "Draft …",
+});
+```
+
+Subagents run with the session's model and hooks, and `enabled_skills` still scopes which
+skills they may load. They are discovered at session start, so `/reload` after adding one.
+
+**The copies are generated — never edit them by hand.** After changing
+`agents/<name>.toml`, regenerate its copy:
+
+```bash
+cd ~/code/mistral-toolbox/agents
+for f in *.toml; do case "$f" in *-subagent.toml) continue;; esac
+  n="${f%.toml}"
+  { echo "# Spawnable copy of ${n}.toml — generated; do not edit by hand. Regenerate after changing ${n}.toml (see README.md in this directory)."
+    sed -e "s/^display_name = \"\(.*\)\"$/display_name = \"\1 (subagent)\"/" \
+        -e 's/^agent_type = "agent"$/agent_type = "subagent"/' "$f"
+  } > "${n}-subagent.toml"
+done
+```
+
 ## Notes
 
 - Skills are loaded on demand by the model via the `skill` tool — a profile does not
   auto-load them. `enabled_skills` in a profile narrows which skills that agent may
   load; remove the line to let it load anything the session can see.
-- To make a profile spawnable by the model as a subagent instead of a user-facing
-  agent, set `agent_type = "subagent"` in a copy of the file.
+- Base profiles stay `agent_type = "agent"`; spawnable copies live next to them as
+  `<name>-subagent.toml` — see "Spawnable subagent copies" above.
 - Tool approvals still come from the session's `[tools.bash] allowlist`; an agent
   profile can only narrow permissions, never widen them.
