@@ -36,7 +36,9 @@ rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/
 Syncs go stale, so re-run the `rsync` after every `git pull` of this repository. Don't add
 `--delete` unless `~/.vibe/agents/` holds only toolbox profiles — it would delete private
 ones. (`rsync` is not in a base macOS install; `brew install rsync` if it's missing, or
-fall back to `cp ~/code/mistral-toolbox/agents/*.toml ~/.vibe/agents/`.)
+fall back to `cp ~/code/mistral-toolbox/agents/*.toml ~/.vibe/agents/`.) Changed only one
+profile? Syncing is not needed — copy that single file (after regenerating its
+`-subagent` copy, see below): `cp ~/code/mistral-toolbox/agents/<name>*.toml ~/.vibe/agents/`.
 
 Skills are wired differently and need **no** copy or symlink: `skill_paths` (below) expands
 `~`, so pointing it at this repository's `skills/` works as is. The copy/symlink caveats
