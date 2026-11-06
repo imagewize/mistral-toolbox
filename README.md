@@ -26,7 +26,7 @@ Built for WordPress engineering work, written to be adapted to any codebase.
 | Kind | Count | Runs in | What it is |
 |------|:-----:|---------|------------|
 | 🛠 **[Vibe skills](docs/skills.md)** | 59 | Mistral Vibe | [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) (`SKILL.md`) invoked as slash commands: they read your files, run git and linters, and report |
-| 🤖 **[Vibe agents](docs/agents.md)** | 9 | Mistral Vibe | TOML role profiles for `vibe --agent NAME`; each scopes and loads its skills on demand |
+| 🤖 **[Vibe agents](docs/agents.md)** | 9 roles (+9 subagent copies) | Mistral Vibe | TOML role profiles for `vibe --agent NAME`, plus generated `<name>-subagent.toml` copies the model can spawn via `agents.spawn`; each scopes and loads its skills on demand |
 | 💬 **[Le Chat prompts](docs/le-chat-prompts.md)** | 2 | Le Chat | System prompts for agents with no shell or file access, each with recorded example runs |
 
 ### Start with these
@@ -60,11 +60,16 @@ Skills by area (full tables in [docs/skills.md](docs/skills.md)):
 skill_paths = ["~/code/mistral-toolbox/skills"]
 ```
 
-Agents are linked into Vibe's own agents folder, which it searches without any config:
+Agents are synced into Vibe's own agents folder, which it searches without any config:
 
 ```bash
-ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents
+mkdir -p ~/.vibe/agents
+rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/   # re-run after git pull
 ```
+
+(Don't add `--delete` if you keep private profiles in `~/.vibe/agents/` — it would remove
+them. A symlink works too and stays current automatically, but it dangles silently if the
+repo moves — see [agents/README.md](agents/README.md#wiring-them-into-any-repository).)
 
 **2. Use it in any repository:**
 
