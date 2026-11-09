@@ -11,7 +11,7 @@ Built for WordPress engineering work, written to be adapted to any codebase.
 <br>
 [![Mistral Vibe](https://img.shields.io/badge/Mistral-Vibe-FA520F)](https://docs.mistral.ai/vibe/)
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
-[![Skills](https://img.shields.io/badge/skills-59-brightgreen)](docs/skills.md)
+[![Skills](https://img.shields.io/badge/skills-60-brightgreen)](docs/skills.md)
 [![Agents](https://img.shields.io/badge/agents-9-brightgreen)](docs/agents.md)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](docs/le-chat-prompts.md)
 
@@ -25,7 +25,7 @@ Built for WordPress engineering work, written to be adapted to any codebase.
 
 | Kind | Count | Runs in | What it is |
 |------|:-----:|---------|------------|
-| 🛠 **[Vibe skills](docs/skills.md)** | 59 | Mistral Vibe | [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) (`SKILL.md`) invoked as slash commands: they read your files, run git and linters, and report |
+| 🛠 **[Vibe skills](docs/skills.md)** | 60 | Mistral Vibe | [Agent Skills](https://docs.mistral.ai/vibe/code/cli/skills) (`SKILL.md`) invoked as slash commands: they read your files, run git and linters, and report |
 | 🤖 **[Vibe agents](docs/agents.md)** | 9 roles (+9 subagent copies) | Mistral Vibe | TOML role profiles for `vibe --agent NAME`, plus generated `<name>-subagent.toml` copies the model can spawn via `agents.spawn`; each scopes and loads its skills on demand |
 | 💬 **[Le Chat prompts](docs/le-chat-prompts.md)** | 2 | Le Chat | System prompts for agents with no shell or file access, each with recorded example runs |
 
@@ -46,7 +46,7 @@ Skills by area (full tables in [docs/skills.md](docs/skills.md)):
 |------|:------:|
 | WordPress development | 9 |
 | Design & frontend | 16 |
-| Development workflow & quality | 10 |
+| Development workflow & quality | 11 |
 | DevOps & release | 11 |
 | SEO & content marketing | 13 |
 
@@ -98,7 +98,7 @@ What makes these different from a pile of prompts:
 - **Allowlist-friendly.** Skills prescribe plain single commands: no shell loops, no `$(…)`, no one-liner interpreters. A project can approve them once in `[tools.bash] allowlist` and stop seeing prompts.
 - **Evidence before claims.** Review output carries `file:line` references and a failure scenario per finding; completion requires running the proving command fresh. False positives are treated as a defect.
 - **Project rules live in the project.** Skills stay generic. Per-repo rules go in `.agents/` files such as `.agents/code-review.md`, so one skill serves many codebases.
-- **Honest provenance.** 49 of the 59 skills are adapted from permissively licensed open-source collections. Each keeps its upstream `LICENSE`, records the pinned commit in `metadata.source`, and is logged in [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md).
+- **Honest provenance.** 50 of the 60 skills are adapted from permissively licensed open-source collections. Each keeps its upstream `LICENSE`, records the pinned commit in `metadata.source`, and is logged in [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md).
 - **Public-safe.** No client hostnames, credentials or per-client lists; real values live in private per-site files.
 - **Le Chat prompts are tested.** Each prompt ships with recorded runs (input, raw output, review feedback), including failures, so you can see how it behaves before pasting it.
 
@@ -108,10 +108,10 @@ What makes these different from a pile of prompts:
 
 | Doc | Contents |
 |-----|----------|
-| [docs/skills.md](docs/skills.md) | Every skill by area with source, plus the `/code-review`, `/wp-update-round`, design and content workflows |
+| [docs/skills.md](docs/skills.md) | Every skill by area with source, plus the `/code-review`, `/wp-update-round`, `/real-browser-control`, design and content workflows |
 | [docs/agents.md](docs/agents.md) | Agent profiles, the skills each loads, wiring and subagents |
 | [docs/le-chat-prompts.md](docs/le-chat-prompts.md) | The Le Chat prompts, how to use them, example runs |
-| [docs/install.md](docs/install.md) | User-wide and per-project install, project rules, approvals |
+| [docs/install.md](docs/install.md) | User-wide and per-project install, project rules, approvals, real-browser MCP setup |
 | [docs/contributing.md](docs/contributing.md) | Adding a skill, agent or prompt |
 | [docs/sources.md](docs/sources.md) · [NOTICE.md](NOTICE.md) | Source register, pinned commits, third-party licenses |
 | [AGENTS.md](AGENTS.md) · [CHANGELOG.md](CHANGELOG.md) | Rules for agents working in this repo · release history |
@@ -128,7 +128,7 @@ mistral-toolbox/
 
 ## 🙏 Credits
 
-Adapted from [obra/superpowers](https://github.com/obra/superpowers) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mralaminahamed/wp-dev-skills](https://github.com/mralaminahamed/wp-dev-skills) · [NotHarshhaa/devops-skills](https://github.com/NotHarshhaa/devops-skills) · [jakubkrehel/skills](https://github.com/jakubkrehel/skills) · [MengTo/Skills](https://github.com/MengTo/Skills) · [BagelHole/DevOps-Security-Agent-Skills](https://github.com/BagelHole/DevOps-Security-Agent-Skills) · [Ilm-Alan/frontend-design](https://github.com/Ilm-Alan/frontend-design) · [siddik-web/wp-block-theme-converter](https://github.com/siddik-web/wp-block-theme-converter) · [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) · [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) · [google-labs-code/design.md](https://github.com/google-labs-code/design.md) · [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) · [guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) · [aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills) (method reference only)
+Adapted from [obra/superpowers](https://github.com/obra/superpowers) · [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) · [mralaminahamed/wp-dev-skills](https://github.com/mralaminahamed/wp-dev-skills) · [NotHarshhaa/devops-skills](https://github.com/NotHarshhaa/devops-skills) · [jakubkrehel/skills](https://github.com/jakubkrehel/skills) · [MengTo/Skills](https://github.com/MengTo/Skills) · [BagelHole/DevOps-Security-Agent-Skills](https://github.com/BagelHole/DevOps-Security-Agent-Skills) · [Ilm-Alan/frontend-design](https://github.com/Ilm-Alan/frontend-design) · [siddik-web/wp-block-theme-converter](https://github.com/siddik-web/wp-block-theme-converter) · [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [content-designer/ux-writing-skill](https://github.com/content-designer/ux-writing-skill) · [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) · [google-labs-code/design.md](https://github.com/google-labs-code/design.md) · [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) · [guillaumemeyer/watermarks-remover](https://github.com/guillaumemeyer/watermarks-remover) · [aaron-he-zhu/aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills) (method reference only) · [ofershap/real-browser-mcp](https://github.com/ofershap/real-browser-mcp)
 
 All MIT except `google-labs-code/design.md` and `aaron-he-zhu/aaron-marketing-skills` (Apache-2.0). Resources: [Mistral Vibe docs](https://docs.mistral.ai/vibe/) · [Vibe skills](https://docs.mistral.ai/vibe/code/cli/skills) · [Vibe agents](https://docs.mistral.ai/vibe/code/cli/agents) · [Le Chat](https://chat.mistral.ai)
 

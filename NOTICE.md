@@ -86,6 +86,10 @@ Rules:
 - `skills/serp-check/` is original; its method borrows from the `serp-analysis` skill in
   `github.com/aaron-he-zhu/aaron-marketing-skills`, Apache-2.0, upstream commit `a285188d99663e2825dc79832ba898ca890f39a1`.
   No text or code was copied
+- `skills/real-browser-control/` — from `github.com/ofershap/real-browser-mcp`
+  (skill adapted; server + extension are installed from upstream, not copied), MIT
+  (© 2026 Ofer Shapira, see the copied `LICENSE`), pinned
+  `173c964c3df3ea247a7b65ef519f664771709f12`
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.
