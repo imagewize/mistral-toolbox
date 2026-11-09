@@ -91,6 +91,10 @@ Two parts: the MCP server (local stdio process) and the Chrome extension (execut
 - Large pages: scope the snapshot with `selector`.
 - Social feeds: scroll 2000–3000 px, wait ~2 s, re-snapshot.
 
+## Packaging note
+
+Upstream also ships `plugin.json` / `mcp.json` / `server.json`, so the repo can be installed as an Agent Plugins 1.0 plugin (e.g. symlinked into `~/.vibe/plugins/`) or from the MCP registry. This skill deliberately does not: the plugin's `mcp.json` runs `npx -y real-browser-mcp` (latest published), while the setup above pins the audited clone at `173c964c…` for both the extension (load unpacked) and the server (the `[[mcp_servers]]` entry). Do not vendor a copy of the upstream repo into this toolbox either — it is MIT and actively maintained, so a copy would drift from upstream; the pinned clone outside this repo already carries the upstream `LICENSE` (recorded in `metadata.source`, `docs/sources.md`, `NOTICE.md`).
+
 ## Error scenarios
 
 | Symptom | Action |
