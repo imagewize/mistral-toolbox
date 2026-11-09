@@ -117,6 +117,14 @@ Needs [wp-ops](https://github.com/imagewize/wp-ops) 5.42.0+ and a private `updat
 vibe --agent wp-maintainer               # same round, with debugging and verification skills enabled
 ```
 
+## `/real-browser-control` usage
+
+Drives the user's real, logged-in Chrome through [real-browser-mcp](https://github.com/ofershap/real-browser-mcp) (MIT): local MCP server + MV3 extension over a localhost WebSocket — useful for read-only Search Console reads, verifying a live page past SSO, reading LinkedIn under Vibe. Needs more than `skill_paths`: the extension loaded in Chrome and a `[[mcp_servers]]` stdio entry in `~/.vibe/config.toml`. Recommended install is from the pinned source (clone, `git checkout 173c964c3df3ea247a7b65ef519f664771709f12`, `npm install && npm run build`, load `extension/` unpacked at `chrome://extensions`), not the thin-reviewed store listing. Setup, tool table, guardrails: [skills/real-browser-control/SKILL.md](../skills/real-browser-control/SKILL.md).
+
+```
+/real-browser-control                    # load the skill, then drive the real browser via browser_* tools
+```
+
 ## Design → HTML/CSS → block patterns
 
 The design skills form a pipeline for FSE themes such as Elayne:

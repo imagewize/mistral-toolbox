@@ -19,6 +19,13 @@ Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a sk
 </details>
 
 <details>
+<summary><strong>Real-browser access (<code>/real-browser-control</code>)</strong></summary>
+
+The skill drives the user's real, logged-in Chrome through [real-browser-mcp](https://github.com/ofershap/real-browser-mcp) (MIT) — a local MCP server plus an MV3 extension over a localhost WebSocket. It needs two pieces beyond `skill_paths`: the extension loaded in Chrome (recommended: unpacked from the pinned clone at `chrome://extensions` → Developer mode → Load unpacked → `extension/`; the store listing exists but has a thin review base) and a `[[mcp_servers]]` stdio entry in `~/.vibe/config.toml` running the clone's built `mcp-server/dist/index.js`. Full steps: [skills/real-browser-control/SKILL.md](../skills/real-browser-control/SKILL.md).
+
+</details>
+
+<details>
 <summary><strong>Project instructions: AGENTS.md, not a system prompt</strong></summary>
 
 Vibe loads `AGENTS.md` files on top of its built-in system prompt; that is the place for project rules. `system_prompt_id` in `config.toml` *replaces* the built-in prompt — tool use, planning and editing instructions included — and is rarely what you want. See [Mistral Vibe: AGENTS.md vs a custom system prompt](https://imagewize.com/mistral-vibe-agents-md-vs-custom-system-prompt/).
