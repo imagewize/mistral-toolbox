@@ -51,6 +51,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/code-review-and-quality`](../skills/code-review-and-quality/SKILL.md) | Multi-axis review — correctness, readability, maintainability, performance, security, tests. | addyosmani |
 | [`/security-and-hardening`](../skills/security-and-hardening/SKILL.md) | Hardening against vulnerabilities with attack-scenario verification. | addyosmani |
 | [`/performance-optimization`](../skills/performance-optimization/SKILL.md) | Profile-first performance work; re-measure after every fix. | addyosmani |
+| [`/real-browser-control`](../skills/real-browser-control/SKILL.md) | Drive the user's real logged-in Chrome via Real Browser MCP (extension + local MCP over localhost WebSocket, no CDP port): verify in the browser that is already past SSO, read open tabs, use existing sessions. Read-only first on authenticated dashboards. | ofershap |
 
 ## DevOps & release
 
