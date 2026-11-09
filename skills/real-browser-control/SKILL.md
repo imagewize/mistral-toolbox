@@ -25,18 +25,36 @@ Chrome 136+ blocks `--remote-debugging-port` on the default profile, so CDP atta
 
 ## Setup (Vibe)
 
-1. Install the Chrome extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/real-browser-mcp/fkkimpklpgedomcheiojngaaaicmaidi) ("Real Browser MCP" by ofershap). Popup green = connected.
-2. Add the MCP server to `~/.vibe/config.toml` (or run `vibe mcp add real-browser --transport stdio --command npx --arg -y --arg real-browser-mcp`, which writes the same entry):
+Two parts: the MCP server (local stdio process) and the Chrome extension (executes in your real Chrome). **Recommended: install both from the pinned source, not the store** — the store listing has a thin review base, the repo is MIT and auditable.
+
+1. Clone and pin the source (audited at this commit — no external URLs, WebSocket only to `ws://localhost`, no fetch/XHR/beacon):
+
+   ```bash
+   git clone https://github.com/ofershap/real-browser-mcp.git ~/code/real-browser-mcp
+   git -C ~/code/real-browser-mcp checkout 173c964c3df3ea247a7b65ef519f664771709f12
+   npm --prefix ~/code/real-browser-mcp install
+   npm --prefix ~/code/real-browser-mcp run build
+   ```
+
+2. Load the extension from source:
+   - Open `chrome://extensions`, enable **Developer mode** (toggle, top right).
+   - Click **Load unpacked** and select `~/code/real-browser-mcp/extension/`.
+   - Click the Real Browser MCP icon in the toolbar: **green dot = connected** to the local server, gray = waiting for the server.
+   - Alternative: the Chrome Web Store listing ("Real Browser MCP", ID `fkkimpklpgedomcheiojngaaaicmaidi`) packages the same code.
+
+3. Add the MCP server to `~/.vibe/config.toml`, running the audited build from the clone:
 
    ```toml
    [[mcp_servers]]
    name = "real-browser"
    transport = "stdio"
-   command = "npx"
-   args = ["-y", "real-browser-mcp"]
+   command = "node"
+   args = ["/Users/jasperfrumau/code/real-browser-mcp/mcp-server/dist/index.js"]
    ```
 
-3. Restart Vibe, or `/mcp` reconnect in a running session. Confirm the bridge with the `browser_tabs` tool (action `list`).
+   (The published package is the alternative: `command = "npx"`, `args = ["-y", "real-browser-mcp@1.4.0"]`.)
+
+4. Restart Vibe, or `/mcp` reconnect in a running session. The server listens on `ws://localhost:7225` by default. Confirm the bridge with the `browser_tabs` tool (action `list`) — it only answers once the extension shows green.
 
 ## Tools
 
