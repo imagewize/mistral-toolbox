@@ -108,10 +108,10 @@ What makes these different from a pile of prompts:
 
 | Doc | Contents |
 |-----|----------|
-| [docs/skills.md](docs/skills.md) | Every skill by area with source, plus the `/code-review`, `/wp-update-round`, design and content workflows |
+| [docs/skills.md](docs/skills.md) | Every skill by area with source, plus the `/code-review`, `/wp-update-round`, `/real-browser-control`, design and content workflows |
 | [docs/agents.md](docs/agents.md) | Agent profiles, the skills each loads, wiring and subagents |
 | [docs/le-chat-prompts.md](docs/le-chat-prompts.md) | The Le Chat prompts, how to use them, example runs |
-| [docs/install.md](docs/install.md) | User-wide and per-project install, project rules, approvals |
+| [docs/install.md](docs/install.md) | User-wide and per-project install, project rules, approvals, real-browser MCP setup |
 | [docs/contributing.md](docs/contributing.md) | Adding a skill, agent or prompt |
 | [docs/sources.md](docs/sources.md) · [NOTICE.md](NOTICE.md) | Source register, pinned commits, third-party licenses |
 | [AGENTS.md](AGENTS.md) · [CHANGELOG.md](CHANGELOG.md) | Rules for agents working in this repo · release history |
