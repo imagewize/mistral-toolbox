@@ -50,6 +50,17 @@ After Claude generates the theme, run through these checks. Provide this checkli
 - [ ] Templates open in Site Editor without errors
 - [ ] All `<!-- wp:pattern -->` references have matching pattern files
 
+## Pattern Validation (wp-pattern-sentinel)
+
+Only when the theme has a `patterns/` directory. Aviendha forks already carry the harness in
+`package.json`; from-scratch themes must add `@imwz/wp-pattern-sentinel` plus the `validate`
+scripts first.
+
+- [ ] `npm install && npm run setup` run once in the theme directory
+- [ ] `npm run validate` (`sentinel --log patterns/`) passes with zero validation errors
+- [ ] On the Imagewize stack: `sentinel --trellis --trellis-dir=$HOME/code/imagewize.com/trellis --site=demo.imagewize.com --subsite=<theme-slug> patterns/` passes against the Trellis demo VM (never a standalone `--url`)
+- [ ] Sentinel re-run after EVERY pattern edit, not just once at the end — `wp pattern validate`'s PHP `parse_blocks()` pass does not catch JS `save()` serializer issues (class ordering, auto-injected styles), only the browser-based sentinel does
+
 ## CSS Validation
 
 - [ ] No hardcoded colors (use `var(--wp--preset--color--*)`)

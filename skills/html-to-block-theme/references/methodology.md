@@ -197,6 +197,14 @@ add_action( 'init', '{{theme_slug_underscored}}_register_pattern_categories' );
 
 **Patterns are auto-discovered** from the `/patterns/` directory in WordPress 6.0+. No manual registration needed for individual patterns — only categories.
 
+**Validate each pattern as you write it.** When the theme's `package.json` carries
+`@imwz/wp-pattern-sentinel` (every Aviendha fork does), run `npm run validate` after every
+pattern iteration — `wp pattern validate`'s PHP `parse_blocks()` pass does not run the JS
+`save()` serializer, so only the browser-based sentinel catches class-ordering and
+auto-injected-style mismatches that fail in the real editor. See
+`references/forking-a-starter-theme.md` for the exact `sentinel --trellis` commands on the
+Imagewize stack.
+
 ---
 
 ## Phase 5: Block Styles & Variations

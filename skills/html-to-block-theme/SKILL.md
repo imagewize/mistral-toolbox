@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -221,6 +221,13 @@ For large projects (10+ HTML pages or WooCommerce themes), split delivery across
 npx phpcs --standard=WordPress-Extra .
 ```
 
+**If the theme has a `patterns/` directory and its `package.json` carries
+`@imwz/wp-pattern-sentinel` (every Aviendha fork does): run `npm run validate`, and on the
+Imagewize stack the `--trellis` form against the demo VM — after every pattern iteration,
+not once at the end.** `wp pattern validate`'s PHP `parse_blocks()` pass never runs the JS
+`save()` serializer, so only the browser-based sentinel catches the validation failures the
+real editor will show. Exact commands: `references/forking-a-starter-theme.md`.
+
 Validate `theme.json` against the current schema (`https://schemas.wp.org/trunk/theme.json`), activate the theme with `WP_DEBUG` on, and confirm `debug.log` stays clean. **Do not declare success until every check passes.** If a check fails, loop back to the relevant phase and fix every violation before continuing.
 
 Then provide:
@@ -238,6 +245,7 @@ PASS Activate theme → Confirm no PHP errors in debug.log
 PASS Visit front page → Confirm visual match with source
 PASS Open Site Editor → Confirm all templates listed
 PASS Insert block → Confirm all patterns appear under correct categories
+PASS Run `npm run validate` (wp-pattern-sentinel) on themes with a `patterns/` dir → Confirm zero pattern validation errors
 PASS Run `npx phpcs --standard=WordPress-Extra .` → Confirm zero errors
 PASS Check browser console → Confirm zero JS errors
 PASS Run Lighthouse → Confirm accessibility score ≥ 90
@@ -301,7 +309,7 @@ Read these on-demand based on the task:
 | `references/woocommerce.md` | WooCommerce themes | When needed |
 | `references/validation-checklist.md` | Post-generation verification | After all files |
 | `references/local-environment.md` | Setting up a local WordPress (Valet or Trellis/Bedrock VM) to preview and verify the theme | Before Step 5 verification |
-| `references/forking-a-starter-theme.md` | Forking a starter theme (Aviendha) for a client: rename all identifiers, keep lineage docs, activate on the local site | When a base/starter theme is given |
+| `references/forking-a-starter-theme.md` | Forking a starter theme (Aviendha) for a client: rename all identifiers, keep lineage docs, validate patterns with the wp-pattern-sentinel harness from `package.json`, activate on the local site | When a base/starter theme is given |
 | `references/custom-blocks.md` | Custom block development (block.json schema, edit.js patterns, render.php, deprecations) — **only** when no core block, pattern, block style, or existing plugin block (e.g. Aludra's) fits; the block goes in a plugin, never in the theme | Last resort, explicit user request |
 | `references/content-migration.md` | Classic-to-block conversion, WP-CLI commands, ACF bindings, CPT templates, page builder migration | When `/wp-migrate` is invoked |
 | `references/asset-optimization.md` | Fonts (subsetting, preload, self-hosting), images (WebP, lazy load, LCP), per-block CSS, JS deferral, Core Web Vitals | During Phase 8 (Performance) |
