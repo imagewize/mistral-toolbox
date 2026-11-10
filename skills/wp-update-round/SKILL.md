@@ -4,7 +4,7 @@ description: "Use when running a WordPress update round — orchestrating before
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
   source: "github.com/imagewize/mistral-toolbox skills/wp-update-round (Imagewize, MIT)"
 ---
 
@@ -52,10 +52,11 @@ An update round follows this sequence. Each step is a separate command; work thr
 
 Read the site's `update-manifest.yml` first: host type, skip list, pages, masks, cache plugin.
 
-**Trellis/Bedrock (Composer).** `composer.json` lives in the Bedrock `site/` directory, not the Trellis directory:
+**Trellis/Bedrock (Composer).** `composer.json` lives in the Bedrock `site/` directory, not the Trellis directory — for a `repo_subtree_path` site it is the subtree root itself (`composer_dir` in the manifest is relative to the repo root):
 ```bash
 cd /path/to/project/site
 composer outdated --direct
+composer audit        # advisories for the locked packages; re-run after any update and keep the output in the round notes
 ```
 
 **Shared host (WP-CLI over SSH).** `cd` into the WordPress root (or pass `--path`), since a non-interactive SSH session starts in the home directory:
@@ -67,6 +68,18 @@ ssh user@example.com 'cd ~/public_html && wp core check-update --format=json'
 MCP equivalent: `wp_cli(site="example.com", env="production", args=["plugin","list","--update=available","--format=json"])`.
 
 Drop everything on the skip list. Flag **major version updates** (x.0.0), WooCommerce updates, page-builder updates, and anything with database migrations. These get manual review regardless of the screenshot result.
+
+### Fast path — one semver-safe package, no screenshots
+
+If the round is exactly one minor/patch package whose changelog shows no migration and no security-relevant change, skip the local sync and the screenshot steps (1–6) and run the short round instead:
+
+1. **Apply locally** (step 4) and smoke-test: `curl -sI <local_url>/` must return 200.
+2. **Back up production when the host has no atomic rollback** — on shared hosts the step-7 backup is mandatory even for one minor plugin. Trellis code rolls back atomically, so only a migration triggers a DB backup there.
+3. **Deploy** (step 8). Run `trellis deploy` as a background process and poll its output — the on-server `composer install` regularly takes 10–15+ minutes (longer on aarch64), so never block on a short command timeout. Shared hosts: apply over `wp_cli`/`ssh` with `confirm: true` after approval.
+4. **Verify with WP-CLI instead of screenshots:** `wp_cli(site, env="production", args=["plugin","list","--update=available","--format=json"])` (or the theme/core equivalent) must no longer list the package, and `curl -sI https://example.com/` must return 200.
+5. **Record the round** (step 10), including the `composer audit` line and, for Trellis, the release ID from the deploy output.
+
+Anything beyond that — several packages at once, a major bump (x.0.0), WooCommerce, a page builder, anything with a database migration — takes the full path below.
 
 ### 1. Sync local environment
 
@@ -212,8 +225,10 @@ ssh user@example.com 'tar -czf - -C public_html wp-content/plugins wp-content/th
 git add site/composer.json site/composer.lock
 git commit -m "Update plugin-name to X.Y.Z, theme-name to A.B.C"
 git push                                   # Trellis deploys from the remote
-trellis deploy production example.com
+trellis deploy production example.com    # background it; see the fast-path note on duration
 ```
+
+Capture the deploy output line `main@<sha> deployed as release <timestamp>` — the release timestamp is what `trellis rollback` steps back through, and it belongs in the round log (step 10).
 
 **Shared host:**
 ```bash
@@ -268,6 +283,8 @@ Append to the site's update log. For Trellis/Bedrock, the commit message is part
 - **Local diff:** 0.000% all pages
 - **Production diff:** 0.000% all pages
 - **Duration:** 28m (local test: 12m, deploy: 2m, prod check: 5m, review: 9m)
+- **Release:** `20261110074323` — Trellis release timestamp from the deploy output (Trellis hosts only)
+- **Audit:** `composer audit` result after the update (Composer ≥ 2.4 runs it automatically on `composer update`)
 - **Rollback:** `trellis rollback production example.com`
 ```
 
@@ -309,7 +326,7 @@ The skill uses it to:
 
 ## Where manifests live
 
-Keep manifests in a private location, e.g. `~/code/site-manifests/<site>/update-manifest.yml`, and copy or symlink them into each sandbox. For Trellis sites, `.vibe/update-manifest.yml` in the project works too.
+Keep manifests in a private location, e.g. `~/code/site-manifests/<site>/update-manifest.yml`, and copy or symlink them into each sandbox. For Trellis sites, `.vibe/update-manifest.yml` in the project works too — but only for **one site per repo**. When a repo hosts several sites as subtrees (`repo_subtree_path`, e.g. one Trellis repo serving both a flagship site and an `aseonomics/` subtree), the repo-root `.vibe/` belongs to the flagship site; keep the subtree sites' manifests in `~/code/site-manifests/<site>/` or at `<subtree>/.vibe/update-manifest.yml`. Remember `composer_dir` is relative to the repo root — the subtree root for subtree sites, not `site/`.
 
 ## Notes
 
