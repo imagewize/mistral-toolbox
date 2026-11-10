@@ -61,6 +61,19 @@ scripts first.
 - [ ] On the Imagewize stack: `sentinel --trellis --trellis-dir=$HOME/code/imagewize.com/trellis --site=demo.imagewize.com --subsite=<theme-slug> patterns/` passes against the Trellis demo VM (never a standalone `--url`)
 - [ ] Sentinel re-run after EVERY pattern edit, not just once at the end — `wp pattern validate`'s PHP `parse_blocks()` pass does not catch JS `save()` serializer issues (class ordering, auto-injected styles), only the browser-based sentinel does
 
+## Mode B: Aviendha fork + Aludra blocks
+
+Only for a theme built on Aludra blocks (see `composing-with-aludra.md`).
+
+- [ ] The fork is in the folder the prompt names, and is a complete copy of the starter (`package.json`, `composer.json`, `phpcs.xml`, `AGENTS.md`, `CLAUDE.md` present)
+- [ ] No new files in `~/code/aviendha` (`git -C ~/code/aviendha status --short` shows nothing new)
+- [ ] Every section starts from an `aludra/*` block. Sections built from `core/group` are listed as gaps in the report
+- [ ] Every `aludra/*` block name in `patterns/`, `parts/` and `templates/` exists in `~/code/aludra/blocks/`
+- [ ] `theme.json` defines every colour slug the Aludra blocks read, and has no second set of design-named slugs
+- [ ] `style.css` stays close to the starter's size. Each added rule has a comment naming the gap it fills
+- [ ] Aludra (and Contact Form 7, when `aludra/contact-section` is used) is active on the local site
+- [ ] The front page HTML contains a `wp-block-aludra-<name>` wrapper for every block used
+
 ## CSS Validation
 
 - [ ] No hardcoded colors (use `var(--wp--preset--color--*)`)

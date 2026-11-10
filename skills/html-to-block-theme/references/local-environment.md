@@ -25,9 +25,11 @@ Install and activate the generated theme:
 
 ```bash
 cp -r <theme-slug> ~/code/<site-name>/wp-content/themes/
-wp theme activate <theme-slug> --path=~/code/<site-name>
-wp rewrite flush --hard --path=~/code/<site-name>
+wp theme activate <theme-slug> --path="$HOME/code/<site-name>"
+wp rewrite flush --hard --path="$HOME/code/<site-name>"
 ```
+
+Use `$HOME`, not `~`, inside `--path=`: the shell does not expand `~` after `=`.
 
 Useful Valet commands: `valet isolate php@8.x` pins the PHP version to match the target host,
 `valet secure <site-name>` adds HTTPS, `valet links` lists the parked sites.

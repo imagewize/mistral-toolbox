@@ -5,6 +5,19 @@ All notable changes to the mistral-toolbox repository will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-11-10
+
+### Added
+
+- `html-to-block-theme` 1.4.0: two build modes, picked in Step 1 and never mixed. **Mode A** converts the HTML into a standalone theme from core blocks and patterns. **Mode B** builds on an Aviendha fork with content from the Aludra plugin's `aludra/*` blocks. The "prefer core blocks" rule now applies only to Mode A. In Mode B, a section hand-built from `core/group` + CSS when an Aludra block fits counts as a failure, and sections no block covers are reported as gaps. New `references/composing-with-aludra.md`: list the blocks from `~/code/aludra/blocks/*/src/block.json`, a section-to-block starting map, copying each block's wrapper markup from Aludra's own `patterns/section-*.php` (the blocks are static, so any markup difference makes the block invalid), defining every colour slug the blocks read (listed with a grep, no second set of design-named slugs), a small theme `style.css`, and checks: block names exist, Aludra is active on the site sentinel uses, wrapper classes appear in the rendered front page. The validation checklist has a Mode B section. These came from an `architect-demo` run of the Aviendha + Aludra prompt: the agent built prompt 10's conversion in `theme/` with 561 lines of CSS, used one Aludra block out of seven asked for, and kept two colour slug sets
+- `html-to-block-theme` 1.1.0–1.3.0: `references/local-environment.md` (Laravel Valet via `wp valet new` for client sites that move to shared hosting, a Trellis/Bedrock VM for pro sites, with verification steps). `references/forking-a-starter-theme.md` for forking Aviendha for a client: rename every identifier (class prefixes, PHP namespace and prefix, text domain, phpcs prefix, package names, logo files), keep the lineage docs, reset the version, activate on the local site. Patterns in a fork are validated with `@imwz/wp-pattern-sentinel` (`npm run validate`, or `--trellis` against the demo VM) after every pattern edit, because `wp pattern validate` never runs the JS `save()` serializer. A house rule against a companion block plugin: compose from core blocks, patterns and block styles, and put custom blocks in a plugin, never in the theme (WordPress.org theme review)
+- `wp-update-round` 1.1.0: a fast path for one semver-safe package (local apply and smoke test, production backup on shared hosts, deploy, verify with WP-CLI instead of screenshots). `trellis deploy` runs in the background because the server's `composer install` can take 15 minutes. The round log records the Trellis release ID and the `composer audit` result. Manifests for subtree sites (`repo_subtree_path`) live outside the repo-root `.vibe/`
+
+### Fixed
+
+- `html-to-block-theme` 1.4.0, `forking-a-starter-theme.md`: fork locally with `rsync` minus `.git`, `node_modules`, `vendor` and sentinel logs, then compare the folder listings, since the test run's fork lacked `package.json`, `composer.json`, `phpcs.xml`, `AGENTS.md` and `CLAUDE.md`. Never run npm or sentinel inside `~/code/aviendha`, since the test run left six sentinel logs there. Add `sentinel-*.log.json` to the fork's `.gitignore`. The "aviendha" grep allows one lineage comment
+- `html-to-block-theme` 1.4.0: WP-CLI examples use `--path="$HOME/code/<site>"`. The shell does not expand `~` after `=`, so `--path=~/code/<site>` failed with "This does not seem to be a WordPress installation"
+
 ## [1.11.0] - 2026-11-09
 
 ### Added
