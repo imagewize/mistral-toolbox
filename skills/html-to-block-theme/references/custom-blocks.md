@@ -1,6 +1,6 @@
 # Custom Block Development Reference
 
-Reference for creating custom WordPress blocks inside a block theme. Read this when `/wp-block` is invoked or when a conversion requires functionality no core block can provide.
+Reference for creating custom WordPress blocks. Blocks live in a **plugin**, never registered by a theme (WordPress.org theme review). Read this only when a conversion requires functionality no core block, pattern, block style, or existing plugin block can provide.
 
 ---
 
@@ -27,6 +27,8 @@ Reference for creating custom WordPress blocks inside a block theme. Read this w
 ## When to Build a Custom Block
 
 Custom blocks add complexity (build step, JS bundle, deprecation management). Always prefer simpler alternatives:
+
+> **House rule:** compose from core blocks, block patterns, and block styles/variations registered in theme.json — or from an existing block plugin (on the Imagewize stack that is Aludra, `~/code/aludra`). Do NOT scaffold a companion plugin or register blocks from the theme: WordPress.org theme review forbids theme-registered blocks, and a theme that registers its own blocks cannot be submitted. Add a block to the shared plugin only when core + patterns + variations genuinely cannot express it.
 
 | Requirement | Prefer instead |
 |-------------|---------------|
