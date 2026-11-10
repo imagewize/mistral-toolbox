@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -38,6 +38,7 @@ Before generating ANY file:
 - **No features beyond what was asked.** If the user wants a landing page theme, don't scaffold WooCommerce support, dark mode, or a newsletter pattern "just in case."
 - **No abstractions for single-use code.** Don't create a `ThemeHelper` class for one function. Don't create a `config.php` that's only read once.
 - **No "flexibility" that wasn't requested.** Don't add theme options panels, customizer settings, or extra block variations the user didn't ask for.
+- **No companion block plugin by default.** Compose with core blocks, patterns, and block styles/variations registered in theme.json. A custom block goes into a plugin only when nothing else fits — and is never registered by the theme itself (WordPress.org theme review forbids theme-registered blocks; on the Imagewize stack new blocks live in the shared Aludra plugin, `~/code/aludra`).
 - **If 200 lines could be 50, rewrite it.** Every line must earn its place.
 - **Prefer core blocks over custom patterns.** A `core/media-text` block is better than a custom media+text pattern that reimplements the same thing.
 - **Prefer theme.json over CSS.** If a style can be expressed in theme.json, it MUST be. Don't write CSS for what theme.json handles natively.
@@ -136,6 +137,7 @@ Gather these inputs (ask only if not provided):
 - Design tokens (colors, fonts, spacing)
 - Build system preference (Vite 6 default, or wp-scripts, or none)
 - WooCommerce support (yes/no)
+- Local WordPress to preview on (default: Laravel Valet via `wp valet new <site>` for client sites that move to shared hosting; Trellis/Bedrock VM for pro sites — see `references/local-environment.md`)
 
 **Before proceeding, explicitly state:**
 
@@ -210,6 +212,8 @@ For large projects (10+ HTML pages or WooCommerce themes), split delivery across
 
 ### Step 5: Verify — Post-Generation (Principle 4)
 
+**If no local WordPress exists yet, set one up before verifying** — see `references/local-environment.md`. Default for client sites that will move to shared hosting: `wp valet new <site-name>` (Laravel Valet, served at `http://<site-name>.test`). For pro/managed sites with a Trellis production deploy (like imagewize.com): a Trellis/Bedrock VM. Then copy the theme into the site's `wp-content/themes/` (Valet) or `site/web/app/themes/` (Trellis), run `wp theme activate <slug>`, and point the checks below at the local URL.
+
 **Validate before reporting.** The upstream `scripts/doctor.mjs` is not imported; run plain single commands instead:
 
 ```bash
@@ -260,6 +264,7 @@ FAIL **NEVER:**
 - Alpine.js when the Interactivity API handles the same interaction
 - Physical CSS directional properties when logical alternatives exist (`margin-inline-start` not `margin-left`)
 - Speculative features the user didn't ask for (Principle 2)
+- Scaffolding a block plugin (or theme-registered `register_block_type()` blocks) when core blocks + patterns + block styles cover the need — custom blocks belong in a plugin, never in the theme
 - "Improving" code that isn't part of the current task (Principle 3)
 
 PASS **ALWAYS:**
@@ -294,7 +299,8 @@ Read these on-demand based on the task:
 | `references/multi-turn-strategy.md` | Large projects (10+ pages) | When needed |
 | `references/woocommerce.md` | WooCommerce themes | When needed |
 | `references/validation-checklist.md` | Post-generation verification | After all files |
-| `references/custom-blocks.md` | Custom block development (block.json schema, edit.js patterns, render.php, deprecations) | When `/wp-block` is invoked |
+| `references/local-environment.md` | Setting up a local WordPress (Valet or Trellis/Bedrock VM) to preview and verify the theme | Before Step 5 verification |
+| `references/custom-blocks.md` | Custom block development (block.json schema, edit.js patterns, render.php, deprecations) — **only** when no core block, pattern, block style, or existing plugin block (e.g. Aludra's) fits; the block goes in a plugin, never in the theme | Last resort, explicit user request |
 | `references/content-migration.md` | Classic-to-block conversion, WP-CLI commands, ACF bindings, CPT templates, page builder migration | When `/wp-migrate` is invoked |
 | `references/asset-optimization.md` | Fonts (subsetting, preload, self-hosting), images (WebP, lazy load, LCP), per-block CSS, JS deferral, Core Web Vitals | During Phase 8 (Performance) |
 | `references/plugin-compatibility.md` | Plugin detection, CSS conflict resolution, plugin-specific hooks, caching compat | When `/wp-plugin-theme` is invoked |
