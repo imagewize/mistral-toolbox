@@ -4,6 +4,8 @@ A WordPress update round with before/after screenshots: list the updates, test t
 
 Works with Vibe (`/wp-update-round`, or `vibe --agent wp-maintainer`) and with Claude Code, which reads the same `SKILL.md`.
 
+A round normally runs the full screenshot path. A single semver-safe package (minor/patch, no migration, no security-relevant change in the changelog) can take the fast path in SKILL.md instead: local smoke test, deploy, WP-CLI verification — no screenshots. On shared hosts the pre-deploy backup stays mandatory even on the fast path, because there is no atomic rollback.
+
 ## Requirements
 
 | Tool | Why | Install |
@@ -26,7 +28,7 @@ The skill is generic; the facts of one site are not. Each site gets a private `u
 - **Skip list**, with a reason per package: majors you're not ready for, abandoned packages still in use, page builders whose next major can't read old data.
 - **Cache** to purge after deploying.
 
-Keep it in the site's own (private) repository, e.g. `.vibe/update-manifest.yml`, or in a private folder such as `~/code/site-manifests/<site>/`. Without a manifest, the agent asks for these facts before starting.
+Keep it in the site's own (private) repository, e.g. `.vibe/update-manifest.yml`, or in a private folder such as `~/code/site-manifests/<site>/`. One manifest per repo: when a Trellis repo hosts several sites as subtrees (`repo_subtree_path`), the repo-root `.vibe/` belongs to the flagship site — put subtree sites' manifests in `~/code/site-manifests/<site>/` or `<subtree>/.vibe/`. Without a manifest, the agent asks for these facts before starting.
 
 ## Setup for a new site
 
@@ -58,7 +60,7 @@ wp-ops update-compare snapshots/before snapshots/after --out=snapshots/compare-l
 | `skip` | no | Packages never updated in a round |
 | `cache` | no | Cache to purge after deploying |
 | `wp_root` | shared hosts | WordPress root on the server, relative to the SSH home |
-| `composer_dir`, `theme_build` | Trellis | Where Composer runs (`site`), which theme to rebuild on the host |
+| `composer_dir`, `theme_build` | Trellis | Where Composer runs, relative to the repo root (`site`; the subtree root for `repo_subtree_path` sites), and which theme to rebuild on the host |
 | `snapshots`, `backups` | no | Where a round writes its folders |
 | `rollback` | no | The exact rollback command |
 | `webserver` | no | For the record; Nginx vs Apache rarely matters |
