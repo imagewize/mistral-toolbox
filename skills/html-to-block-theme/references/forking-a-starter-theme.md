@@ -42,10 +42,46 @@ they should still name Aviendha as the theme's lineage. But reset the version to
 - Replace `screenshot.png` and redraw the logo mark in `assets/logos/`
 - Give the fork its own palette in `theme.json` (or a `styles/*.json` variation) from the source
   design's locked tokens
-- Add a `patterns/` directory if the conversion needs patterns — `npm run validate`
-  (wp-pattern-sentinel) is already wired in `package.json`
+- Add a `patterns/` directory if the conversion needs patterns — then validate every pattern
+  with the wp-pattern-sentinel harness already wired in `package.json` (step 5 below)
 
-## 5. Connect the fork to a site and verify
+## 5. Validate every pattern with wp-pattern-sentinel (already in `package.json`)
+
+Aviendha ships no patterns itself, but its `package.json` carries the
+`@imwz/wp-pattern-sentinel` dependency and the `validate` / `validate:file` / `validate:new`
+scripts, so the fork inherits a working browser-based pattern validator the moment it adds a
+`patterns/` directory. **Use it — do not re-invent pattern checking, and do not rely on
+`wp pattern validate` alone:** its PHP `parse_blocks()` pass never runs Gutenberg's
+JavaScript `save()` serializer, so issues only the JS serializer produces (class ordering,
+attribute defaults like a block's own `align`, auto-injected styles) pass that check but
+still fail block validation in the real editor. Sentinel catches those by launching a real
+browser, logging into WP admin, inserting the pattern into a draft page, saving it, and
+reading back the actual validation/content-mismatch result.
+
+Setup once per fork, then run **after every pattern iteration, not just once at the end**:
+
+```bash
+cd ~/code/<new-slug>
+npm install
+npm run setup                                  # npx playwright install chromium, once
+
+npm run validate                               # sentinel --log patterns/ — whole directory
+npm run validate:file -- patterns/hero.php     # sentinel — single file
+npm run validate:new                           # only patterns changed since the last run
+```
+
+On the Imagewize stack, prefer the `--trellis` form against the real Trellis VM demo install
+— never a standalone `--url`, since the demo VM is the WordPress instance the patterns are
+actually exercised against (swap `--subsite` for the fork's own subsite slug):
+
+```bash
+sentinel --trellis --trellis-dir=$HOME/code/imagewize.com/trellis \
+  --site=demo.imagewize.com --subsite=<new-slug> patterns/                # everything
+sentinel --trellis --trellis-dir=$HOME/code/imagewize.com/trellis \
+  --site=demo.imagewize.com --subsite=<new-slug> patterns/my-pattern.php   # single file
+```
+
+## 6. Connect the fork to a site and verify
 
 Activate the renamed theme on the local WordPress from `references/local-environment.md`
 (Valet for client/shared-hosting sites, Trellis VM for pro sites):
