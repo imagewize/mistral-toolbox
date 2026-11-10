@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -40,7 +40,7 @@ Before generating ANY file:
 - **No "flexibility" that wasn't requested.** Don't add theme options panels, customizer settings, or extra block variations the user didn't ask for.
 - **No companion block plugin by default.** Compose with core blocks, patterns, and block styles/variations registered in theme.json. A custom block goes into a plugin only when nothing else fits — and is never registered by the theme itself (WordPress.org theme review forbids theme-registered blocks; on the Imagewize stack new blocks live in the shared Aludra plugin, `~/code/aludra`).
 - **If 200 lines could be 50, rewrite it.** Every line must earn its place.
-- **Prefer core blocks over custom patterns.** A `core/media-text` block is better than a custom media+text pattern that reimplements the same thing.
+- **Prefer core blocks over custom patterns** — in **Mode A** (standalone conversion, see Step 1). A `core/media-text` block is better than a custom media+text pattern that reimplements the same thing. In **Mode B** (Aviendha + Aludra) the order flips: an `aludra/*` block comes first, core blocks fill the gaps.
 - **Prefer theme.json over CSS.** If a style can be expressed in theme.json, it MUST be. Don't write CSS for what theme.json handles natively.
 
 **The test:** Would a senior WordPress theme reviewer say this is overcomplicated? If yes, simplify.
@@ -139,6 +139,20 @@ Gather these inputs (ask only if not provided):
 - WooCommerce support (yes/no)
 - Local WordPress to preview on (default: Laravel Valet via `wp valet new <site>` for client sites that move to shared hosting; Trellis/Bedrock VM for pro sites — see `references/local-environment.md`)
 - Base theme: from scratch, or a fork of a starter theme (e.g. Aviendha — must be fully renamed for the client, see `references/forking-a-starter-theme.md`)
+
+**Pick exactly one build mode and say which in your first reply. Never mix them.**
+
+| | Mode A — standalone conversion | Mode B — Aviendha fork + Aludra blocks |
+|---|---|---|
+| Use when | The prompt asks to convert the HTML into a self-contained theme, or names no starter theme or block plugin | The prompt names Aviendha, Aludra or `aludra/*` blocks, or the base theme is an Aviendha fork |
+| Content built from | Core blocks, patterns, block styles in theme.json | `aludra/*` blocks first; core blocks only for what no Aludra block covers |
+| Section styling | theme.json first, then small per-section CSS | The Aludra block's own styles, driven by the palette slugs; theme CSS stays close to the fork's |
+| Theme folder | The folder the prompt names | The folder the prompt names (not a generic `theme/`) |
+| Read | `references/methodology.md`, `references/block-conversion-map.md` | `references/forking-a-starter-theme.md`, then `references/composing-with-aludra.md` |
+
+In Mode B, hand-building a section from `core/group` + class names + CSS when an Aludra block
+fits is a failure, even when every check passes. If no Aludra block fits a section, build it from
+core blocks and list it in the report as a gap. Don't hide it.
 
 **Before proceeding, explicitly state:**
 
@@ -246,6 +260,7 @@ PASS Visit front page → Confirm visual match with source
 PASS Open Site Editor → Confirm all templates listed
 PASS Insert block → Confirm all patterns appear under correct categories
 PASS Run `npm run validate` (wp-pattern-sentinel) on themes with a `patterns/` dir → Confirm zero pattern validation errors
+PASS Mode B only: every `aludra/*` block name in the patterns exists in `~/code/aludra/blocks/` → Report the section-to-block map and the gaps
 PASS Run `npx phpcs --standard=WordPress-Extra .` → Confirm zero errors
 PASS Check browser console → Confirm zero JS errors
 PASS Run Lighthouse → Confirm accessibility score ≥ 90
@@ -309,7 +324,8 @@ Read these on-demand based on the task:
 | `references/woocommerce.md` | WooCommerce themes | When needed |
 | `references/validation-checklist.md` | Post-generation verification | After all files |
 | `references/local-environment.md` | Setting up a local WordPress (Valet or Trellis/Bedrock VM) to preview and verify the theme | Before Step 5 verification |
-| `references/forking-a-starter-theme.md` | Forking a starter theme (Aviendha) for a client: rename all identifiers, keep lineage docs, validate patterns with the wp-pattern-sentinel harness from `package.json`, activate on the local site | When a base/starter theme is given |
+| `references/forking-a-starter-theme.md` | Forking a starter theme (Aviendha) for a client: complete copy, rename all identifiers, keep lineage docs, validate patterns with the wp-pattern-sentinel harness from the fork's own `package.json`, activate on the local site | When a base/starter theme is given |
+| `references/composing-with-aludra.md` | Mode B: pick `aludra/*` blocks per section, copy markup from Aludra's own patterns, map the palette to the slugs the blocks read, check block names, report gaps | Mode B, before writing any pattern |
 | `references/custom-blocks.md` | Custom block development (block.json schema, edit.js patterns, render.php, deprecations) — **only** when no core block, pattern, block style, or existing plugin block (e.g. Aludra's) fits; the block goes in a plugin, never in the theme | Last resort, explicit user request |
 | `references/content-migration.md` | Classic-to-block conversion, WP-CLI commands, ACF bindings, CPT templates, page builder migration | When `/wp-migrate` is invoked |
 | `references/asset-optimization.md` | Fonts (subsetting, preload, self-hosting), images (WebP, lazy load, LCP), per-block CSS, JS deferral, Core Web Vitals | During Phase 8 (Performance) |

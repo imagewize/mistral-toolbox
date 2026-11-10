@@ -9,8 +9,27 @@ and rename it. Never ship a client theme that still calls itself `aviendha`.
 - Preferred: on GitHub, **Use this template → Create a new repository** for Aviendha, then in the
   new repo run **Actions → "Rename theme from template" → Run workflow**. GitHub fires no workflow
   event at template creation, so this one step is manual. Review and merge the PR it opens.
-- Working locally instead: `cp -r ~/code/aviendha ~/code/<new-slug>` and do the rename by hand as
-  below.
+- Working locally instead: copy the **whole** repository without its build and run output, then do
+  the rename by hand as below. Copy into the folder the prompt names. Don't pick your own:
+
+  ```bash
+  rsync -a --exclude .git --exclude node_modules --exclude vendor --exclude 'sentinel-*.log.json' ~/code/aviendha/ <new-theme-dir>/
+  ```
+
+  Then check that the fork has everything the starter has. Run both and compare the lists:
+
+  ```bash
+  ls -A ~/code/aviendha
+  ls -A <new-theme-dir>
+  ```
+
+  Only `.git`, `node_modules`, `vendor` and sentinel logs may be missing. A fork without
+  `package.json` cannot run sentinel, one without `composer.json` / `phpcs.xml` cannot run PHPCS,
+  and one without `AGENTS.md` / `CLAUDE.md` loses the instructions for the next agent.
+
+**Never run anything inside `~/code/aviendha` itself** (no `npm install`, no sentinel, no edits).
+It is the upstream starter. Tools write logs into the folder they run in, and those files end up in
+the starter repository.
 
 ## 2. Rename every mechanical identifier
 
@@ -24,11 +43,15 @@ and rename it. Never ship a client theme that still calls itself `aviendha`.
 - Logo filenames in `assets/logos/` (`aviendha-rose-*.svg`) and every reference to them
 - `languages/` text-domain files
 
-Verify each pass with a grep that must return nothing (one command per call):
+Verify each pass with a grep (one command per call):
 
 ```bash
-grep -rn "aviendha" --include="*.php" --include="*.css" --include="*.html" --include="*.json" --include="*.xml" <new-theme-dir>
+grep -rni "aviendha" --include="*.php" --include="*.css" --include="*.html" --include="*.json" --include="*.xml" --exclude-dir=node_modules --exclude-dir=vendor <new-theme-dir>
 ```
+
+The only hit allowed is one lineage comment in a file header, such as
+`Forked from the Aviendha starter theme`. Every identifier, slug, class, text domain and package
+name must be gone.
 
 ## 3. Keep the lineage docs
 
@@ -58,10 +81,11 @@ still fail block validation in the real editor. Sentinel catches those by launch
 browser, logging into WP admin, inserting the pattern into a draft page, saving it, and
 reading back the actual validation/content-mismatch result.
 
-Setup once per fork, then run **after every pattern iteration, not just once at the end**:
+Setup once per fork, **in the fork's own directory** (never in `~/code/aviendha`, see step 1),
+then run **after every pattern iteration, not just once at the end**:
 
 ```bash
-cd ~/code/<new-slug>
+cd <new-theme-dir>
 npm install
 npm run setup                                  # npx playwright install chromium, once
 
@@ -81,6 +105,14 @@ sentinel --trellis --trellis-dir=$HOME/code/imagewize.com/trellis \
   --site=demo.imagewize.com --subsite=<new-slug> patterns/my-pattern.php   # single file
 ```
 
+Sentinel writes a `sentinel-<timestamp>.log.json` into the current directory on every run. Add
+`sentinel-*.log.json` to the fork's `.gitignore` before the first run, so the logs are never
+committed.
+
+Sentinel validates against a real WordPress, so the site it uses must have every plugin the
+patterns need active. For a Mode B theme that is Aludra (see `references/composing-with-aludra.md`),
+otherwise every `aludra/*` block fails.
+
 ## 6. Connect the fork to a site and verify
 
 Activate the renamed theme on the local WordPress from `references/local-environment.md`
@@ -88,11 +120,17 @@ Activate the renamed theme on the local WordPress from `references/local-environ
 
 ```bash
 # Valet
-cp -r ~/code/<new-slug> ~/code/<site>/wp-content/themes/
-wp theme activate <new-slug> --path=~/code/<site>
+ln -s <new-theme-dir> "$HOME/code/<site>/wp-content/themes/<new-slug>"   # or cp -r for a one-off copy
+wp theme activate <new-slug> --path="$HOME/code/<site>"
 # Trellis: theme lives at ~/code/<site>/site/web/app/themes/<new-slug>
 trellis vm shell --workdir /srv/www/<site>/current -- wp theme activate <new-slug> --path=web/wp
 ```
+
+Use `$HOME`, not `~`, in `--path=`: the shell does not expand `~` after `=`, so
+`--path=~/code/<site>` points at a folder literally named `~`.
+
+A symlink keeps the site in step with the repository while you work. Copy instead when the site
+must not change while the theme is being edited.
 
 Then confirm: `wp theme list` shows the new name as active, no `aviendha` string remains in the
 active theme's code files, the front page renders, and `debug.log` stays clean with `WP_DEBUG` on.
