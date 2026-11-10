@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -138,6 +138,7 @@ Gather these inputs (ask only if not provided):
 - Build system preference (Vite 6 default, or wp-scripts, or none)
 - WooCommerce support (yes/no)
 - Local WordPress to preview on (default: Laravel Valet via `wp valet new <site>` for client sites that move to shared hosting; Trellis/Bedrock VM for pro sites — see `references/local-environment.md`)
+- Base theme: from scratch, or a fork of a starter theme (e.g. Aviendha — must be fully renamed for the client, see `references/forking-a-starter-theme.md`)
 
 **Before proceeding, explicitly state:**
 
@@ -300,6 +301,7 @@ Read these on-demand based on the task:
 | `references/woocommerce.md` | WooCommerce themes | When needed |
 | `references/validation-checklist.md` | Post-generation verification | After all files |
 | `references/local-environment.md` | Setting up a local WordPress (Valet or Trellis/Bedrock VM) to preview and verify the theme | Before Step 5 verification |
+| `references/forking-a-starter-theme.md` | Forking a starter theme (Aviendha) for a client: rename all identifiers, keep lineage docs, activate on the local site | When a base/starter theme is given |
 | `references/custom-blocks.md` | Custom block development (block.json schema, edit.js patterns, render.php, deprecations) — **only** when no core block, pattern, block style, or existing plugin block (e.g. Aludra's) fits; the block goes in a plugin, never in the theme | Last resort, explicit user request |
 | `references/content-migration.md` | Classic-to-block conversion, WP-CLI commands, ACF bindings, CPT templates, page builder migration | When `/wp-migrate` is invoked |
 | `references/asset-optimization.md` | Fonts (subsetting, preload, self-hosting), images (WebP, lazy load, LCP), per-block CSS, JS deferral, Core Web Vitals | During Phase 8 (Performance) |
