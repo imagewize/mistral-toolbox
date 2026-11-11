@@ -27,6 +27,7 @@ vibe --agent seo-publish-reviewer -p "audit drafts/my-post.md before publishing"
 - The agent name is the TOML file stem; `vibe --agent NAME` fails with the reason if a profile is invalid.
 - Skills are **not** auto-loaded — the agent loads them via the `skill` tool when the task calls for it. Remove `enabled_skills` from a profile to let it load any skill the session can see.
 - **Spawning from a running session needs `agent_type = "subagent"`.** Plain `agent` profiles are selectable with `--agent` but rejected by `agents.spawn` (`subagent_type_not_found`, "Unknown subagent type"). Each profile therefore ships a generated `<name>-subagent.toml` copy; spawn it by file stem: `tools.agents.spawn({ name: "draft-post", config_name: "seo-content-writer-subagent", message: "…" })`. Subagents cannot be selected with `--agent`. The copies are generated — after editing a base profile, regenerate with the loop in [`agents/README.md`](../agents/README.md#spawnable-subagent-copies), never by hand.
+- **Starting a session and writing the first prompt:** `vibe --agent wp-frontend-builder --smart-approve`, with prompt templates for prototype, block-theme conversion and change requests, in [Running the agents](../agents/README.md#running-the-agents).
 - See [`agents/README.md`](../agents/README.md) for wiring details and the [Vibe agents docs](https://docs.mistral.ai/vibe/code/cli/agents).
 
 ---

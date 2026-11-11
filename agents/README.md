@@ -82,6 +82,63 @@ vibe --agent devops-oncall -p "triage alert X"
 Vibe discovers only `*.toml` files in its agent directories, so this README is ignored by
 the loader. The agent name is the file stem.
 
+## Running the agents
+
+**Start command.** `--agent` replaces Vibe's default agent, so a `default_agent = "smart-approve"`
+in `~/.vibe/config.toml` stops applying. Add the flag back to get fewer approval prompts:
+
+```bash
+vibe --agent wp-frontend-builder --smart-approve
+```
+
+`--smart-approve` classifies each tool call and only asks for risky ones (see
+[Fewer approval prompts](../docs/install.md)). `--auto-approve` skips every prompt: throwaway sites only.
+
+**Before a session**
+- Re-sync after every `git pull` of this repository (see "Wiring" above). A stale copy in
+  `~/.vibe/agents/` runs the old instructions while the skills are already new.
+- Check the wiring: `grep -c "Mobile check" ~/.vibe/agents/wp-frontend-builder.toml` prints `1`
+  when the copy has the latest rules.
+- Start in the project's folder, on a feature branch, not `main`.
+
+**What a good first prompt contains.** The agent works best when the first prompt already names:
+1. the source (`index.html`, a Figma export or a brief) and the client name,
+2. the build mode: Mode A (core blocks) or Mode B (Aviendha fork + Aludra blocks),
+3. the starter theme path and the local site URL (for example `https://client-demo.test`),
+4. the checks that count as done: sentinel passes, screenshots of source and site at 1440, 800 and
+   390px, a working mobile menu,
+5. when to stop and ask: only for a real decision, not for each step.
+
+### Prompts for `wp-frontend-builder`
+
+Replace the `<…>` values. Each template is meant to finish a stage in one run; use the next one
+only when the screenshots show what still differs.
+
+**1. Brief → HTML/CSS prototype**
+
+```
+Load design-first-ui-prompting and frontend-design. Build <page> for <client> from this brief: <audience, offer, tone, language>. One index.html, one locked design system, one <section> per future block pattern, real copy in <language>. Include a header navigation that collapses into a hamburger below 1024px (see html-to-block-theme/references/mobile-navigation.md). Screenshot at 390, 800 and 1440px with headless Chrome and fix what you see. List the assumptions you made at the top of your reply.
+```
+
+**2. Prototype → block theme, design layer included (Mode B)**
+
+```
+Load html-to-block-theme. Mode B. Convert <path>/index.html into a fork of <path to Aviendha> named <client>, active on <local URL>. Use aludra/* blocks for every section; use the light variations and theme.json for the design rules before any CSS; rebuild the header and footer parts from the source, keep the mobile menu (overlayMenu "mobile"), and put the remaining gaps in one design-layer block at the end of style.css. Run phpcs and sentinel. Then screenshot source and site side by side at 1440, 800 and 390px, open the mobile menu, and list per section what still differs. Stop only for a decision I have to make.
+```
+
+**3. Change requests and review notes**
+
+```
+Read <REVIEW.md or my list>. Apply notes <numbers> in place, keep everything else, and report per note what you changed. Re-check the page at 390, 800 and 1440px.
+```
+
+**Reading the result.** The agent should report a section-to-block map, the check results and what
+still differs. "All checks pass" without screenshots is not done: sentinel passes on a page that
+looks nothing like the source. Ask for the screenshots, or for the specific width that looks wrong.
+
+A real run of these stages, with every prompt, what went wrong and which skill change fixed it, is
+in the [Architect Demo `PROMPTS.md`](https://github.com/imagewize/architect-demo/blob/main/PROMPTS.md).
+
 ## Spawnable subagent copies
 
 Vibe has two kinds of profiles. `agent_type = "agent"` (the default) profiles are
