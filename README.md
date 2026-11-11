@@ -17,7 +17,7 @@ From an HTML design to a reviewed FSE block theme, a safe update round and SEO c
 [![Agents](https://img.shields.io/badge/agents-9-brightgreen)](docs/agents.md)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](docs/le-chat-prompts.md)
 
-[Quick start](#-quick-start) · [Workflow](docs/workflow.md) · [Skills](docs/skills.md) · [Agents](docs/agents.md) · [Install](docs/install.md)
+[Quick start](#quick-start) · [Workflow](docs/workflow.md) · [Skills](docs/skills.md) · [Agents](docs/agents.md) · [Install](docs/install.md)
 
 </div>
 
@@ -31,7 +31,7 @@ Out of the box, Mistral Vibe doesn't know what a block theme is. It writes class
 
 Made by a block-theme developer who uses it daily.
 
-## 🧭 From design to live site
+## From design to live site
 
 | Step | Agent / skill | You get |
 |------|---------------|---------|
@@ -45,7 +45,7 @@ Works best with the [Aviendha](https://github.com/imagewize/aviendha) starter th
 
 ![Terminal recording of vibe --agent wp-reviewer reviewing the latest commit in wp-vibe-toolbox: the agent loads the code-review skill, runs git checks and reports an OVERALL ASSESSMENT](docs/assets/vibe-agent-demo.gif)
 
-## 🚀 Quick start
+## Quick start
 
 Point Vibe at the skills in `~/.vibe/config.toml`:
 
@@ -70,23 +70,23 @@ vibe --agent wp-reviewer -p "review the diff against main"
 
 Using Le Chat instead? Paste [`FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-DEV.md) into **Agents → New Agent → System Prompt**. Per-project installs, approval allowlists and model tips: [docs/install.md](docs/install.md).
 
-## ✨ What's inside
+## What's inside
 
 | Kind | Count | |
 |------|:-----:|---|
-| 🛠 [Vibe skills](docs/skills.md) | 60 | Slash commands that read your files, run git and linters, and report |
-| 🤖 [Vibe agents](docs/agents.md) | 9 | Role profiles for `vibe --agent NAME`, each with a spawnable subagent copy |
-| 💬 [Le Chat prompts](docs/le-chat-prompts.md) | 2 | System prompts for agents without shell access, with recorded runs |
+| [Vibe skills](docs/skills.md) | 60 | Slash commands that read your files, run git and linters, and report |
+| [Vibe agents](docs/agents.md) | 9 | Role profiles for `vibe --agent NAME`, each with a spawnable subagent copy |
+| [Le Chat prompts](docs/le-chat-prompts.md) | 2 | System prompts for agents without shell access, with recorded runs |
 
 Skills by area: WordPress development (9) · Design & frontend (16) · Development workflow & quality (11) · DevOps & release (11) · SEO & content marketing (13).
 
 Why they behave the way they do: [design principles](docs/principles.md).
 
-## 📚 Documentation
+## Documentation
 
 [Workflow](docs/workflow.md) · [Skills](docs/skills.md) · [Agents](docs/agents.md) · [Le Chat prompts](docs/le-chat-prompts.md) · [Install](docs/install.md) · [Principles](docs/principles.md) · [Contributing](docs/contributing.md) · [Sources](docs/sources.md) · [Credits](docs/credits.md) · [Changelog](CHANGELOG.md)
 
-## 📄 License
+## License
 
 [MIT](LICENSE.md) © Imagewize. Most skills are adapted from open-source collections and keep their own licenses (MIT, one Apache-2.0): see [credits](docs/credits.md) and [NOTICE.md](NOTICE.md).
 
