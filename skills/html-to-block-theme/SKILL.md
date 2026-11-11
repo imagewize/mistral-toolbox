@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 

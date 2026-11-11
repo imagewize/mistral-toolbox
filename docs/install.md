@@ -14,6 +14,8 @@ The skill's generic checks are the same everywhere; what catches most regression
 <details>
 <summary><strong>Fewer approval prompts</strong></summary>
 
+**Quickest:** start Vibe with `vibe --agent wp-frontend-builder --smart-approve`. It classifies each tool call and only prompts for risky ones. `--auto-approve` (alias `--yolo`) skips every prompt, so use it only on a throwaway site. Commands that chain with `&&`, `;` or `|`, use shell variables, or touch paths outside the working directory (for example `~/code/aludra` or the local site's folder) prompt every time even when each command is on the allowlist; in the approval dialog choose "Allow for remainder of this session".
+
 Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a skill's `allowed-tools`. Put the commands the skill runs in the project's `.vibe/config.toml` so everyone on the project gets the same approvals. A project allowlist **replaces** the one in `~/.vibe/config.toml`, so include the read-only basics too — the **Setup** section of [code-review's SKILL.md](../skills/code-review/SKILL.md) has a starting list.
 
 </details>
