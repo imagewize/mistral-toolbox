@@ -21,6 +21,39 @@ Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a sk
 </details>
 
 <details>
+<summary><strong>Faster model for coding runs (GLM) and a cheap approval classifier</strong></summary>
+
+**Model.** The author gets faster coding runs from GLM (`zai-glm-5-3`, served through the Mistral provider) than from `mistral-large-4`, for theme and pattern work like the [Kadewerk case study](../README.md#case-study-an-html-design-to-a-block-theme). That is one developer's experience on one kind of task, not a benchmark, so try both on your own repo. Add a preset to `~/.vibe/config.toml` and make it the active model:
+
+```toml
+active_model = "glm-5-3"
+
+[[models]]
+name = "zai-glm-5-3"
+alias = "glm-5-3"
+provider = "mistral"
+thinking = "high"
+```
+
+Every `[[models]]` entry needs a `name`, a `provider` and an `alias`. An entry without them is not a usable preset.
+
+**Smart approve.** Start with `vibe --smart-approve` (or `vibe --agent smart-approve`, or press `Shift+Tab` in a session). Vibe still applies your allowlist and denylist first, then classifies each remaining tool call, runs the ones it judges safe and asks before risky ones. It is a classifier, not a sandbox: a call judged safe runs with your account's access, so use `ask` or an isolated environment for untrusted code. With no setting, Vibe picks a small Mistral model as the classifier if one is available, otherwise your session model, which adds cost and latency to every tool call when that is GLM or Large. Pin a small classifier instead ([docs](https://docs.mistral.ai/vibe/code/safety-approvals-permissions#smart-approve)):
+
+```toml
+[utility_models]
+smart_approve = "classifier"
+
+[[models]]
+name = "mistral-small-latest"
+provider = "mistral"
+alias = "classifier"
+```
+
+`smart_approve` must be the `alias` of one of your `[[models]]` presets (or `active` for the session model). To make smart approve the default, set `default_agent = "smart-approve"`. That applies when you start `vibe` without `--agent`. Whether a custom profile such as `wp-frontend-builder` can also run in smart-approve mode is not documented on that page, so check with a short test run before relying on it.
+
+</details>
+
+<details>
 <summary><strong>Real-browser access (<code>/real-browser-control</code>)</strong></summary>
 
 The skill drives the user's real, logged-in Chrome through [real-browser-mcp](https://github.com/ofershap/real-browser-mcp) (MIT) — a local MCP server plus an MV3 extension over a localhost WebSocket. It needs two pieces beyond `skill_paths`: the extension loaded in Chrome (recommended: unpacked from the pinned clone at `chrome://extensions` → Developer mode → Load unpacked → `extension/`; the store listing exists but has a thin review base) and a `[[mcp_servers]]` stdio entry in `~/.vibe/config.toml` running the clone's built `mcp-server/dist/index.js`. Full steps: [skills/real-browser-control/SKILL.md](../skills/real-browser-control/SKILL.md).

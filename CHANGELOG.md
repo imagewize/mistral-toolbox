@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README: a "Why this exists" section, the `architect-demo` case study, and a "Works best with Aviendha and Aludra" table. A theme built from Aludra blocks needs the plugin active, so the skills now say so
 - `html-to-block-theme` (1.5.0), `references/composing-with-aludra.md`: step 4 items 5 and 7–11 from the Kadewerk design pass. Contact Form 7 (template kept in the theme, `<p>`/`<br>` and the two-column grid, label markup), Aludra selector specificity, `has-global-padding` on grid groups, header alignment, scroll-triggered SVG animation, and telling users the plugins are required (admin notice, README). Checks: sentinel run with `--url`/`--user`/`--pass` (bare `npm run validate` hangs an agent), PHPCS in the fork, screenshots in slices plus computed-style measurements
 - `docs/install.md`: `--smart-approve` and why chained commands and paths outside the working directory still prompt
+- `docs/install.md`: a GLM model preset for faster coding runs (the author's experience, not a benchmark) and a pinned smart-approve classifier (`[utility_models] smart_approve`), with the caveats from Vibe's docs: it is a classifier, not a sandbox, and the page does not say whether custom agent profiles can run in smart-approve mode
 
 ### Changed
 
