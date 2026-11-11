@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `docs/install.md`: how to pin a model to one agent (`active_model` in the profile) without letting the fork go stale: generate it from the base profile after every `git pull`, or set `active_model` in `~/.vibe/config.toml` instead
+
 ## [1.15.0] - 2026-11-11
 
 Headers keep their mobile menu, and `wp-update-round` checks HTTPS and mixed content after a round. The Kadewerk conversion lost its hamburger because the HTML prototype had none and the header part was copied as `overlayMenu: "never"`. The skills and the `wp-frontend-builder` agent now require a mobile menu in the prototype and the theme, and the agents README says how to start a session and what to put in the first prompt.

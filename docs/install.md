@@ -37,6 +37,14 @@ thinking = "high"
 
 Every `[[models]]` entry needs a `name`, a `provider` and an `alias`. An entry without them is not a usable preset.
 
+**Pinning a model to one agent.** A profile can set its own model with `active_model = "glm-5-3"` as its first line, so only that agent runs on GLM. Keep such a variant out of this repository and generate it from the base profile, because a hand-edited fork stops receiving the toolbox's changes: the instructions, the skills list and the rules that came with each release. After every `git pull`, regenerate it, then `/reload`:
+
+```bash
+{ echo 'active_model = "glm-5-3"'; sed 's/^display_name = "WP Frontend Builder"$/display_name = "WP Frontend Builder (GLM)"/' ~/code/wp-vibe-toolbox/agents/wp-frontend-builder.toml; } > ~/.vibe/agents/wp-frontend-builder-glm.toml
+```
+
+Setting `active_model` in `~/.vibe/config.toml` instead (above) needs no copy and never goes stale.
+
 **Smart approve.** Start with `vibe --smart-approve` (or `vibe --agent smart-approve`, or press `Shift+Tab` in a session). Vibe still applies your allowlist and denylist first, then classifies each remaining tool call, runs the ones it judges safe and asks before risky ones. It is a classifier, not a sandbox: a call judged safe runs with your account's access, so use `ask` or an isolated environment for untrusted code. With no setting, Vibe picks a small Mistral model as the classifier if one is available, otherwise your session model, which adds cost and latency to every tool call when that is GLM or Large. Pin a small classifier instead ([docs](https://docs.mistral.ai/vibe/code/safety-approvals-permissions#smart-approve)):
 
 ```toml
