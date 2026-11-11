@@ -67,7 +67,7 @@ At 375px, 800px and 1280px:
   as a separate wrapped row, and opening it shows every link.
 - From the breakpoint up there is no hamburger and the links are inline on one line.
 - The header is one row tall at every width (no CTA wrapped into a narrow column). If the wordmark,
-  CTA and hamburger do not fit at 375px, hide the CTA under 480px when the hero repeats it.
+  CTA and hamburger do not fit at 375px, hide the CTA under 600px (where the hamburger starts) when the hero repeats it, and set `white-space: nowrap` on its label: a squeezed flex row otherwise wraps it into a tall column at 480–600px.
 - No horizontal scroll.
 
 Check the same three widths again on the converted theme. `html-page-review` carries the same check.
