@@ -90,6 +90,10 @@ Rules:
   (skill adapted; server + extension are installed from upstream, not copied), MIT
   (© 2026 Ofer Shapira, see the copied `LICENSE`), pinned
   `173c964c3df3ea247a7b65ef519f664771709f12`
+- `assets/logos/wp-vibe-toolbox-primary.svg` and `assets/logos/wp-vibe-toolbox-dark.svg` — the
+  `box` icon from Bootstrap Icons (`github.com/twbs/icons`, via
+  `blade-ui-kit.com/blade-icons/bi-box`), MIT (© 2019-2024 The Bootstrap Authors, see
+  `assets/logos/LICENSE-bootstrap-icons.txt`); used unmodified except for recoloring
 
 Full register with all approved sources: `docs/sources.md`. Entries are added here as
 imports land.

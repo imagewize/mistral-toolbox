@@ -15,6 +15,7 @@ The repository is now `wp-vibe-toolbox` (renamed from `mistral-toolbox`), the RE
 
 ### Added
 
+- New logo mark: the `box` icon from Bootstrap Icons (via Blade Icons), MIT, as light and dark SVGs in `assets/logos/` that swap with the reader's colour scheme through a `<picture>` element in the README. The README credits the icon and links the Traveling box from *The Wheel of Time* it nods to; the Bootstrap Icons license text is in `assets/logos/LICENSE-bootstrap-icons.txt` and the icon is listed in `NOTICE.md`
 - README: a "Why this exists" section, the `architect-demo` case study, and a "Works best with Aviendha and Aludra" table. A theme built from Aludra blocks needs the plugin active, so the skills now say so
 - `html-to-block-theme` (1.5.0), `references/composing-with-aludra.md`: step 4 items 5 and 7–11 from the Kadewerk design pass. Contact Form 7 (template kept in the theme, `<p>`/`<br>` and the two-column grid, label markup), Aludra selector specificity, `has-global-padding` on grid groups, header alignment, scroll-triggered SVG animation, and telling users the plugins are required (admin notice, README). Checks: sentinel run with `--url`/`--user`/`--pass` (bare `npm run validate` hangs an agent), PHPCS in the fork, screenshots in slices plus computed-style measurements
 - `docs/install.md`: `--smart-approve` and why chained commands and paths outside the working directory still prompt
