@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-11-11
+
+The toolbox is repositioned as a WordPress toolbox for block-theme development, site maintenance and content work. A repository rename is planned after this release; the name and paths are unchanged in 1.13.0.
+
 ### Changed
 
 - README repositioned as a WordPress toolbox: new tagline, a design → build → review → maintain → publish workflow table replacing "Start with these", and Quick start examples that lead with `wp-frontend-builder`. The repo name and all paths are unchanged
