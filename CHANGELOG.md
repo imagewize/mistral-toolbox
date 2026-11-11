@@ -7,8 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-11-11
+
+Headers keep their mobile menu. The Kadewerk conversion lost its hamburger because the HTML prototype had none and the header part was copied as `overlayMenu: "never"`. The skills and the `wp-frontend-builder` agent now require a mobile menu in the prototype and the theme, and the agents README says how to start a session and what to put in the first prompt.
+
+**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` picks up the mobile check. Skills need no step.
+
+### Added
+
+- `html-to-block-theme` (1.6.0), `references/mobile-navigation.md`: a basic no-JS `<details>` hamburger for the HTML prototype (three lines of script keep it open on desktop); the options (collapse below 1024px, always, never; `menu` or `handle` icon) and how they map to `overlayMenu` on `core/navigation`; a 375/800/1280px check (hamburger under the breakpoint, one-row header at every width, no horizontal scroll, hide the header CTA under 600px and keep its label on one line); conversion rules (header `mobile`, footer `never`, CTA before the navigation, delete the prototype's nav-row CSS, scope `ul` flex rules to the closed state, hard-reload before judging CSS); and a section on styling the overlay (ink panel, CSS-counter folio numbers, an overlay-only CTA item, and the two traps: core's `!important` colours and the `<li>` flex box ignoring `text-align`)
+- `agents/README.md`, "Running the agents": `vibe --agent wp-frontend-builder --smart-approve` (`--agent` replaces the default smart-approve agent), re-sync and wiring check, what a good first prompt contains, and three prompt templates for `wp-frontend-builder` (brief to HTML prototype, prototype to block theme with the design layer and mobile menu, change requests). `docs/agents.md` links to it
+
 ### Changed
 
+- `wp-frontend-builder` (and its subagent copy): a mobile check on every HTML/CSS build with a header navigation, at 375, 800 and 1280px, and a rule never to copy a prototype's missing hamburger into the theme as `overlayMenu: "never"`
+- `html-page-review` (1.1.0): the phone-experience check flags a header navigation that has no hamburger or toggle under the desktop breakpoint
+- `html-to-block-theme`, `references/composing-with-aludra.md` (Header step) and `references/block-conversion-map.md` (Navigation): keep the hamburger, `never` only for footer navigation
 - README shortened for WordPress developers and agencies: a three-point pitch, a compact design → publish table, the demo, Quick start and counts. The details moved to new docs pages: `docs/workflow.md` (the full workflow table, Aviendha and Aludra, the `architect-demo` case study), `docs/principles.md` (design principles) and `docs/credits.md` (upstream collections, logo credit, resources). `docs/install.md` links point to the new pages and keep the `rsync --delete` caveat; `AGENTS.md` names the new files in its README sync rules. Section headings and the "What's inside" table no longer carry emoji, so the Quick start anchor is now `#quick-start`
 
 ## [1.14.0] - 2026-11-11
