@@ -154,6 +154,14 @@ rules have to be moved into the theme as well, in this order:
 9. **Header.** Brand left and navigation + CTA right is `justifyContent: space-between` on the
    header row, with the navigation and the button inside one inner group. Three siblings in one
    flex row leave the nav next to the brand.
+
+    **Keep the hamburger.** A static prototype usually has no mobile menu: its nav is just a row
+    that wraps under 760px. Don't copy that into the part as `"overlayMenu":"never"`, because the
+    forked starter's responsive overlay (and its breakpoint CSS) is then dead code and phones get
+    a nav row instead of a hamburger. Use `"overlayMenu":"mobile","icon":"menu"`, put the nav
+    *after* the CTA in the inner group (the starter's CSS pulls it back in front on desktop), and
+    delete the prototype's mobile nav-row CSS. Keep `"never"` only for the footer nav. Check the
+    header at 375px and 1280px: hamburger opens the overlay on the former, inline links on the latter.
 10. **Scroll-triggered SVG animation.** If the source plays draw-on animations inside SVG files
     loaded as `<img>`, they run when the image loads, so below-the-fold drawings finish before
     they are seen (half-drawn and static in screenshots). Port the source's

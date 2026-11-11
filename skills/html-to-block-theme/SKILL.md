@@ -148,7 +148,8 @@ Gather these inputs (ask only if not provided):
 | Content built from | Core blocks, patterns, block styles in theme.json | `aludra/*` blocks first; core blocks only for what no Aludra block covers |
 | Section styling | theme.json first, then small per-section CSS | The source's design rules ported onto the blocks: variations, then theme.json (`styles.elements`, `styles.blocks["aludra/…"]`), then one design-layer CSS block. The palette alone leaves the starter's look |
 | Theme folder | The folder the prompt names | The folder the prompt names (not a generic `theme/`) |
-| Read | `references/methodology.md`, `references/block-conversion-map.md` | `references/forking-a-starter-theme.md`, then `references/composing-with-aludra.md` |
+| Read | `references/methodology.md`, `references/block-conversion-map.md` | `references/mobile-navigation.md` | Header navigation: a basic no-JS hamburger in the HTML prototype, the options (collapse, always, never; icon; 1024px breakpoint), the 375/800/1280px check, and the `overlayMenu` mapping | Any page with a header nav, before and after conversion |
+| `references/forking-a-starter-theme.md`, then `references/composing-with-aludra.md` |
 
 In Mode B, hand-building a section from `core/group` + class names + CSS when an Aludra block
 fits is a failure, even when every check passes. If no Aludra block fits a section, build it from

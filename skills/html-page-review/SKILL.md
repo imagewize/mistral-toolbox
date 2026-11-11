@@ -104,6 +104,9 @@ Measurement finds faults. These need judgement; check each one:
    to a real third party.
 5. **Phone experience.** Reading order, what is visible above the fold, header height, tap
    targets, long words breaking the layout.
+   Navigation: under the desktop breakpoint there must be a hamburger or equivalent toggle, not a
+   nav row that wraps. Flag a missing one as a review note (see
+   `html-to-block-theme/references/mobile-navigation.md`).
 6. **Generic AI-design defaults.** If the `no-ai-design-slop` skill is available, apply its removal
    test. Do not repeat its catalogue here.
 
