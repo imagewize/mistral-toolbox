@@ -2,7 +2,7 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/logos/wp-vibe-toolbox-dark.svg">
-  <img src="assets/logos/wp-vibe-toolbox-primary.svg" alt="WP Vibe Toolbox logo: an open-sided box" width="96" height="96">
+  <img src="assets/logos/wp-vibe-toolbox-primary.svg" alt="WP Vibe Toolbox logo: an isometric box" width="96" height="96">
 </picture>
 
 # WP Vibe Toolbox
