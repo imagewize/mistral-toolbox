@@ -85,3 +85,27 @@ Check the same three widths again on the converted theme. `html-page-review` car
   `.site-nav .wp-block-navigation__responsive-container:not(.is-menu-open) ul`.
 - After a CSS change, hard-reload before judging it: the browser keeps the old stylesheet and the
   old layout looks like a bug in the new one.
+
+## 4. Style the overlay
+
+Core's open menu is black text on white, right-aligned. Design it from the prototype's own
+language instead of leaving the default (Kadewerk: an ink panel, large left-aligned links with
+orange folio numbers, 1px rules, a white CTA button). Put the rules in the design-layer CSS block,
+scoped to `.<prefix>-header .wp-block-navigation__responsive-container.is-menu-open`.
+
+- **Colours need `!important`.** Core paints the panel with `.wp-block-navigation:not(.has-background)`
+  and the text with `has-*-color` utilities. Set `background-color` and `color` with `!important`,
+  scoped to `.is-menu-open` so the inline desktop nav (same element above 600px) is untouched.
+- **Left-align through the `<li>`.** Each item is a column flex box with `align-items: flex-end`
+  (from the nav's "justify right"), so `text-align: left` on the list and a full-width link do
+  nothing: the link stays shrink-wrapped against the right edge. Set `align-items: stretch` on the
+  `ul` and on `.wp-block-navigation-item`, and `justify-content: flex-start` on the link.
+- **Numbers without markup.** `counter-reset` on the `ul`, `counter-increment` and
+  `content: counter(n, decimal-leading-zero)` in `a::before`. Exclude the CTA item with `:not(.nav-cta)`.
+- **A CTA the header lost on phones.** Add one more `core/navigation-link` with
+  `"className":"nav-cta"` (label, URL of the header button). Hide it by default
+  (`.header .nav-cta { display: none }`) and show it only inside `.is-menu-open`, styled as a button.
+- **The close button** takes the panel's text colour (`.wp-block-navigation__responsive-container-close`),
+  or it vanishes on a dark panel. The first link shows a focus ring when the menu opens: that is
+  core moving focus into the dialog, so keep it.
+- Check it open at 390px: panel colour, left edge of the links, one folio per link, the CTA last.
