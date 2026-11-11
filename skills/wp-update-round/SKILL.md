@@ -4,7 +4,7 @@ description: "Use when running a WordPress update round — orchestrating before
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/wp-update-round (Imagewize, MIT)"
 ---
 
@@ -76,7 +76,7 @@ If the round is exactly one minor/patch package whose changelog shows no migrati
 1. **Apply locally** (step 4) and smoke-test: `curl -sI <local_url>/` must return 200.
 2. **Back up production when the host has no atomic rollback** — on shared hosts the step-7 backup is mandatory even for one minor plugin. Trellis code rolls back atomically, so only a migration triggers a DB backup there.
 3. **Deploy** (step 8). Run `trellis deploy` as a background process and poll its output — the on-server `composer install` regularly takes 10–15+ minutes (longer on aarch64), so never block on a short command timeout. Shared hosts: apply over `wp_cli`/`ssh` with `confirm: true` after approval.
-4. **Verify with WP-CLI instead of screenshots:** `wp_cli(site, env="production", args=["plugin","list","--update=available","--format=json"])` (or the theme/core equivalent) must no longer list the package, and `curl -sI https://example.com/` must return 200.
+4. **Verify with WP-CLI instead of screenshots:** `wp_cli(site, env="production", args=["plugin","list","--update=available","--format=json"])` (or the theme/core equivalent) must no longer list the package, and `curl -sI https://example.com/` must return 200 (run the step 5b HTTPS check too).
 5. **Record the round** (step 10), including the `composer audit` line and, for Trellis, the release ID from the deploy output.
 
 Anything beyond that — several packages at once, a major bump (x.0.0), WooCommerce, a page builder, anything with a database migration — takes the full path below.
@@ -186,6 +186,29 @@ This writes `snapshots/compare-local/index.html` (with `before/`, `after/`, `dif
 - **Scattered small red:** Animation, carousel, or lazy element not masked — add to `--mask` and re-capture both runs
 
 **Important:** Screenshots only prove the page *looks* the same. They do NOT prove functionality (checkout, contact forms). Test those separately.
+
+### 5b. HTTPS and mixed-content check (production, after deploy)
+
+Screenshots do not show an insecure resource that a browser quietly blocks. After any production round, and after any change to SSL, `WP_HOME`/`WP_SITEURL` or search-replace, check what the server actually serves:
+
+```bash
+# 1. Which certificate does the server present for this host? (-servername needed for SNI)
+echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \
+  | openssl x509 -noout -issuer -subject -dates
+
+# 2. Does the chain verify without -k? Expect 200.
+curl -sS -o /dev/null -w "%{http_code}\n" https://example.com/
+
+# 3. Any http:// resources left in the HTML of each page in pages.txt?
+for p in $(cat pages.txt); do
+  echo "== $p"
+  curl -sSL "https://example.com$p" \
+    | grep -o -i -E "(src|href|action|poster|data-src|srcset)=[\"']http://[^\"' ]+" \
+    | grep -v -E "w3\.org|schema\.org" | sort -u
+done
+```
+
+Empty output from check 3 means no mixed content in the HTML. It does not see resources that CSS or JS load later, so on a page that changed, also open it with the browser's console (Playwright `page.on("console")` or Chrome DevTools) and look for "Mixed Content" messages. Fixes: `wp search-replace 'http://example.com' 'https://example.com' --all-tables --precise` (dry run first), or correct the theme/plugin that hard-codes http. A "connection reset by peer" on 1 or 2 right after an SSL change usually means the web server is still reloading; retry in a few minutes before changing anything.
 
 ### 6. Human review (approval gate)
 

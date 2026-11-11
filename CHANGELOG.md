@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `wp-update-round` (1.2.0), step 5b: an HTTPS and mixed-content check for production after a round or after any SSL / `WP_HOME` change. `openssl s_client` (with `-servername`) shows the served certificate, `curl` without `-k` proves the chain, and a per-page grep finds `http://` resources in the HTML. Notes that a connection reset right after an SSL change usually means the vhost is reloading, and that the browser console still has to be checked for resources loaded by CSS or JS. The fast path now points at it
+
 ### Changed
 
 - README shortened for WordPress developers and agencies: a three-point pitch, a compact design → publish table, the demo, Quick start and counts. The details moved to new docs pages: `docs/workflow.md` (the full workflow table, Aviendha and Aludra, the `architect-demo` case study), `docs/principles.md` (design principles) and `docs/credits.md` (upstream collections, logo credit, resources). `docs/install.md` links point to the new pages and keep the `rsync --delete` caveat; `AGENTS.md` names the new files in its README sync rules. Section headings and the "What's inside" table no longer carry emoji, so the Quick start anchor is now `#quick-start`
