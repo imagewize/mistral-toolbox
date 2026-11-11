@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-11-11
+
+The repository is now `wp-vibe-toolbox` (renamed from `mistral-toolbox`), the README is written for WordPress developers, and the Mode B (Aviendha + Aludra) skill and agent carry the fixes from the Kadewerk run: selector specificity, Contact Form 7 markup and template, grid layout classes, scroll-triggered SVG animation, the required-plugin notice, and sentinel and PHPCS checks. New install docs cover a GLM model preset and a pinned smart-approve classifier.
+
+**Upgrading a local clone:** rename the directory to `wp-vibe-toolbox`, run `git remote set-url origin git@github.com:imagewize/wp-vibe-toolbox.git`, and change `skill_paths` in `~/.vibe/config.toml` (and any `rsync` or symlink to `agents/`) to `~/code/wp-vibe-toolbox`. Re-run the `agents/` sync so `wp-frontend-builder` picks up its new Mode B paragraph.
+
 ### Added
 
 - README: a "Why this exists" section, the `architect-demo` case study, and a "Works best with Aviendha and Aludra" table. A theme built from Aludra blocks needs the plugin active, so the skills now say so
