@@ -8,7 +8,7 @@ allowed-tools:
   - bash
 metadata:
   version: "1.0.1"
-  source: "github.com/imagewize/mistral-toolbox skills/html-page-review"
+  source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
 # HTML Page Review

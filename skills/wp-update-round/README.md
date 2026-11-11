@@ -70,7 +70,7 @@ wp-ops update-compare snapshots/before snapshots/after --out=snapshots/compare-l
 Symlink the skill so Claude Code reads the same file:
 
 ```bash
-ln -s ~/code/mistral-toolbox/skills/wp-update-round ~/.claude/skills/wp-update-round
+ln -s ~/code/wp-vibe-toolbox/skills/wp-update-round ~/.claude/skills/wp-update-round
 ```
 
 ## What a round looks like

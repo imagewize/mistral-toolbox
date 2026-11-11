@@ -5,7 +5,7 @@ user-invocable: true
 license: MIT
 metadata:
   version: "1.1.0"
-  source: "github.com/imagewize/mistral-toolbox skills/wp-update-round (Imagewize, MIT)"
+  source: "github.com/imagewize/wp-vibe-toolbox skills/wp-update-round (Imagewize, MIT)"
 ---
 
 # WordPress Update Round

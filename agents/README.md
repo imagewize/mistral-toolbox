@@ -30,15 +30,15 @@ and keep private profiles of your own out of this public repository:
 
 ```bash
 mkdir -p ~/.vibe/agents
-rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/
+rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/
 ```
 
 Syncs go stale, so re-run the `rsync` after every `git pull` of this repository. Don't add
 `--delete` unless `~/.vibe/agents/` holds only toolbox profiles — it would delete private
 ones. (`rsync` is not in a base macOS install; `brew install rsync` if it's missing, or
-fall back to `cp ~/code/mistral-toolbox/agents/*.toml ~/.vibe/agents/`.) Changed only one
+fall back to `cp ~/code/wp-vibe-toolbox/agents/*.toml ~/.vibe/agents/`.) Changed only one
 profile? Syncing is not needed — copy that single file (after regenerating its
-`-subagent` copy, see below): `cp ~/code/mistral-toolbox/agents/<name>*.toml ~/.vibe/agents/`.
+`-subagent` copy, see below): `cp ~/code/wp-vibe-toolbox/agents/<name>*.toml ~/.vibe/agents/`.
 
 Skills are wired differently and need **no** copy or symlink: `skill_paths` (below) expands
 `~`, so pointing it at this repository's `skills/` works as is. The copy/symlink caveats
@@ -49,10 +49,10 @@ Add the skills the profiles load to `~/.vibe/config.toml` (user-level, so it app
 every project):
 
 ```toml
-skill_paths = ["~/code/mistral-toolbox/skills"]
+skill_paths = ["~/code/wp-vibe-toolbox/skills"]
 ```
 
-**Symlink alternative, and its pitfall.** `ln -s ~/code/mistral-toolbox/agents ~/.vibe/agents`
+**Symlink alternative, and its pitfall.** `ln -s ~/code/wp-vibe-toolbox/agents ~/.vibe/agents`
 works and stays current with `git pull` on its own, but it dangles silently if the repo
 moves or is renamed, and anything that replaces the link with a real directory makes every
 profile in this repo disappear without a word: `vibe --agent NAME` fails with
@@ -64,7 +64,7 @@ symlink, verify with `ls -la ~/.vibe/agents` (must show the link) and
 **`agent_paths` alternative:** Vibe also reads profiles from directories listed in
 `agent_paths`, but it does not expand `~` there (it does in `skill_paths`). A `~/code/...`
 entry is treated as a path relative to the working directory and silently skipped, so use
-an **absolute** path (`/Users/.../code/mistral-toolbox/agents`) in your own
+an **absolute** path (`/Users/.../code/wp-vibe-toolbox/agents`) in your own
 `~/.vibe/config.toml` — a repository cannot register itself this way, since the setting is
 user config.
 
@@ -109,7 +109,7 @@ skills they may load. They are discovered at session start, so `/reload` after a
 `agents/<name>.toml`, regenerate its copy:
 
 ```bash
-cd ~/code/mistral-toolbox/agents
+cd ~/code/wp-vibe-toolbox/agents
 for f in *.toml; do case "$f" in *-subagent.toml) continue;; esac
   n="${f%.toml}"
   { echo "# Spawnable copy of ${n}.toml — generated; do not edit by hand. Regenerate after changing ${n}.toml (see README.md in this directory)."

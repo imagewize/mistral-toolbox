@@ -1,13 +1,13 @@
 <div align="center">
 
-# 🧰 Mistral Toolbox
+# 🧰 WP Vibe Toolbox
 
 **A WordPress toolbox for [Mistral Vibe](https://docs.mistral.ai/vibe/) and [Le Chat](https://chat.mistral.ai): design to block theme, safe site updates, and SEO content with a review gate before publishing.**<br>
 Built by a block-theme developer who also runs content sites. The generic engineering skills (code review, debugging, release checks) are in here too, because that work happens in the same repos.
 
-[![Latest release](https://img.shields.io/github/v/release/imagewize/mistral-toolbox?label=release&color=orange)](https://github.com/imagewize/mistral-toolbox/releases/latest)
-[![License: MIT](https://img.shields.io/github/license/imagewize/mistral-toolbox?color=blue)](LICENSE.md)
-[![Last commit](https://img.shields.io/github/last-commit/imagewize/mistral-toolbox)](https://github.com/imagewize/mistral-toolbox/commits/main)
+[![Latest release](https://img.shields.io/github/v/release/imagewize/wp-vibe-toolbox?label=release&color=orange)](https://github.com/imagewize/wp-vibe-toolbox/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/imagewize/wp-vibe-toolbox?color=blue)](LICENSE.md)
+[![Last commit](https://img.shields.io/github/last-commit/imagewize/wp-vibe-toolbox)](https://github.com/imagewize/wp-vibe-toolbox/commits/main)
 <br>
 [![Mistral Vibe](https://img.shields.io/badge/Mistral-Vibe-FA520F)](https://docs.mistral.ai/vibe/)
 [![Le Chat](https://img.shields.io/badge/Mistral-Le%20Chat-FA520F)](https://chat.mistral.ai)
@@ -60,14 +60,14 @@ Skills by area (full tables in [docs/skills.md](docs/skills.md)):
 **1. Wire the toolbox into Vibe once.** Skills go in `~/.vibe/config.toml`:
 
 ```toml
-skill_paths = ["~/code/mistral-toolbox/skills"]
+skill_paths = ["~/code/wp-vibe-toolbox/skills"]
 ```
 
 Agents are synced into Vibe's own agents folder, which it searches without any config:
 
 ```bash
 mkdir -p ~/.vibe/agents
-rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/   # re-run after git pull
+rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/   # re-run after git pull
 ```
 
 (Don't add `--delete` if you keep private profiles in `~/.vibe/agents/` — it would remove
@@ -86,7 +86,7 @@ vibe --agent release-manager -p "is main ready for release?"
 
 A live run — `wp-reviewer` reviewing the latest commit in this repo, loading the `code-review` skill on demand and ending with a `file:line` verdict:
 
-![Terminal recording of vibe --agent wp-reviewer reviewing the latest commit in mistral-toolbox: the agent loads the code-review skill, runs git checks and reports an OVERALL ASSESSMENT](docs/assets/vibe-agent-demo.gif)
+![Terminal recording of vibe --agent wp-reviewer reviewing the latest commit in wp-vibe-toolbox: the agent loads the code-review skill, runs git checks and reports an OVERALL ASSESSMENT](docs/assets/vibe-agent-demo.gif)
 
 **3. Or, in Le Chat**, paste [`prompts/frontend-dev/FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-DEV.md) into **Agents → New Agent → System Prompt**.
 
@@ -121,7 +121,7 @@ What makes these different from a pile of prompts:
 | [AGENTS.md](AGENTS.md) · [CHANGELOG.md](CHANGELOG.md) | Rules for agents working in this repo · release history |
 
 ```
-mistral-toolbox/
+wp-vibe-toolbox/
 ├── skills/    # Vibe skills: skills/<name>/SKILL.md (+ LICENSE for imported skills)
 ├── agents/    # Vibe agent profiles: agents/<name>.toml
 ├── prompts/   # Le Chat prompts + example runs

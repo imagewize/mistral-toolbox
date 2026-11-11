@@ -1,4 +1,4 @@
-# AGENTS.md — mistral-toolbox
+# AGENTS.md — wp-vibe-toolbox
 
 Instructions for coding agents (Mistral Vibe and others) working in this repository.
 
@@ -19,7 +19,7 @@ Reusable AI instructions for WordPress development, maintained by Imagewize, in 
 ## Layout
 
 ```
-mistral-toolbox/
+wp-vibe-toolbox/
 ├── AGENTS.md          # This file
 ├── .vibe/config.toml  # Vibe project settings for this repo
 ├── agents/            # Vibe agent profiles: agents/<name>.toml (linked to ~/.vibe/agents)
@@ -61,7 +61,7 @@ mistral-toolbox/
   `config.toml`); the agent loads skills on demand via the `skill` tool — the profile never
   auto-loads them, so the `instructions` must say which skill to load for which task.
 - Wire the directory in by syncing the files into Vibe's agents folder:
-  `mkdir -p ~/.vibe/agents && rsync -a ~/code/mistral-toolbox/agents/ ~/.vibe/agents/`
+  `mkdir -p ~/.vibe/agents && rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`
   (re-run after `git pull`; no `--delete` if you keep private profiles there). Vibe searches
   `~/.vibe/agents` without config. A symlink (`ln -s … ~/.vibe/agents`) is the alternative —
   it stays current automatically but dangles silently if the repo moves, and private
