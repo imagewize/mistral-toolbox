@@ -146,13 +146,18 @@ Gather these inputs (ask only if not provided):
 |---|---|---|
 | Use when | The prompt asks to convert the HTML into a self-contained theme, or names no starter theme or block plugin | The prompt names Aviendha, Aludra or `aludra/*` blocks, or the base theme is an Aviendha fork |
 | Content built from | Core blocks, patterns, block styles in theme.json | `aludra/*` blocks first; core blocks only for what no Aludra block covers |
-| Section styling | theme.json first, then small per-section CSS | The Aludra block's own styles, driven by the palette slugs; theme CSS stays close to the fork's |
+| Section styling | theme.json first, then small per-section CSS | The source's design rules ported onto the blocks: variations, then theme.json (`styles.elements`, `styles.blocks["aludra/…"]`), then one design-layer CSS block. The palette alone leaves the starter's look |
 | Theme folder | The folder the prompt names | The folder the prompt names (not a generic `theme/`) |
 | Read | `references/methodology.md`, `references/block-conversion-map.md` | `references/forking-a-starter-theme.md`, then `references/composing-with-aludra.md` |
 
 In Mode B, hand-building a section from `core/group` + class names + CSS when an Aludra block
 fits is a failure, even when every check passes. If no Aludra block fits a section, build it from
 core blocks and list it in the report as a gap. Don't hide it.
+
+So is a Mode B page that has the client's colours but the starter's look (pill buttons, shadows,
+dark default sections, the starter's header). Port the design layer
+(`references/composing-with-aludra.md`, step 4) and compare screenshots of the source and the
+site before reporting.
 
 **Before proceeding, explicitly state:**
 

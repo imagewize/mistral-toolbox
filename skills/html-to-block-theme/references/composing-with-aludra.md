@@ -36,7 +36,8 @@ the plugin changes:
 |---|---|---|
 | Hero with text and an image or drawing | `aludra/hero-split` | `aludra/hero-banner` (text only, dark) |
 | Key figures under the hero | `aludra/stat-rail` + `aludra/stat-item` | — |
-| Project, portfolio or case cards (image + title + meta) | `aludra/carousel` + `aludra/slide` (see `carousel-portfolio-showcase.php`) | `aludra/feature-cards`, `aludra/photo-grid` (square images, no text) |
+| Project, portfolio or case cards in a **grid** (image + title + meta) | `aludra/feature-cards` | `aludra/carousel` with `slidesToShow` set to the source's column count, no `variableWidth` |
+| Project cards that are a **slider** in the source | `aludra/carousel` + `aludra/slide` (see `carousel-portfolio-showcase.php`) | `aludra/photo-grid` (square images, no text) |
 | Steps, process, "how we work" | `aludra/service-blocks` (numbered) | `aludra/feature-list-grid`, `aludra/icon-grid`, `aludra/spine-section` |
 | About, studio, facts | `aludra/about` | `aludra/split-section` (media + content), `aludra/spine-section` |
 | One or more client quotes | `aludra/testimonial-grid` | `aludra/review-profiles` |
@@ -45,8 +46,15 @@ the plugin changes:
 | FAQ | `aludra/faq-tabs` + `aludra/faq-tab-answer` | — |
 | Pricing | `aludra/pricing-tiers` | — |
 
-Several blocks have style variations (`is-style-night`, `is-style-light`, …) in their `block.json`
-`styles`. Use a variation before writing CSS.
+Match the source's **layout**, not only its content: a 3-column grid stays a grid, not a carousel
+with one and a half slides visible. Several blocks have style variations (`is-style-night`,
+`is-style-light`, `is-style-steps`, …) in their `block.json` `styles`. Many blocks are dark by
+default (`hero-banner`, `stat-rail`, `contact-section`, `cta-banner`), so a light source design
+needs their `light` variation. List the variations per block:
+
+```bash
+python3 -c "import json,glob; [print(json.load(open(f))['name'], [s['name'] for s in json.load(open(f)).get('styles',[])]) for f in sorted(glob.glob('$HOME/code/aludra/blocks/*/src/block.json'))]"
+```
 
 ## 2. Copy the wrapper markup. Don't write it from scratch.
 
@@ -88,12 +96,42 @@ same value and say which in the report (for example `main` = `contrast` for a tw
 Don't keep a second set of slugs named after the source design (`paper`, `ink`, …) next to them.
 That gives the Site Editor two names for one colour.
 
-## 4. Theme CSS stays small
+## 4. Port the design layer. Colours are not enough.
 
-The fork's `style.css` should stay close to Aviendha's size. Section layout comes from the Aludra
-block. A theme CSS rule is for a real gap (a detail no block or variation can show), and gets a
-comment naming the section. If `style.css` grows by hundreds of lines, stop and check whether a
-block was skipped.
+Aludra blocks and the Aviendha fork bring their own look: pill buttons, rounded cards, shadows,
+monospace eyebrows, dark sections, Aviendha's header with a WooCommerce cart. With only the
+palette changed, the page has the client's colours but the starter's design. The source's design
+rules have to be moved into the theme as well, in this order:
+
+1. **Write down the source's design rules** from its `:root` tokens and base CSS: border radius,
+   shadows, button shape and hover, heading weight and letter-spacing, link style, eyebrow/kicker
+   style, section separators (lines, bands), card frames, form fields (labels, borders), and the
+   font families. These are facts from the source, like its copy.
+2. **Style variations** of the chosen blocks (step 1 above), e.g. `is-style-light` on a block that
+   is dark by default.
+3. **`theme.json`** for everything it can express:
+   - `settings.border.radiusSizes` and `settings.shadow.presets`: replace the starter's values
+     (Aviendha's `pill` radius, its shadows) with the source's, e.g. `0` and none
+   - `styles.elements`: `button` (shape, colours, `:hover`), `link`, `heading`, `h1`–`h6`
+   - `styles.blocks["aludra/<name>"]`: colours, spacing, typography and border per Aludra block
+   - `settings.typography.fontFamilies`: only the source's families. Remove the starter's (e.g. a
+     mono family) **and** every reference to them, or eyebrows keep a monospace fallback
+4. **Header and footer parts**: rebuild them from the source's header and footer (site title,
+   tagline, navigation, CTA, footer columns). Remove starter-only blocks the client doesn't need
+   (WooCommerce mini-cart and account, "Start a project"). Set the site's `blogname` and
+   `blogdescription` (`wp option update`), since the header shows the site title.
+5. **Plugin output the theme renders** (e.g. the Contact Form 7 form inside
+   `aludra/contact-section`): its template must keep the source's visible labels. Placeholders
+   instead of labels are an accessibility regression.
+6. **Theme CSS only for what is left**, in one block at the end of `style.css` headed
+   `/* <Client> design layer */`, one comment per rule naming the section and why `theme.json` or a
+   variation can't do it. Don't edit the starter's own rules in place. Override them in that block,
+   so the fork's diff with the starter stays readable.
+
+**Size as a signal, both ways.** If the design layer block grows to hundreds of lines, a block
+or variation was probably skipped (step 1). If it is empty while the source has a clear design of
+its own, the design layer was skipped, and the page will look like the starter. A `style.css` the
+same size as the starter's is not a success by itself.
 
 ## 5. Checks
 
@@ -119,6 +157,15 @@ Run each as one command, from the fork's own directory:
    grep -oE "wp-block-aludra-[a-z-]+" "$TMPDIR/front.html" | sort | uniq -c
    ```
 
+5. **The page looks like the source.** Take screenshots of the source HTML and the local site at
+   1440px and 390px wide with headless Chrome, before and after the design pass:
+   ```bash
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --force-prefers-reduced-motion --window-size=1440,6000 --screenshot="$TMPDIR/site-1440.png" https://<site>.test/
+   ```
+   Run it again with `file://<path>/index.html` for the source and `--window-size=390,9000` for
+   phones. List per section what still differs. Passing sentinel and the block checks says nothing
+   about the look. If you can't view images, say so in the report and ask the user to compare.
+
 ## 6. Report
 
 End with:
@@ -128,3 +175,6 @@ End with:
 - The gaps: what the source design has that no Aludra block covers, and how it was built instead.
   These are candidates for a new Aludra block or variation. Don't build one unless asked.
 - The palette mapping, including slugs mapped to the same value.
+- The design layer: the source's design rules from step 4.1, where each one landed (variation,
+  `theme.json` path, or design-layer CSS rule), and the design-layer line count.
+- Per section, what still differs from the source after the screenshot comparison.
