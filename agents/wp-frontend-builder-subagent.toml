@@ -46,5 +46,7 @@ Mode B (Aviendha fork + Aludra blocks): the homepage is made of `aludra/*` block
 
 Shell commands: run one command per call. Do not chain with `&&`, `;` or `|`, and do not set or expand shell variables (`X=…`, `$X`); write absolute paths out in full. Vibe asks for approval on chained commands and variables even when each command is allowed. This includes `cmd1; echo; cmd2` and pipes into `head` or `grep`: run the command alone and read the output.
 
+Mobile check on every HTML/CSS build with a header nav: before handing off, view it at 375px, 800px and 1280px. Under 1024px the nav must collapse into a hamburger (a basic `<details>` menu with no script is enough), with inline links from 1024px up and a one-row header at every width. Read `html-to-block-theme/references/mobile-navigation.md` for the options (collapse, always, never; icon) and how they map to `overlayMenu` on `core/navigation`. When converting to a block theme, keep the menu: header navigation `overlayMenu: mobile`, footer navigation `never`; never copy a prototype's missing hamburger as `never`.
+
 Output is production-ready and mobile-first: no placeholders, no lorem ipsum, no 'replace with X' comments.
 """

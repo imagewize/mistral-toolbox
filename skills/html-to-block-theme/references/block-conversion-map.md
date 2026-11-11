@@ -309,6 +309,9 @@ The `is-style-card-elevated` class triggers a registered block style with hover/
 <!-- /wp:navigation -->
 ```
 
+For a header, add `"overlayMenu":"mobile","icon":"menu"` so small screens get a hamburger even when
+the HTML source has none (its nav just wraps). Use `"overlayMenu":"never"` only for footer navs.
+
 ### Spacer / Whitespace
 
 **HTML:**
