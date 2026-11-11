@@ -7,7 +7,7 @@ allowed-tools:
   - bash
 metadata:
   version: "1.0.0"
-  source: "github.com/imagewize/mistral-toolbox skills/create-pull-request"
+  source: "github.com/imagewize/wp-vibe-toolbox skills/create-pull-request"
 ---
 
 # Create Pull Request

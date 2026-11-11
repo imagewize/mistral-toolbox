@@ -5,7 +5,7 @@ user-invocable: true
 license: MIT
 metadata:
   version: "1.0.0"
-  source: "imagewize/mistral-toolbox (original, authored 2026-11-05)"
+  source: "imagewize/wp-vibe-toolbox (original, authored 2026-11-05)"
 ---
 
 # First-Hand Proof

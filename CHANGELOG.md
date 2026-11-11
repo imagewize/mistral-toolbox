@@ -1,11 +1,15 @@
 # Changelog
 
-All notable changes to the mistral-toolbox repository will be documented in this file.
+All notable changes to the wp-vibe-toolbox repository (formerly mistral-toolbox) will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Changed
+
+- Renamed the repository from `mistral-toolbox` to `wp-vibe-toolbox` to match its WordPress positioning (1.13.0). GitHub redirects the old URL. Local clones: rename the directory, run `git remote set-url origin git@github.com:imagewize/wp-vibe-toolbox.git`, and change `skill_paths` in `~/.vibe/config.toml` (and any `rsync`/symlink to `agents/`) to `~/code/wp-vibe-toolbox`. Earlier changelog entries keep the old name
 
 ## [1.13.0] - 2026-11-11
 

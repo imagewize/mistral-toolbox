@@ -8,7 +8,7 @@ allowed-tools:
   - bash
 metadata:
   version: "1.4.0"
-  source: "github.com/imagewize/mistral-toolbox skills/architectural-drawing"
+  source: "github.com/imagewize/wp-vibe-toolbox skills/architectural-drawing"
 ---
 
 # Architectural Drawing

@@ -10,7 +10,7 @@ allowed-tools:
   - todo
 metadata:
   version: "1.1.1"
-  source: "github.com/imagewize/mistral-toolbox skills/code-review"
+  source: "github.com/imagewize/wp-vibe-toolbox skills/code-review"
 ---
 
 # Code Review

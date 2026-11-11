@@ -1,13 +1,13 @@
-# Sourcing external skills, agents, plugins and connectors into Mistral Toolbox — Plan
+# Sourcing external skills, agents, plugins and connectors into WP Vibe Toolbox — Plan
 
 - **Status:** in progress — Phase 0 executed 2026-11-02 (`docs/sources.md` + `NOTICE.md` created; licenses verified via LICENSE files and the GitHub API; commits pinned in `docs/sources.md`); Phase 1 license checks recorded there
 - **Date:** 2026-11-02
 - **Replaces:** `docs/anubhav-vibe-integration-plan.md` (removed — its source collection is CC BY-NC-SA 4.0 and stays reference-only, see section 2)
-- **Target repo:** `mistral-toolbox` (this repository, MIT, Imagewize)
+- **Target repo:** `wp-vibe-toolbox` (this repository, MIT, Imagewize)
 
 ## 1. Question and short answer
 
-Can we improve mistral-toolbox with external collections of skills, agents, plugins and MCP connectors — for design, DevOps, WordPress development, code review, UX/UI?
+Can we improve wp-vibe-toolbox with external collections of skills, agents, plugins and MCP connectors — for design, DevOps, WordPress development, code review, UX/UI?
 
 **Yes — from permissively licensed sources only.** This repo is MIT and used commercially by Imagewize, so anything we import must come from an MIT-, Apache-2.0-, CC0-, BSD- or public-domain-licensed source. The SKILL.md-based formats line up well:
 
@@ -83,7 +83,7 @@ Licenses marked **(LICENSE fetched)** were verified by reading the repo's LICENS
 
 ## 4. Format compatibility map
 
-| Source artifact | mistral-toolbox destination | Conversion needed |
+| Source artifact | wp-vibe-toolbox destination | Conversion needed |
 |---|---|---|
 | `SKILL.md` skill dir (Agent Skills standard) | `skills/<name>/SKILL.md` (Vibe skill) | Mechanical + editorial: rename to Vibe limits (lowercase, hyphens, ≤ 64 chars), trim `description` to ≤ 1024 chars, add `user-invocable` and `allowed-tools`, set `metadata.version` and `metadata.source` (+ license), copy per-skill LICENSE if present, verify WordPress claims (section 7) |
 | Agent / persona markdown (`.agent.md`, role prompts) | `prompts/<name>/ROLE.md` (Le Chat prompt) | Strip tool/model frontmatter (Le Chat has no shell or file access); restructure to our prompt anatomy: role and scope, critical rules, output format, examples; add example run under `prompts/<name>/<run>/` |
@@ -130,7 +130,7 @@ Every imported artifact must pass these before merge:
 ## 8. Proposed repo layout after the first imports
 
 ```
-mistral-toolbox/
+wp-vibe-toolbox/
 ├── AGENTS.md
 ├── .vibe/config.toml
 ├── agents/                  # Vibe agent profiles (TOML; linked to ~/.vibe/agents)
