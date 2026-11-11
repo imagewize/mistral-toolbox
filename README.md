@@ -2,8 +2,8 @@
 
 # 🧰 Mistral Toolbox
 
-**Production-tested skills, agent profiles and prompts for [Mistral Vibe](https://docs.mistral.ai/vibe/) and [Le Chat](https://chat.mistral.ai).**<br>
-Built for WordPress engineering work, written to be adapted to any codebase.
+**A WordPress toolbox for [Mistral Vibe](https://docs.mistral.ai/vibe/) and [Le Chat](https://chat.mistral.ai): design to block theme, safe site updates, and SEO content with a review gate before publishing.**<br>
+Built by a block-theme developer who also runs content sites. The generic engineering skills (code review, debugging, release checks) are in here too, because that work happens in the same repos.
 
 [![Latest release](https://img.shields.io/github/v/release/imagewize/mistral-toolbox?label=release&color=orange)](https://github.com/imagewize/mistral-toolbox/releases/latest)
 [![License: MIT](https://img.shields.io/github/license/imagewize/mistral-toolbox?color=blue)](LICENSE.md)
@@ -29,16 +29,19 @@ Built for WordPress engineering work, written to be adapted to any codebase.
 | 🤖 **[Vibe agents](docs/agents.md)** | 9 roles (+9 subagent copies) | Mistral Vibe | TOML role profiles for `vibe --agent NAME`, plus generated `<name>-subagent.toml` copies the model can spawn via `agents.spawn`; each scopes and loads its skills on demand |
 | 💬 **[Le Chat prompts](docs/le-chat-prompts.md)** | 2 | Le Chat | System prompts for agents with no shell or file access, each with recorded example runs |
 
-### Start with these
+### The WordPress workflow
 
-| Try | What you get |
-|-----|--------------|
-| [`/code-review`](skills/code-review/SKILL.md) | Reviews a branch, PR or path. Detects the project type and lint commands, applies the project's own rules, and labels every finding CONFIRMED or PLAUSIBLE with a failure scenario |
-| [`wp-reviewer`](agents/wp-reviewer.toml) | The review skills bundled as an agent, with a read-only second-opinion subagent for large diffs |
-| [`/wp-update-round`](skills/wp-update-round/SKILL.md) | A full WordPress update round: before/after screenshots, pixel diff, human approval, production deploy |
-| [`/html-to-block-theme`](skills/html-to-block-theme/SKILL.md) | HTML/CSS/JS design to a production FSE block theme with `theme.json` v3 |
-| [`seo-content-writer`](agents/seo-content-writer.toml) → [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) | Plan and draft content, then hand it to an independent reviewer before publishing |
-| [`devops-oncall`](agents/devops-oncall.toml) | Incident triage that starts read-only and logs its evidence |
+The skills and agents are built to chain, from a design to a live, maintained site:
+
+| Step | Use | What you get |
+|------|-----|--------------|
+| 1. Design | [`wp-frontend-builder`](agents/wp-frontend-builder.toml) with `/design-first-ui-prompting`, `/frontend-design`, `/no-ai-design-slop` | A locked design system and an anchored HTML/CSS prototype, one section per future block pattern |
+| 2. Build | [`/html-to-block-theme`](skills/html-to-block-theme/SKILL.md) | The HTML/CSS/JS design as a production FSE block theme with `theme.json` v3, patterns and parts |
+| 3. Review | [`wp-reviewer`](agents/wp-reviewer.toml), [`/code-review`](skills/code-review/SKILL.md) | The diff reviewed against WordPress coding standards, every finding labelled CONFIRMED or PLAUSIBLE with a failure scenario |
+| 4. Maintain | [`wp-maintainer`](agents/wp-maintainer.toml), [`/wp-update-round`](skills/wp-update-round/SKILL.md) | A full update round: before/after screenshots, pixel diff, human approval, production deploy |
+| 5. Publish | [`seo-content-writer`](agents/seo-content-writer.toml) → [`seo-publish-reviewer`](agents/seo-publish-reviewer.toml) | Content planned and drafted, then handed to an independent reviewer before it goes live |
+
+Also in the box: [`release-manager`](agents/release-manager.toml) for release readiness and [`devops-oncall`](agents/devops-oncall.toml) for incident triage that starts read-only and logs its evidence.
 
 Skills by area (full tables in [docs/skills.md](docs/skills.md)):
 
@@ -75,7 +78,8 @@ repo moves — see [agents/README.md](agents/README.md#wiring-them-into-any-repo
 
 ```bash
 cd ~/code/some-wordpress-project
-vibe                                        # then: /code-review, /frontend-design, …
+vibe                                        # then: /html-to-block-theme, /wp-update-round, /code-review, …
+vibe --agent wp-frontend-builder            # design to block theme
 vibe --agent wp-reviewer -p "review the diff against main"
 vibe --agent release-manager -p "is main ready for release?"
 ```
@@ -97,7 +101,7 @@ What makes these different from a pile of prompts:
 - **Vibe-native, not ported.** Skills follow the Agent Skills format with `metadata.version`, so copies in projects can be compared. Agents are plain TOML with scoped `enabled_skills`. Commands are written from each tool's real interface (checked against `--help` and MCP schemas).
 - **Allowlist-friendly.** Skills prescribe plain single commands: no shell loops, no `$(…)`, no one-liner interpreters. A project can approve them once in `[tools.bash] allowlist` and stop seeing prompts.
 - **Evidence before claims.** Review output carries `file:line` references and a failure scenario per finding; completion requires running the proving command fresh. False positives are treated as a defect.
-- **Project rules live in the project.** Skills stay generic. Per-repo rules go in `.agents/` files such as `.agents/code-review.md`, so one skill serves many codebases.
+- **Project rules live in the project.** Skills stay generic across WordPress projects. Per-repo rules go in `.agents/` files such as `.agents/code-review.md`, so one skill serves many codebases.
 - **Honest provenance.** 50 of the 60 skills are adapted from permissively licensed open-source collections. Each keeps its upstream `LICENSE`, records the pinned commit in `metadata.source`, and is logged in [`NOTICE.md`](NOTICE.md) and [`docs/sources.md`](docs/sources.md).
 - **Public-safe.** No client hostnames, credentials or per-client lists; real values live in private per-site files.
 - **Le Chat prompts are tested.** Each prompt ships with recorded runs (input, raw output, review feedback), including failures, so you can see how it behaves before pasting it.
