@@ -1,6 +1,6 @@
 # Install
 
-**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and sync `agents/` into `~/.vibe/agents/` with rsync, as in [Quick start](../README.md#-quick-start). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
+**For all your projects** — add this repository's `skills/` to `~/.vibe/config.toml` and sync `agents/` into `~/.vibe/agents/` with rsync, as in [Quick start](../README.md#quick-start) (no `--delete` if you keep private profiles in `~/.vibe/agents/`; symlink and `agent_paths` alternatives are in [agents.md](agents.md)). Vibe uses the first skill it finds with a given name and searches `skill_paths` before a project's `.vibe/skills/` and `.agents/skills/`. If your config sets `enabled_skills`, add the skills you want to it.
 
 **For one project** — put the same lines in that project's `.vibe/config.toml` (the folder must be trusted), or copy individual skill directories (e.g. `skills/code-review/`) into the project's `.agents/skills/` so everyone on the project gets them. Copies carry `metadata.version`, so you can compare them with this repository.
 
@@ -23,7 +23,7 @@ Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a sk
 <details>
 <summary><strong>Faster model for coding runs (GLM) and a cheap approval classifier</strong></summary>
 
-**Model.** The author gets faster coding runs from GLM (`zai-glm-5-3`, served through the Mistral provider) than from `mistral-large-4`, for theme and pattern work like the [Kadewerk case study](../README.md#case-study-an-html-design-to-a-block-theme). That is one developer's experience on one kind of task, not a benchmark, so try both on your own repo. Add a preset to `~/.vibe/config.toml` and make it the active model:
+**Model.** The author gets faster coding runs from GLM (`zai-glm-5-3`, served through the Mistral provider) than from `mistral-large-4`, for theme and pattern work like the [Kadewerk case study](workflow.md#case-study-an-html-design-to-a-block-theme). That is one developer's experience on one kind of task, not a benchmark, so try both on your own repo. Add a preset to `~/.vibe/config.toml` and make it the active model:
 
 ```toml
 active_model = "glm-5-3"

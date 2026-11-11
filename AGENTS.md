@@ -25,7 +25,7 @@ wp-vibe-toolbox/
 ├── agents/            # Vibe agent profiles: agents/<name>.toml (linked to ~/.vibe/agents)
 ├── prompts/           # Le Chat prompts + runs, one dir per prompt: prompts/<name>/ROLE.md + <run>/
 ├── skills/            # Vibe skills: skills/<name>/SKILL.md
-├── docs/              # User docs (skills, agents, prompts, install, contributing), plans and source notes: sourcing plan, source register, curation notes
+├── docs/              # User docs (workflow, skills, agents, prompts, install, principles, credits, contributing), plans and source notes: sourcing plan, source register, curation notes
 ├── README.md          # Short public overview: badges, counts, quick start, principles
 ├── CHANGELOG.md
 ├── NOTICE.md          # Third-party material included in this repo
@@ -118,8 +118,9 @@ wp-vibe-toolbox/
 - `README.md` is a short overview. Adding, renaming or removing a skill, agent profile or prompt
   changes: its table row in `docs/skills.md` (grouped by category, with a **Source** column),
   `docs/agents.md` or `docs/le-chat-prompts.md`; the count badges and the "What's inside" and
-  "Skills by area" counts in `README.md`; the imported-skills count in "Design principles"; and the
-  **Credits** list when a new upstream source is added. `agents/README.md` lists agent profiles too.
+  "Skills by area" counts in `README.md`; the imported-skills count in `docs/principles.md`; and the
+  upstream list in `docs/credits.md` when a new source is added. `agents/README.md` lists agent
+  profiles too. Keep the README short: details belong in `docs/` (workflow, principles, credits).
 
 ## Commits and releases
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README shortened for WordPress developers and agencies: a three-point pitch, a compact design → publish table, the demo, Quick start and counts. The details moved to new docs pages: `docs/workflow.md` (the full workflow table, Aviendha and Aludra, the `architect-demo` case study), `docs/principles.md` (design principles) and `docs/credits.md` (upstream collections, logo credit, resources). `docs/install.md` links point to the new pages and keep the `rsync --delete` caveat; `AGENTS.md` names the new files in its README sync rules. Section headings and the "What's inside" table no longer carry emoji, so the Quick start anchor is now `#quick-start`
+
 ## [1.14.0] - 2026-11-11
 
 The repository is now `wp-vibe-toolbox` (renamed from `mistral-toolbox`), the README is written for WordPress developers, and the Mode B (Aviendha + Aludra) skill and agent carry the fixes from the Kadewerk run: selector specificity, Contact Form 7 markup and template, grid layout classes, scroll-triggered SVG animation, the required-plugin notice, and sentinel and PHPCS checks. New install docs cover a GLM model preset and a pinned smart-approve classifier.
