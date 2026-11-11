@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.15.0] - 2026-11-11
 
-Headers keep their mobile menu. The Kadewerk conversion lost its hamburger because the HTML prototype had none and the header part was copied as `overlayMenu: "never"`. The skills and the `wp-frontend-builder` agent now require a mobile menu in the prototype and the theme, and the agents README says how to start a session and what to put in the first prompt.
+Headers keep their mobile menu, and `wp-update-round` checks HTTPS and mixed content after a round. The Kadewerk conversion lost its hamburger because the HTML prototype had none and the header part was copied as `overlayMenu: "never"`. The skills and the `wp-frontend-builder` agent now require a mobile menu in the prototype and the theme, and the agents README says how to start a session and what to put in the first prompt.
 
 **Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` picks up the mobile check. Skills need no step.
 
 ### Added
 
+- `wp-update-round` (1.2.0), step 5b: an HTTPS and mixed-content check for production after a round or after any SSL / `WP_HOME` change. `openssl s_client` (with `-servername`) shows the served certificate, `curl` without `-k` proves the chain, and a per-page grep finds `http://` resources in the HTML. Notes that a connection reset right after an SSL change usually means the vhost is reloading, and that the browser console still has to be checked for resources loaded by CSS or JS. The fast path now points at it
 - `html-to-block-theme` (1.6.0), `references/mobile-navigation.md`: a basic no-JS `<details>` hamburger for the HTML prototype (three lines of script keep it open on desktop); the options (collapse below 1024px, always, never; `menu` or `handle` icon) and how they map to `overlayMenu` on `core/navigation`; a 375/800/1280px check (hamburger under the breakpoint, one-row header at every width, no horizontal scroll, hide the header CTA under 600px and keep its label on one line); conversion rules (header `mobile`, footer `never`, CTA before the navigation, delete the prototype's nav-row CSS, scope `ul` flex rules to the closed state, hard-reload before judging CSS); and a section on styling the overlay (ink panel, CSS-counter folio numbers, an overlay-only CTA item, and the two traps: core's `!important` colours and the `<li>` flex box ignoring `text-align`)
 - `agents/README.md`, "Running the agents": `vibe --agent wp-frontend-builder --smart-approve` (`--agent` replaces the default smart-approve agent), re-sync and wiring check, what a good first prompt contains, and three prompt templates for `wp-frontend-builder` (brief to HTML prototype, prototype to block theme with the design layer and mobile menu, change requests). `docs/agents.md` links to it
 
