@@ -5,6 +5,14 @@ All notable changes to the mistral-toolbox repository will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- `html-to-block-theme`, Mode B (`references/composing-with-aludra.md`): a new step 4, "Port the design layer". It replaces "Theme CSS stays small", which only checked size: the `architect-demo` rerun kept `style.css` identical to Aviendha's and reported that as a success, and the page had Kadewerk's colours with Aviendha's and Aludra's look (orange pill buttons, rounded cards with shadows, monospace eyebrows, dark stat and contact bands, Aviendha's header with a WooCommerce cart and "Start a project"). The step moves the source's design rules into the theme in a fixed order: write them down from the source CSS, block style variations (`light` for blocks that are dark by default), `theme.json` (`radiusSizes`, shadow presets, `styles.elements`, `styles.blocks["aludra/<name>"]`, only the source's font families), header and footer parts rebuilt from the source plus `blogname`/`blogdescription`, visible form labels in plugin-rendered forms, and then one design-layer CSS block at the end of `style.css` with a comment per rule. Size is a signal both ways: a large block means a skipped variation, an empty one means a skipped design layer
+- `composing-with-aludra.md`: the section map keeps the source's layout (a grid of project cards maps to `aludra/feature-cards`, the carousel only for a source slider), with a command that lists each block's style variations. A new check compares headless Chrome screenshots of the source and the site at 1440px and 390px per section, because sentinel and the block checks say nothing about the look. The report lists where each design rule landed and what still differs
+- SKILL.md Mode B row and the validation checklist's Mode B section updated to match
+
 ## [1.12.0] - 2026-11-10
 
 ### Added

@@ -70,7 +70,12 @@ Only for a theme built on Aludra blocks (see `composing-with-aludra.md`).
 - [ ] Every section starts from an `aludra/*` block. Sections built from `core/group` are listed as gaps in the report
 - [ ] Every `aludra/*` block name in `patterns/`, `parts/` and `templates/` exists in `~/code/aludra/blocks/`
 - [ ] `theme.json` defines every colour slug the Aludra blocks read, and has no second set of design-named slugs
-- [ ] `style.css` stays close to the starter's size. Each added rule has a comment naming the gap it fills
+- [ ] The source's design rules (radius, shadows, buttons, headings, links, eyebrows, section lines, form labels) are ported: block variations first, then `theme.json` (`radiusSizes`, shadow presets, `styles.elements`, `styles.blocks["aludra/<name>"]`), then one design-layer block at the end of `style.css` with a comment per rule
+- [ ] No starter design left that the source doesn't have: pill radius, shadows, monospace font family and its references, dark default variations on a light design
+- [ ] Header and footer parts rebuilt from the source; starter-only blocks (WooCommerce mini-cart, account, "Start a project") removed; `blogname` and `blogdescription` set
+- [ ] Source layouts kept: a grid stays a grid, not a carousel
+- [ ] Form fields have visible labels as in the source, not placeholders only
+- [ ] Screenshots of the source and the site at 1440px and 390px compared per section; the remaining differences listed in the report
 - [ ] Aludra (and Contact Form 7, when `aludra/contact-section` is used) is active on the local site
 - [ ] The front page HTML contains a `wp-block-aludra-<name>` wrapper for every block used
 
