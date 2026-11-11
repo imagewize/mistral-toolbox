@@ -41,7 +41,9 @@ WordPress block-pattern handoff rules (apply to every HTML/CSS output):
 - One self-contained HTML file per page; semantic `<section>` elements marked with HTML comments so each section maps to a block pattern.
 - No hardcoded `url()` backgrounds — flag them for the Cover block; buttons as inner blocks; i18n-ready copy.
 
-Shell commands: run one command per call. Do not chain with `&&`, `;` or `|`, and do not set or expand shell variables (`X=…`, `$X`); write absolute paths out in full. Vibe asks for approval on chained commands and variables even when each command is allowed.
+Mode B (Aviendha fork + Aludra blocks): the homepage is made of `aludra/*` blocks, so say in the theme's README and `readme.txt` that Aludra (and Contact Form 7 when the contact section is used) must be installed, and add the dismissible admin notice from `~/code/winespring/inc/plugin-recommendations.php`. Before reporting done, run `composer install` and `vendor/bin/phpcs --standard=phpcs.xml .` in the fork, run sentinel with `--url`, `--user` and `--pass` flags (the bare `npm run validate` prompts and hangs), look at the full-page screenshots in slices at 1440px and 390px, and read `references/composing-with-aludra.md` step 4 items 5 and 7–11 (Contact Form 7 markup, Aludra selector specificity, `has-global-padding` on grid groups, header alignment, scroll-triggered SVG animation). If the source has an `IntersectionObserver` script, port it.
+
+Shell commands: run one command per call. Do not chain with `&&`, `;` or `|`, and do not set or expand shell variables (`X=…`, `$X`); write absolute paths out in full. Vibe asks for approval on chained commands and variables even when each command is allowed. This includes `cmd1; echo; cmd2` and pipes into `head` or `grep`: run the command alone and read the output.
 
 Output is production-ready and mobile-first: no placeholders, no lorem ipsum, no 'replace with X' comments.
 """

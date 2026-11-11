@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README: a "Why this exists" section, the `architect-demo` case study, and a "Works best with Aviendha and Aludra" table. A theme built from Aludra blocks needs the plugin active, so the skills now say so
+- `html-to-block-theme` (1.5.0), `references/composing-with-aludra.md`: step 4 items 5 and 7–11 from the Kadewerk design pass. Contact Form 7 (template kept in the theme, `<p>`/`<br>` and the two-column grid, label markup), Aludra selector specificity, `has-global-padding` on grid groups, header alignment, scroll-triggered SVG animation, and telling users the plugins are required (admin notice, README). Checks: sentinel run with `--url`/`--user`/`--pass` (bare `npm run validate` hangs an agent), PHPCS in the fork, screenshots in slices plus computed-style measurements
+- `docs/install.md`: `--smart-approve` and why chained commands and paths outside the working directory still prompt
+
 ### Changed
 
+- `wp-frontend-builder` (and its subagent copy): a Mode B paragraph with the Aludra requirement, the PHPCS and sentinel steps and the items above, and a stricter one-command-per-call rule
 - Renamed the repository from `mistral-toolbox` to `wp-vibe-toolbox` to match its WordPress positioning (1.13.0). GitHub redirects the old URL. Local clones: rename the directory, run `git remote set-url origin git@github.com:imagewize/wp-vibe-toolbox.git`, and change `skill_paths` in `~/.vibe/config.toml` (and any `rsync`/symlink to `agents/`) to `~/code/wp-vibe-toolbox`. Earlier changelog entries keep the old name
 
 ## [1.13.0] - 2026-11-11

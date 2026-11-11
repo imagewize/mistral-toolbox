@@ -122,11 +122,51 @@ rules have to be moved into the theme as well, in this order:
    `blogdescription` (`wp option update`), since the header shows the site title.
 5. **Plugin output the theme renders** (e.g. the Contact Form 7 form inside
    `aludra/contact-section`): its template must keep the source's visible labels. Placeholders
-   instead of labels are an accessibility regression.
+   instead of labels are an accessibility regression. Three things to know about Contact Form 7:
+   - The form template lives in the database (`_form` post meta), not in the theme. Keep a copy in
+     the theme (`assets/forms/contact-form-7-<name>.txt`) and document how to load it
+     (`wp post meta update <form-id> _form "$(cat assets/forms/<file>.txt)"`), or a fresh install
+     gets an empty form.
+   - CF7 wraps fields in `<p>` and `<br>`, and `aludra/contact-section` lays the form out as a
+     two-column grid with 11px uppercase labels. To get stacked, sentence-case labels, override
+     `.contact-section__card form { display: block }`, hide `br`, and reset the label's
+     `font-size`, `letter-spacing` and `text-transform`. Use `display: block` on the label (not
+     flex), or the required star and the hint land on separate lines.
+   - Check the rendered form: the field tops in one row must line up, and the submit button must
+     not inherit Aludra's uppercase, arrow icon and `translateY` hover.
 6. **Theme CSS only for what is left**, in one block at the end of `style.css` headed
    `/* <Client> design layer */`, one comment per rule naming the section and why `theme.json` or a
    variation can't do it. Don't edit the starter's own rules in place. Override them in that block,
    so the fork's diff with the starter stays readable.
+
+7. **Specificity.** Aludra's CSS is nested under the block class and, for some blocks, under
+   `.wp-block-group.<class>` (e.g. `.wp-block-aludra-testimonial-grid .wp-block-group.testimonial-grid__card`
+   at 0,3,0). A rule with fewer classes loses silently: the quote card stayed white with a 12px
+   radius, the CTA button kept `border-radius: 10px` and the hero button its drop shadow. Copy the
+   block's own selector and add a class (or repeat it), and use `!important` only where Aludra
+   itself does, with a comment saying so. Check the computed style in the browser, not the CSS.
+8. **Layout classes on grid containers.** A `core/group` with `"layout":{"type":"constrained"}`
+   gets `has-global-padding` (56px of side padding inside a full-width block), and its children
+   get `margin-inline: auto` and `max-width`, which staircases headings and pulls grid items off
+   the left edge. For a group that the design layer turns into a grid (project cards, footer
+   columns, a contact intro), omit `layout` entirely. For a row that must not wrap (title + folio
+   number), set `"flexWrap":"nowrap"` on the group.
+9. **Header.** Brand left and navigation + CTA right is `justifyContent: space-between` on the
+   header row, with the navigation and the button inside one inner group. Three siblings in one
+   flex row leave the nav next to the brand.
+10. **Scroll-triggered SVG animation.** If the source plays draw-on animations inside SVG files
+    loaded as `<img>`, they run when the image loads, so below-the-fold drawings finish before
+    they are seen (half-drawn and static in screenshots). Port the source's
+    `IntersectionObserver` script to `assets/js/draw-on-scroll.js` and enqueue it with
+    `wp_enqueue_script` (footer, `defer`). It swaps below-the-fold images to a placeholder and
+    restores the `src` when they scroll into view, and does nothing under reduced motion. Grep the
+    source for `IntersectionObserver` before declaring the page done.
+11. **Tell users the plugins are required.** In Mode B the homepage is made of `aludra/*` blocks
+    (and often a Contact Form 7 form). Without those plugins the blocks render as empty
+    placeholders, so the theme must say so: a "required plugins" section in its README and
+    `readme.txt`, and the dismissible admin notice from `~/code/winespring/inc/plugin-recommendations.php`
+    (copy it, change the namespace, slugs and wording, and `require_once` it in `functions.php`
+    inside `is_admin()`).
 
 **Size as a signal, both ways.** If the design layer block grows to hundreds of lines, a block
 or variation was probably skipped (step 1). If it is empty while the source has a clear design of
@@ -147,9 +187,15 @@ Run each as one command, from the fork's own directory:
    `npm run build --workspaces --if-present` in `~/code/aludra` first.
 2. **The plugin is active** on the local site: `wp plugin list --path="$HOME/code/<site>"` shows
    `aludra` as active (plus `contact-form-7` when `aludra/contact-section` is used).
-3. **Sentinel passes** on every pattern (`npm run validate` in the fork, see
-   `references/forking-a-starter-theme.md`). The site sentinel validates against must have Aludra
-   active, or every `aludra/*` block fails.
+3. **Sentinel passes** on every pattern. `npm run validate` prompts for a URL and hangs a
+   non-interactive agent, and a Valet/local site has no Trellis vault, so pass the site and login as
+   flags: `npx sentinel --log --url=https://<site>.test --user=<admin> --pass=<password> patterns/`
+   (the local dev login is in the project notes or `AGENTS.md`; ask the user if it is not). See
+   `references/forking-a-starter-theme.md`. The site sentinel validates against must have Aludra
+   active, or every `aludra/*` block fails. Re-run it after every pattern or part change.
+   **Coding standards.** Run `composer install` once in the fork, then
+   `vendor/bin/phpcs --standard=phpcs.xml .` and fix what it reports (`vendor/bin/phpcbf` for the
+   auto-fixable). A fork that adds PHP (the plugin notice, an enqueue) must stay clean.
 4. **The rendered page uses the blocks.** For each block you used, check that its wrapper class
    appears in the HTML of the front page:
    ```bash
@@ -163,7 +209,10 @@ Run each as one command, from the fork's own directory:
    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --force-prefers-reduced-motion --window-size=1440,6000 --screenshot="$TMPDIR/site-1440.png" https://<site>.test/
    ```
    Run it again with `file://<path>/index.html` for the source and `--window-size=390,9000` for
-   phones. List per section what still differs. Passing sentinel and the block checks says nothing
+   phones. For long pages crop the full-page screenshot into slices of about 1300px, so each
+   section is readable, and look at every slice. Measure what the eye can miss with the browser's
+   computed styles: padding on grid containers, the tops of form fields in one row, button radius
+   and shadow. List per section what still differs. Passing sentinel and the block checks says nothing
    about the look. If you can't view images, say so in the report and ask the user to compare.
 
 ## 6. Report

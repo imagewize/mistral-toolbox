@@ -2,8 +2,10 @@
 
 # 🧰 WP Vibe Toolbox
 
-**A WordPress toolbox for [Mistral Vibe](https://docs.mistral.ai/vibe/) and [Le Chat](https://chat.mistral.ai): design to block theme, safe site updates, and SEO content with a review gate before publishing.**<br>
-Built by a block-theme developer who also runs content sites. The generic engineering skills (code review, debugging, release checks) are in here too, because that work happens in the same repos.
+**Build, review and maintain WordPress block themes with Mistral Vibe.**<br>
+Skills and agents that turn an HTML design into a real FSE block theme, review it against WordPress standards, run your update rounds, and write SEO content that gets a second pair of eyes before it ships.
+
+Made by a block-theme developer who uses them daily, so every workflow starts from the files and sites you already work in: `theme.json`, patterns, parts, WP-CLI, PHPCS, your local site.
 
 [![Latest release](https://img.shields.io/github/v/release/imagewize/wp-vibe-toolbox?label=release&color=orange)](https://github.com/imagewize/wp-vibe-toolbox/releases/latest)
 [![License: MIT](https://img.shields.io/github/license/imagewize/wp-vibe-toolbox?color=blue)](LICENSE.md)
@@ -18,6 +20,31 @@ Built by a block-theme developer who also runs content sites. The generic engine
 [Quick start](#-quick-start) · [What's inside](#-whats-inside) · [Design principles](#-design-principles) · [Docs](#-documentation) · [Contributing](docs/contributing.md)
 
 </div>
+
+---
+
+## 🎯 Why this exists
+
+Mistral Vibe is a capable coding agent, but out of the box it doesn't know what a block theme is. Left alone it writes classic PHP templates, hardcodes colours instead of `theme.json` presets, invents blocks that don't exist, and says "done" when the page looks nothing like the design. These skills and agents fix that:
+
+- **They know the WordPress way.** `theme.json` v3 first, patterns and parts second, CSS last, with a comment for every rule that had to live in CSS.
+- **They check their own work.** Pattern validation in a real browser (`wp-pattern-sentinel`), PHPCS with the WordPress standard, and screenshots of the source and the site at 1440px and 390px, compared section by section.
+- **They ask before they publish.** Update rounds need human approval. Content goes to an independent reviewer before it goes live.
+
+### Case study: an HTML design to a block theme
+
+[`architect-demo`](https://github.com/imagewize/architect-demo) is an architecture studio site. The `wp-frontend-builder` agent took a single `index.html` and built a [Kadewerk](https://github.com/imagewize/architect-demo/tree/main/theme-kadewerk) block theme from it: a fork of the [Aviendha](https://github.com/imagewize/aviendha) starter theme, with the homepage composed from [Aludra](https://github.com/imagewize/aludra) blocks. The write-up of each run, including what went wrong and which skill change fixed it, is in its `PROMPTS.md`.
+
+### Works best with Aviendha and Aludra
+
+For themes, the toolbox builds on two open-source pieces:
+
+| Piece | Role | Why you want it |
+|-------|------|-----------------|
+| [Aviendha](https://github.com/imagewize/aviendha) | Lean FSE starter theme to fork | A tested `theme.json`, WooCommerce templates and the pattern-validation harness, with no pattern library to fight |
+| [Aludra](https://github.com/imagewize/aludra) | Block library (hero, stat rail, feature cards, carousel, FAQ, contact section, mega menu…) | Sections the agent composes instead of hand-writing markup. **A theme built from Aludra blocks needs the plugin active, or the blocks render as empty placeholders**, so the skills make the theme say so and show an admin notice |
+
+Plain core-block conversions (Mode A of [`/html-to-block-theme`](skills/html-to-block-theme/SKILL.md)) need neither.
 
 ---
 
