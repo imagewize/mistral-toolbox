@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `wp-frontend-builder` (and its subagent copy) loads `demo-project-setup` for a new project, and ends that run with the stage 1 command and prompt instead of building
 - `agents/README.md`: prompt template 0 for a new project; `docs/workflow.md`: a set-up step before design
 
+### Fixed
+
+- `demo-project-setup` (1.0.1): checks `images/` with `ls` before writing anything, even when the prompt says the photos are there. On its first run the prompt said "Photos are in ~/code/bakery-demo/images", the folder did not exist, and the skill created it empty and only flagged that at the end. Now an empty or missing folder is a question in the brief round: photos come later (prompt 1 keeps the photo rule, `CREDITS.md` lists the photos still needed, and the report says stage 1 waits for them) or no photos (prompt 1 gets the drawings rule). With minimal questions it takes "photos come later" and says so
+
 ## [1.16.0] - 2026-11-12
 
 A new skill turns open design choices in a block theme into option sheets a client can pick from, and the install docs explain how to pin a model to one agent. On its first runs the skill found real Twilight contrast bugs in two themes: a 1.1:1 footer in Ecotuin and a 1.9:1 sidebar CTA hover in Aviendha.

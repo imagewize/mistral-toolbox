@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -69,6 +69,24 @@ gaps with stated assumptions and go on.
 A reference URL alone is not enough: write down what to take from it (layout traits, density,
 photo treatment) and that its name, logo, layout and copy are not copied. The build agent may not
 be able to fetch the site, and a JavaScript-heavy page often comes back almost empty.
+
+**Check the photos before writing anything.** When the visuals are photos, look at the folder
+first, even when the user says the photos are there:
+
+```bash
+ls <project-dir>/images
+```
+
+If the folder is missing or empty, ask in the same question round which of these applies, and do
+not assume either:
+
+- **Photos come later.** Prompt 1 keeps the photo rule, `images/CREDITS.md` lists exactly which
+  photos are needed (how many, which orientation, for which section), and the report says that
+  stage 1 must wait until they are in `images/`.
+- **No photos.** Prompt 1 gets the drawings rule (inline SVG or CSS compositions) instead.
+
+If the user asked for minimal questions, take "photos come later" and say so at the top of the
+reply.
 
 ## Step 2 — Create the folder and files
 
@@ -141,7 +159,8 @@ grep -n -e "{{" -e "<!--" <project-dir>/PROMPTS.md <project-dir>/README.md <proj
 
 It must print nothing.
 
-**Photos already in `images/`?** List their sizes in one call:
+**Photos already in `images/`?** (If not, follow the choice made in step 1: list the photos still
+needed in `CREDITS.md` and skip this part.) List their sizes in one call:
 
 ```bash
 file <project-dir>/images/*.jpg
@@ -228,7 +247,9 @@ licence of every image and keep `CREDITS.md` complete.
 
 - the folder, the files written and the commit
 - the local URL and the plugin list
-- the photos found and what is still missing (orientations, credits)
+- the photos found and what is still missing (orientations, credits); when the photos come
+  later, say plainly that stage 1 waits until they are in `images/` and their rows are in
+  `CREDITS.md`
 - the command and the prompt for stage 1:
 
   ```bash
