@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `demo-project-setup` (1.2.0): the photo follow-up run looks at the photos. It builds a numbered contact sheet (4 columns, tile number and filename under each image, a number-to-filename list below), takes one headless Chrome screenshot of the whole sheet, describes each tile by number before looking up its filename, and checks every primary photo a second time before writing the credits; without a way to view images it writes "uses by orientation only, not checked by eye". The Use column holds the subject, one primary per section, the rest alternates, and off-brief photos are marked spare. On the bakery demo's first run the agent scrolled a sheet in four slices, said it had checked every photo, and described most of them wrongly, including the hero (a row of cupcakes recorded as "bread and butter on a work table"). The report now asks the user to open the primaries before stage 1
+- `demo-project-setup` (1.2.0): the Mode B block map follows the layout the brief asks for, with a hero table: text beside a photo is `aludra/hero-split`, a full-bleed photo is `core/cover` (a gap) or the hero carousel (`aludra/carousel` + `aludra/slide` + `core/cover`), text only is `aludra/hero-banner`, which holds no image. The follow-up run checks prompt 4's hero block against the chosen hero photo
+
 ## [1.17.0] - 2026-11-12
 
 A new skill sets up a theme project or demo before the first build run: the brief, a `PROMPTS.md` with the prompt for every stage, a local Valet site with the plugins and a first commit. Its first real run (a bakery demo) changed the order: the agent now sets up first, the user adds the photos after, and a short follow-up run fills the image credits from Unsplash's filenames.
