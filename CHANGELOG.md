@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `docs/install.md`, "Paths outside the project": the example grants `/private/tmp` in the shell and `read_file` allowlists, because `wp-frontend-builder` and `html-page-review` write their screenshots to `/tmp` and read them back, so every visual check prompted. It explains why the grant names `/private/tmp` on macOS (`/tmp` is a link), that an older `/private/tmp/*` entry does not cover `cd /tmp`, and that allowing `magick` for screenshot crops lets it overwrite images in any granted folder. From the bakery demo, where image reads and a `cd /tmp && magick … -crop …` call prompted.
+
 ## [1.19.0] - 2026-11-12
 
 ### Fixed
