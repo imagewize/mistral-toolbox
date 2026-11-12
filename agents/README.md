@@ -84,15 +84,18 @@ the loader. The agent name is the file stem.
 
 ## Running the agents
 
-**Start command.** `--agent` replaces Vibe's default agent, so a `default_agent = "smart-approve"`
-in `~/.vibe/config.toml` stops applying. Add the flag back to get fewer approval prompts:
+**Start command.**
 
 ```bash
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
-`--smart-approve` classifies each tool call and only asks for risky ones (see
-[Fewer approval prompts](../docs/install.md)). `--auto-approve` skips every prompt: throwaway sites only.
+`--agent` replaces Vibe's default agent, and smart approve is an agent of its own, so a
+`default_agent = "smart-approve"` stops applying and adding `--smart-approve` does not bring the
+classifier back (checked with Vibe 3.1.2). Fewer prompts come from the allowlist and from path
+grants for the folders the agent reads outside the project (other themes, Aludra, the local
+site's WordPress files, screenshots): see [Fewer approval prompts](../docs/install.md).
+`--auto-approve` skips every prompt: throwaway sites only.
 
 **Before a session**
 - Re-sync after every `git pull` of this repository (see "Wiring" above). A stale copy in

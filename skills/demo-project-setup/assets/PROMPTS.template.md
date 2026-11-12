@@ -9,7 +9,7 @@ step shows the exact command, then the prompt to paste:
 
 ```bash
 cd {{PROJECT_DIR}}
-vibe --agent <agent> --smart-approve
+vibe --agent <agent>
 ```
 
 | # | Step | Agent | Outcome | Commit |
@@ -65,7 +65,7 @@ stage 2 do it.
 
 ```bash
 cd {{PROJECT_DIR}}
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
 Then paste this prompt:
@@ -110,7 +110,7 @@ model could not see the screenshots: switch model and run it again. If it calls 
 
 ```bash
 cd {{PROJECT_DIR}}
-vibe --agent ux-designer --smart-approve
+vibe --agent ux-designer
 ```
 
 Then paste this prompt:
@@ -130,7 +130,7 @@ screenshots at 390 and 1440px through `html-page-review/frame.html` at the end o
 
 ```bash
 cd {{PROJECT_DIR}}
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
 Then paste this prompt:
@@ -162,7 +162,7 @@ Run it on a branch:
 ```bash
 cd {{PROJECT_DIR}}
 git switch -c feat/block-theme
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
 Then paste this prompt:
@@ -216,7 +216,7 @@ Run it on a branch:
 ```bash
 cd {{PROJECT_DIR}}
 git switch -c feat/block-theme
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
 Then paste this prompt:
@@ -245,7 +245,7 @@ comparison.
 ```bash
 cd {{PROJECT_DIR}}
 git switch feat/block-theme
-vibe --agent wp-frontend-builder --smart-approve
+vibe --agent wp-frontend-builder
 ```
 
 Then paste this prompt:
