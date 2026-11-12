@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.1] - 2026-11-12
+
 ### Fixed
 
+- `docs/install.md`, "Paths outside the project": the example allowlist adds headless Chrome (`"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new`, so Chrome with other options first still prompts) and read-only wp-cli calls (`wp option get`, `wp option list`, `wp post list`, `wp post get`, `wp plugin list`, `wp theme list`, `wp --info`; writes keep prompting). It also notes that Vibe prompts for `echo ===` but not for `echo ---`. `wp-frontend-builder` (and its generated `-subagent` copy) separates command output with `echo ---`. From the bakery demo stage 4 run, checked against Vibe 3.1.2: with the folder grants in place, the remaining prompts were about 20 Chrome screenshot calls, the wp-cli reads and `echo ===` separators.
 - `docs/install.md`, "Paths outside the project": the example grants `/private/tmp` in the shell and `read_file` allowlists, because `wp-frontend-builder` and `html-page-review` write their screenshots to `/tmp` and read them back, so every visual check prompted. It explains why the grant names `/private/tmp` on macOS (`/tmp` is a link), that an older `/private/tmp/*` entry does not cover `cd /tmp`, and that allowing `magick` for screenshot crops lets it overwrite images in any granted folder. From the bakery demo, where image reads and a `cd /tmp && magick … -crop …` call prompted.
 
 ## [1.19.0] - 2026-11-12

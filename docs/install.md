@@ -26,6 +26,14 @@ allowlist = [
     "vibe-path:directory_recursive:/Users/you/Desktop",
     "vibe-path:directory_recursive:/private/tmp",
     "sed -n",
+    "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new",
+    "wp option get",
+    "wp option list",
+    "wp post list",
+    "wp post get",
+    "wp plugin list",
+    "wp theme list",
+    "wp --info",
     # … the other commands
 ]
 
@@ -39,6 +47,8 @@ allowlist = [
 ```
 
 The `/private/tmp` grant is for screenshots: `wp-frontend-builder` and `html-page-review` write them to `/tmp`, and the agent reads every one back with `read_file`, so without the grant each visual check prompts. On macOS `/tmp` is a link to `/private/tmp` and Vibe follows links before it compares, so the grant has to name `/private/tmp`; it then covers `/tmp/…` paths too. An older `"/private/tmp/*"` entry covers the files in the folder but not the folder itself, so `cd /tmp` still prompts. On Linux, where `/tmp` is a real folder, grant `/tmp`.
+
+The Chrome entry is for the screenshots themselves: a visual check takes one headless Chrome command per width, so a design pass runs a few dozen of them. Vibe matches an entry against the start of the command, quotes included, so the entry covers only Chrome started with `--headless=new` as its first option, which is how the toolbox writes the command; Chrome with other options first, such as a remote-debugging port, still prompts. On Linux the entry is `google-chrome --headless=new` or `chromium --headless=new`. The `wp` entries are the read-only wp-cli calls the agent makes to check the local site (front page settings, Contact Form 7 forms, plugin list). Writes such as `wp post update`, `wp option update`, `wp eval` and `wp db` keep prompting. Vibe treats `echo ===` as shell syntax it cannot read and prompts for it, while plain `echo` and `echo ---` pass, so `wp-frontend-builder` separates outputs with `echo ---`.
 
 A grant only clears the path check. The command still needs its own allowlist entry, and an allowed command may then do anything it can in that folder. So allow `sed -n`, not `sed`, or `sed -i` edits any file in a granted folder without asking. The same goes for `magick` (ImageMagick), which the agent uses to crop screenshots into sections for comparison: allowing it stops those prompts, but `magick` writes its output file without asking, so it can overwrite an image in any granted folder, a theme's `assets/` included. Leave it off the allowlist if you would rather approve each crop. For a single session, `vibe --add-dir DIR` makes the folder part of the working directory instead. `[tools.grep]` takes no allowlist: the agent searches through the shell.
 
