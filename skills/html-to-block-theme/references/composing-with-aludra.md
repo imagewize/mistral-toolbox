@@ -216,8 +216,12 @@ Run each as one command, from the fork's own directory:
    ```bash
    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --force-prefers-reduced-motion --window-size=1440,6000 --screenshot="$TMPDIR/site-1440.png" https://<site>.test/
    ```
-   Run it again with `file://<path>/index.html` for the source and `--window-size=390,9000` for
-   phones. For long pages crop the full-page screenshot into slices of about 1300px, so each
+   Run it again with `file://<path>/index.html` for the source. For phones, do not use
+   `--window-size=390,…`: headless Chrome on macOS will not go below 500px, so the page is laid out
+   at 500px and the screenshot cuts off its right side. Use `html-page-review/frame.html`, which
+   shows the page in an iframe at the exact width, with a window wider than that:
+   `--allow-file-access-from-files --window-size=600,9000 --screenshot="$TMPDIR/site-390.png" "file:///<toolbox>/skills/html-page-review/frame.html?target=https://<site>.test/&w=390&h=9000"`
+   (and `target=file://<path>/index.html` for the source). For long pages crop the full-page screenshot into slices of about 1300px, so each
    section is readable, and look at every slice. Measure what the eye can miss with the browser's
    computed styles: padding on grid containers, the tops of form fields in one row, button radius
    and shadow. List per section what still differs. Passing sentinel and the block checks says nothing

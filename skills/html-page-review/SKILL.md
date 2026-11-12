@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -69,12 +69,19 @@ deliberate and consistent with the rest of the page.
 
 ## Step 2: Look at the page
 
-Take a screenshot per width. Use the `page_height` from the probe as the window height to capture
-the full page:
+Take a screenshot per width through `frame.html` in this skill's directory, which shows the page
+in an iframe at the exact width. Do not set the width with `--window-size` alone: headless Chrome
+on macOS will not make its window narrower than 500px, so `--window-size=390,…` lays the page out
+at 500px and the screenshot cuts off its right side. The hamburger, the end of a headline and a
+second button then seem to be missing or overflowing when they are not. Keep the window at least
+500px wide; the page fills the left `w` pixels. Use the `page_height` from the probe as `h` and as
+the window height to capture the full page:
 
 ```
-"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --virtual-time-budget=6000 --window-size=390,9400 --screenshot=/tmp/html-page-review/page-390.png "file:///ABS/PROJECT/index.html"
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --allow-file-access-from-files --virtual-time-budget=6000 --window-size=600,9400 --screenshot=/tmp/html-page-review/page-390.png "file:///ABS/SKILL/DIR/frame.html?target=file:///ABS/PROJECT/index.html&w=390&h=9400"
 ```
+
+For 768 and 1440, use a window wider than `w` (for example 800 and 1460).
 
 Keep `--force-prefers-reduced-motion`: animated SVG images (`<img src="…svg">` with CSS animation
 inside the file) stay frozen at their first frame in a headless screenshot, so cards would show

@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `html-page-review` (1.2.0): the same check before the visual pass; without image support the pass is "not done" and the user is told to switch model
   - `wp-frontend-builder` (and its subagent copy): a "Screenshots and visual checks" rule. One headless Chrome command per width, no DevTools-protocol scripts and no dependence on the browser extension (it was disconnected, and cannot resize the window); measure what can be measured; never describe a screenshot or photo without image support, and ask the user to switch model for the visual part. The mobile check and the Mode B checks point to it
 - `docs/install.md`: the GLM preset notes that GLM cannot look at images in Vibe and when to switch to `mistral-medium-3.5`
+- Phone screenshots were taken at the wrong width. Headless Chrome on macOS will not make its window narrower than 500px, so `--window-size=390,…` laid the page out at 500px (`innerWidth` measured 500) and the screenshot cut off its right side: on the bakery demo the hamburger, the end of the headline and the second hero button seemed missing or overflowing, while at a real 390px the page was fine. New `html-page-review/frame.html` shows a page in an iframe at an exact width (`frame.html?target=…&w=390&h=…`), screenshotted with a wider window; works for `file://` pages and local `https://` sites
+  - `html-page-review` (1.3.0), step 2: screenshots through `frame.html`. The probe already measured in an iframe, so its findings were right; only the screenshots were affected
+  - `wp-frontend-builder` (and its subagent copy): the screenshot example uses `frame.html` and says never to set a phone width with `--window-size` alone
+  - `html-to-block-theme` (1.6.1), `references/composing-with-aludra.md`: the 390px source and site screenshots use `frame.html`
 
 ## [1.17.0] - 2026-11-12
 
