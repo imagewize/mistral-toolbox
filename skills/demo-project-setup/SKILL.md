@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -308,7 +308,18 @@ Photographer and URL empty and list it in the report: never guess a name or an I
 is not a bakery hero. And looking is easy to get wrong: on the first real run the agent scrolled a
 contact sheet in four slices, reported that it had checked every photo, and still described most of
 them wrongly (it called a row of cupcakes "bread and butter on a work table" and made it the hero).
-So build the sheet so a photo cannot be mixed up with its neighbour:
+The likeliest cause: that session ran a model without image support (in Vibe, no
+`supports_images = true` in its `[[models]]` entry), so no image ever reached it and it described
+photos it had not seen. Scrolling in slices may have added to it.
+
+**First, can this session see images?** If you do not know which model the session runs, ask the
+user. Read its `[[models]]` entry in `~/.vibe/config.toml`. Without `supports_images = true`, do
+not build the sheet: write "uses by orientation only, not checked by eye" above the credits table,
+assign by orientation, and tell the user to run this step again after switching with `/model` to a
+model that has it (for example `mistral-medium-3.5`). A screenshot tool that returns an error or
+"too large to process" also means you did not see it.
+
+With image support, build the sheet so a photo cannot be mixed up with its neighbour:
 
 - Write `<project-dir>/contact-sheet.html` with `write_file`: a grid of 4 columns, one `<figure>`
   per photo, `<img src="images/<file>">` 300px wide and 220px high with `object-fit: contain`, and
@@ -322,8 +333,9 @@ So build the sheet so a photo cannot be mixed up with its neighbour:
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --window-size=1400,2400 --screenshot=<project-dir>/contact-sheet.png file://<project-dir>/contact-sheet.html
 ```
 
-Open the PNG with `read_file` if the session shows images, or open the HTML with browser tools if
-they are connected (the `real-browser-control` skill). Describe each tile by its number first, then
+Open the PNG with `read_file`. Prefer it to browser tools: the headless screenshot needs no
+extension and shows the whole sheet at once, and a browser-tool screenshot reaches the model the same
+way, so it needs the same image support. Describe each tile by its number first, then
 look the filename up in the list; never describe a filename from memory. Before writing the
 credits, look again at every photo you are about to name as a primary (hero, first card, workshop,
 about, shop front) and confirm its description matches. Then delete both files:

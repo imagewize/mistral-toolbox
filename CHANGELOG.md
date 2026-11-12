@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` picks up the visual-check rules.
+
 ### Changed
 
 - `demo-project-setup` (1.2.0): the photo follow-up run looks at the photos. It builds a numbered contact sheet (4 columns, tile number and filename under each image, a number-to-filename list below), takes one headless Chrome screenshot of the whole sheet, describes each tile by number before looking up its filename, and checks every primary photo a second time before writing the credits; without a way to view images it writes "uses by orientation only, not checked by eye". The Use column holds the subject, one primary per section, the rest alternates, and off-brief photos are marked spare. On the bakery demo's first run the agent scrolled a sheet in four slices, said it had checked every photo, and described most of them wrongly, including the hero (a row of cupcakes recorded as "bread and butter on a work table"). The report now asks the user to open the primaries before stage 1
 - `demo-project-setup` (1.2.0): the Mode B block map follows the layout the brief asks for, with a hero table: text beside a photo is `aludra/hero-split`, a full-bleed photo is `core/cover` (a gap) or the hero carousel (`aludra/carousel` + `aludra/slide` + `core/cover`), text only is `aludra/hero-banner`, which holds no image. The follow-up run checks prompt 4's hero block against the chosen hero photo
+
+### Fixed
+
+- Visual checks need a model that can see images. In Vibe, images reach the model only when its `[[models]]` entry has `supports_images = true`; GLM (`zai-glm-5-3`) and `mistral-large-4` presets have none. The bakery demo's photo follow-up ran on GLM, reported checking 21 photos by eye and described most of them wrongly, and a later GLM session said a screenshot "came through as a raw image payload (too large to process)". The likeliest cause of the wrong photo credits is that no image reached the model, not only the scrolled contact sheet that 1.2.0 blamed
+  - `demo-project-setup` (1.3.0), step 7: checks the session model's `supports_images` before building the contact sheet; without it, assigns by orientation, writes "not checked by eye" and asks the user to rerun the step after `/model mistral-medium-3.5`. Prefers the headless Chrome screenshot over browser tools, whose screenshots reach the model the same way
+  - `html-page-review` (1.2.0): the same check before the visual pass; without image support the pass is "not done" and the user is told to switch model
+  - `wp-frontend-builder` (and its subagent copy): a "Screenshots and visual checks" rule. One headless Chrome command per width, no DevTools-protocol scripts and no dependence on the browser extension (it was disconnected, and cannot resize the window); measure what can be measured; never describe a screenshot or photo without image support, and ask the user to switch model for the visual part. The mobile check and the Mode B checks point to it
+- `docs/install.md`: the GLM preset notes that GLM cannot look at images in Vibe and when to switch to `mistral-medium-3.5`
 
 ## [1.17.0] - 2026-11-12
 

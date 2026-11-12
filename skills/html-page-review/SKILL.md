@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -85,6 +85,14 @@ heroes). Judge those from the probe numbers, not from the screenshot.
 
 If you can view images, open each screenshot and do the visual pass below. If you cannot, say so
 in the review, rely on the probe, and list the screenshot paths so a human can do the visual pass.
+
+You may not be able to tell from the inside. In Mistral Vibe, images only reach the model when its
+`[[models]]` entry in `~/.vibe/config.toml` has `supports_images = true`; a model without it gets
+no image, or an error such as "too large to process", and can still write a confident description.
+So check before the visual pass: ask the user which model the session runs if you do not know, and
+read its entry in `~/.vibe/config.toml`. Without `supports_images = true`, the visual pass is "not
+done": never describe a screenshot you did not receive, and tell the user to switch with `/model`
+to a model that has it (for example `mistral-medium-3.5`) and run the review again.
 
 ## Step 3: Judge
 
