@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` can load `demo-project-setup`.
+
+### Added
+
+- `demo-project-setup` (1.0.0): sets up a theme project or demo before the first build run. It collects the brief (references with what to take from each, not only a URL), writes `README.md`, `images/CREDITS.md`, `.gitignore` and a `PROMPTS.md` from `assets/PROMPTS.template.md` with one ready-to-paste prompt per stage (prototype, `ux-designer` review, review notes, block-theme conversion in Mode A or Mode B with a section-to-Aludra-block map from the blocks that exist, design pass), each with its own `vibe --agent` command. Then a Valet site with `wp valet new --in` (HTTPS by default, so no `valet secure`), a link when the parent folder is not parked (otherwise Valet answers with its 404 page), Contact Form 7 and a symlinked Aludra working copy for Mode B, a 200 check, a first commit and, only when asked, a private GitHub repository. Never invents stock photo URLs: the user downloads the photos, the skill lists their sizes with `file` and flags missing orientations. Ships `scripts/resize-images.sh` (macOS `sips`, at most 1600px wide). Based on the setup of the model agency demo
+- `wp-frontend-builder` (and its subagent copy) loads `demo-project-setup` for a new project, and ends that run with the stage 1 command and prompt instead of building
+- `agents/README.md`: prompt template 0 for a new project; `docs/workflow.md`: a set-up step before design
+
 ## [1.16.0] - 2026-11-12
 
 A new skill turns open design choices in a block theme into option sheets a client can pick from, and the install docs explain how to pin a model to one agent. On its first runs the skill found real Twilight contrast bugs in two themes: a 1.1:1 footer in Ecotuin and a 1.9:1 sidebar CTA hover in Aviendha.

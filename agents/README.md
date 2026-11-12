@@ -13,7 +13,7 @@ prompts — those live in [`prompts/`](../prompts/) together with their example 
 | Profile | Agent name | Role | Skills it loads |
 |---------|-----------|------|-----------------|
 | [wp-reviewer.toml](wp-reviewer.toml) | `wp-reviewer` | WordPress code review (diffs, PRs, plugins, patterns) | code-review, wordpress-plugin-audit, wordpress-coding-standards, wordpress-plugin-testing, code-review-and-quality, security-and-hardening, requesting/receiving-code-review, verification-before-completion |
-| [wp-frontend-builder.toml](wp-frontend-builder.toml) | `wp-frontend-builder` | WordPress FSE frontend builds: spec → anchored HTML/CSS → block theme/patterns | design-first-ui-prompting, landing-page, frontend-design, ui-ux-pro-max, design-system-library, design-md, ux-writing, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono, theme-style-options |
+| [wp-frontend-builder.toml](wp-frontend-builder.toml) | `wp-frontend-builder` | WordPress FSE frontend builds: spec → anchored HTML/CSS → block theme/patterns | demo-project-setup, design-first-ui-prompting, landing-page, frontend-design, ui-ux-pro-max, design-system-library, design-md, ux-writing, no-ai-design-slop, better-ui, better-colors, frontend-ui-engineering, html-to-block-theme, architectural-drawing, illustration-isometric-mono, theme-style-options |
 | [ux-designer.toml](ux-designer.toml) | `ux-designer` | UI/UX design, microcopy, accessibility | brainstorming, ui-ux-pro-max, ux-writing, better-accessibility, interface-review, html-page-review, design-first-ui-prompting, no-ai-design-slop |
 | [devops-oncall.toml](devops-oncall.toml) | `devops-oncall` | Incidents, on-call, observability, k8s, CI/CD | incident, runbook, alerting-oncall, observability-review, observability-and-instrumentation, security-review, pipeline-review, kubernetes-ops, systematic-debugging |
 | [release-manager.toml](release-manager.toml) | `release-manager` | Release gates, CI, git flow, PRs | release-readiness, pipeline-review, git-workflow, create-pull-request, receiving-code-review, verification-before-completion |
@@ -113,6 +113,16 @@ vibe --agent wp-frontend-builder --smart-approve
 
 Replace the `<…>` values. Each template is meant to finish a stage in one run; use the next one
 only when the screenshots show what still differs.
+
+**0. New project: folder, prompt plan, local site**
+
+```
+Load demo-project-setup. Set up <project-dir> for <client or invented name, place>: <what they do, audience, main actions, tone, language>. Sections: <list>. References: <URL — what to take from it>. Photos are in <project-dir>/images (or: use inline SVG drawings). Mode <A or B>, local site <site>, theme slug <slug>. Ask before creating a GitHub repository.
+```
+
+It writes `README.md` (the brief), `images/CREDITS.md` and a `PROMPTS.md` with templates 1–3 below
+filled in for the project, sets up the Valet site and commits. Then start a fresh session for
+stage 1 with the prompt from that `PROMPTS.md`.
 
 **1. Brief → HTML/CSS prototype**
 
