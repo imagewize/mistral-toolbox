@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` can load `demo-project-setup`.
+## [1.17.0] - 2026-11-12
+
+A new skill sets up a theme project or demo before the first build run: the brief, a `PROMPTS.md` with the prompt for every stage, a local Valet site with the plugins and a first commit. Its first real run (a bakery demo) changed the order: the agent now sets up first, the user adds the photos after, and a short follow-up run fills the image credits from Unsplash's filenames.
+
+**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` can load `demo-project-setup`. The skill itself needs no step.
 
 ### Added
 
