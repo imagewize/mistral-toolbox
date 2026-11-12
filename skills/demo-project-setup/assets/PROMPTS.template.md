@@ -58,6 +58,10 @@ build looks stale. In `~/code/aviendha`, delete any `sentinel-*.log.json` files 
 
 Agent: `wp-frontend-builder`
 
+**Model:** a fast coding model such as GLM is fine for the build. GLM has no image support in
+Vibe (no `supports_images = true` in `~/.vibe/config.toml`), so it checks the page by measuring,
+not by looking. Look at the result yourself, or let stage 2 do it.
+
 ```bash
 cd {{PROJECT_DIR}}
 vibe --agent wp-frontend-builder --smart-approve
@@ -95,6 +99,14 @@ Result: _not run yet._
 Agent: `ux-designer`, with the `html-page-review` skill. It writes numbered notes to `REVIEW.md`
 and does not edit the page.
 
+**Model:** this stage is a look, so it needs image support. Start the agent, run
+`/model mistral-medium-3.5` (or another model with `supports_images = true`), then paste the
+prompt. Vibe asks to read `probe.html` and `frame.html` from the toolbox, outside this folder:
+"Allow for remainder of this session" is fine. A good run measures with the probe and takes one
+screenshot per width through `frame.html`, and reports "Visual pass: done". "Not done" means the
+model could not see the screenshots: switch model and run it again. If it calls Chrome with
+`--window-size=390` directly, stop it.
+
 ```bash
 cd {{PROJECT_DIR}}
 vibe --agent ux-designer --smart-approve
@@ -111,6 +123,10 @@ Result: _not run yet._
 ## 3. Apply review notes
 
 Agent: `wp-frontend-builder`. Keep each run to a few notes, then compare and commit.
+
+**Model:** a fast coding model such as GLM for the edits. To check them by eye, run
+`/model mistral-medium-3.5` at the end of the session and ask for screenshots at 390 and 1440px
+through `html-page-review/frame.html`.
 
 ```bash
 cd {{PROJECT_DIR}}
@@ -134,7 +150,14 @@ Result: _not run yet._
 <!-- MODE B START -->
 ## 4. Convert on Aviendha + Aludra
 
-Agent: `wp-frontend-builder`, with `html-to-block-theme`. Run it on a branch:
+Agent: `wp-frontend-builder`, with `html-to-block-theme`.
+
+**Model:** a fast coding model such as GLM for the conversion. Before you accept its report, run
+`/model mistral-medium-3.5` in the same session and ask it to compare the screenshots of
+`index.html` and the site section by section. Without that switch, "what still differs" comes from
+measurements only.
+
+Run it on a branch:
 
 ```bash
 cd {{PROJECT_DIR}}
@@ -159,7 +182,7 @@ Create theme-{{THEME_SLUG}}/ in this repository as a fork of ~/code/aviendha for
 - Design layer, in this order: block style variations first, then theme.json (radius, shadows, buttons, headings, links, eyebrows), then header and footer parts rebuilt from index.html (header navigation overlayMenu mobile, footer navigation never; no WooCommerce mini-cart or account blocks, no "Start a project" button), and only then the remaining gaps in one block at the end of style.css headed "/* {{NAME}} design layer */", one comment per rule naming the section. Set blogname to "{{NAME}}" with wp option update.
 - Site: {{SITE_DIR}} (Valet{{SITE_PLUGINS}}). Symlink theme-{{THEME_SLUG}}/ to wp-content/themes/{{THEME_SLUG}} and activate it. Use --path="{{SITE_DIR_ABS}}", never ~ after =.
 - README.md and readme.txt in the theme state which plugins must be installed; add the dismissible admin notice from ~/code/winespring/inc/plugin-recommendations.php.
-- Checks, one command per call: php -l every PHP file; composer install and vendor/bin/phpcs --standard=phpcs.xml . in theme-{{THEME_SLUG}}/; sentinel with --url https://{{SITE}}.test --user admin --pass admin after every pattern change until it passes; the aviendha grep; the aludra block-name check; the rendered front page containing a wp-block-aludra-* wrapper for every block used; screenshots of index.html and the site at 1440px and 390px, compared section by section. Confirm git -C ~/code/aviendha status shows nothing new.
+- Checks, one command per call: php -l every PHP file; composer install and vendor/bin/phpcs --standard=phpcs.xml . in theme-{{THEME_SLUG}}/; sentinel with --url https://{{SITE}}.test --user admin --pass admin after every pattern change until it passes; the aviendha grep; the aludra block-name check; the rendered front page containing a wp-block-aludra-* wrapper for every block used; screenshots of index.html and the site at 1440px and 390px, compared section by section (390px through html-page-review/frame.html, which shows the page in an iframe at the exact width; never --window-size=390, headless Chrome on macOS stops at 500px). Confirm git -C ~/code/aviendha status shows nothing new.
 - Report: the section-to-block table (block, source pattern copied, style variation), the gaps, the palette mapping, the design-layer line count, and per section what still differs from index.html.
 ```
 
@@ -181,7 +204,14 @@ Result: _not run yet._
 <!-- MODE A START -->
 ## 4. Convert to a block theme
 
-Agent: `wp-frontend-builder`, with `html-to-block-theme`. Run it on a branch:
+Agent: `wp-frontend-builder`, with `html-to-block-theme`.
+
+**Model:** a fast coding model such as GLM for the conversion. Before you accept its report, run
+`/model mistral-medium-3.5` in the same session and ask it to compare the screenshots of
+`index.html` and the site section by section. Without that switch, "what still differs" comes from
+measurements only.
+
+Run it on a branch:
 
 ```bash
 cd {{PROJECT_DIR}}
@@ -196,7 +226,7 @@ Load html-to-block-theme and work in Mode A (standalone conversion from core blo
 
 Convert index.html into a block theme in theme-{{THEME_SLUG}}/ for {{NAME}}: theme.json v3 from the --wp--preset--* tokens in index.html, the fonts bundled as woff2 in assets/fonts/ with fontFace, one pattern per <section> with the copy verbatim, a front page template that uses them, and header and footer parts rebuilt from index.html (header navigation overlayMenu mobile, footer navigation never). Copy the images from images/ into theme-{{THEME_SLUG}}/assets/img/ and reference them with get_theme_file_uri(). Prefer core blocks; put what theme.json cannot express in one commented block in style.css.
 Site: {{SITE_DIR}} (Valet). Symlink theme-{{THEME_SLUG}}/ to wp-content/themes/{{THEME_SLUG}} and activate it. Use --path="{{SITE_DIR_ABS}}", never ~ after =.
-Checks, one command per call: php -l every PHP file, WP_DEBUG with an empty debug.log, no block validation errors in the editor, screenshots of index.html and the site at 1440px and 390px compared section by section, the mobile menu opened at 390px.
+Checks, one command per call: php -l every PHP file, WP_DEBUG with an empty debug.log, no block validation errors in the editor, screenshots of index.html and the site at 1440px and 390px compared section by section (390px through html-page-review/frame.html, which shows the page in an iframe at the exact width; never --window-size=390, headless Chrome on macOS stops at 500px), the mobile menu opened at 390px.
 Report: the section-to-pattern table, the CSS line count, and per section what still differs from index.html.
 ```
 
@@ -209,6 +239,9 @@ Agent: `wp-frontend-builder`, on the same branch as 4, so its diff shows only th
 Fill in the numbered list from the differences prompt 4 reported and from your own screenshots,
 one point per difference.
 
+**Model:** a fast coding model such as GLM for the fixes, then `/model mistral-medium-3.5` in the
+same session for the before and after comparison.
+
 ```bash
 cd {{PROJECT_DIR}}
 git switch feat/block-theme
@@ -218,7 +251,7 @@ vibe --agent wp-frontend-builder --smart-approve
 Then paste this prompt:
 
 ```
-Load html-to-block-theme. theme-{{THEME_SLUG}}/ does not yet match index.html. Do a design pass so https://{{SITE}}.test matches index.html, without changing which blocks are used except where noted. Screenshot index.html and the site at 1440px and 390px with headless Chrome before and after.
+Load html-to-block-theme. theme-{{THEME_SLUG}}/ does not yet match index.html. Do a design pass so https://{{SITE}}.test matches index.html, without changing which blocks are used except where noted. Screenshot index.html and the site at 1440px and 390px with headless Chrome before and after (390px through html-page-review/frame.html, which shows the page in an iframe at the exact width; never --window-size=390, headless Chrome on macOS stops at 500px).
 
 1. <difference and the fix you want>
 2. ...
