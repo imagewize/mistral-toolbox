@@ -36,6 +36,7 @@ Skills run inside your project with Vibe's tools and are invoked as slash comman
 | [`/better-accessibility`](../skills/better-accessibility/SKILL.md) | Keyboard/focus, ARIA, accessible names, forms, hit areas, motion/zoom, screen readers. | jakubkrehel |
 | [`/interface-review`](../skills/interface-review/SKILL.md) | Reviews a branch/PR for the interface problems it introduces, scoped to what changed. | jakubkrehel |
 | [`/html-page-review`](../skills/html-page-review/SKILL.md) | Reviews a rendered HTML/CSS page: headless-Chrome layout probe at three widths, then brief fit, consistency and copy; writes numbered fix notes to `REVIEW.md`. | Imagewize |
+| [`/theme-style-options`](../skills/theme-style-options/SKILL.md) | Option sheets a client can pick from: one mini page per style variation (buttons, tint, dark band, footer, measured contrast) and a heading-font comparison with Fontsource licences, rendered to PNG by a bundled script (`options.mjs`, Node + Chrome headless). Each color option is a real `styles/*.json` variation. | Imagewize |
 
 ## Development workflow & quality
 
