@@ -37,6 +37,8 @@ thinking = "high"
 
 Every `[[models]]` entry needs a `name`, a `provider` and an `alias`. An entry without them is not a usable preset.
 
+**GLM cannot look at images here.** Vibe sends images only to models whose entry has `supports_images = true`, and the GLM preset above has none (in the author's config only `mistral-medium-3.5` does). On GLM, an agent that takes a screenshot or opens a photo gets no image, or an error such as "too large to process", and may still describe it. That happened on a demo: a GLM session reported checking 21 photos by eye and described most of them wrongly. The agents and skills now check this before any visual step, but switch yourself for steps that need eyes, such as checking photos, screenshot comparisons and the `ux-designer` review: `/model mistral-medium-3.5` in the running session, then back.
+
 **Pinning a model to one agent.** A profile can set its own model with `active_model = "glm-5-3"` as its first line, so only that agent runs on GLM. Keep such a variant out of this repository and generate it from the base profile, because a hand-edited fork stops receiving the toolbox's changes: the instructions, the skills list and the rules that came with each release. After every `git pull`, regenerate it, then `/reload`:
 
 ```bash
