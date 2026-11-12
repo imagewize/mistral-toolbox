@@ -24,6 +24,7 @@ allowlist = [
     "vibe-path:directory_recursive:/Users/you/code",
     "vibe-path:directory_recursive:/Users/you/.config/valet/Sites",
     "vibe-path:directory_recursive:/Users/you/Desktop",
+    "vibe-path:directory_recursive:/private/tmp",
     "sed -n",
     # … the other commands
 ]
@@ -33,10 +34,13 @@ allowlist = [
     "vibe-path:directory_recursive:/Users/you/code",
     "vibe-path:directory_recursive:/Users/you/.config/valet/Sites",
     "vibe-path:directory_recursive:/Users/you/Desktop",
+    "vibe-path:directory_recursive:/private/tmp",
 ]
 ```
 
-A grant only clears the path check. The command still needs its own allowlist entry, and an allowed command may then do anything it can in that folder. So allow `sed -n`, not `sed`, or `sed -i` edits any file in a granted folder without asking. For a single session, `vibe --add-dir DIR` makes the folder part of the working directory instead. `[tools.grep]` takes no allowlist: the agent searches through the shell.
+The `/private/tmp` grant is for screenshots: `wp-frontend-builder` and `html-page-review` write them to `/tmp`, and the agent reads every one back with `read_file`, so without the grant each visual check prompts. On macOS `/tmp` is a link to `/private/tmp` and Vibe follows links before it compares, so the grant has to name `/private/tmp`; it then covers `/tmp/…` paths too. An older `"/private/tmp/*"` entry covers the files in the folder but not the folder itself, so `cd /tmp` still prompts. On Linux, where `/tmp` is a real folder, grant `/tmp`.
+
+A grant only clears the path check. The command still needs its own allowlist entry, and an allowed command may then do anything it can in that folder. So allow `sed -n`, not `sed`, or `sed -i` edits any file in a granted folder without asking. The same goes for `magick` (ImageMagick), which the agent uses to crop screenshots into sections for comparison: allowing it stops those prompts, but `magick` writes its output file without asking, so it can overwrite an image in any granted folder, a theme's `assets/` included. Leave it off the allowlist if you would rather approve each crop. For a single session, `vibe --add-dir DIR` makes the folder part of the working directory instead. `[tools.grep]` takes no allowlist: the agent searches through the shell.
 
 Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a skill's `allowed-tools`. Put the commands the skill runs in the project's `.vibe/config.toml` so everyone on the project gets the same approvals. A project allowlist **replaces** the one in `~/.vibe/config.toml`, so include the read-only basics too — the **Setup** section of [code-review's SKILL.md](../skills/code-review/SKILL.md) has a starting list.
 
