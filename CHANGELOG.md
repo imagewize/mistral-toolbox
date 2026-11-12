@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-11-12
+
+Visual checks got honest. The bakery demo's first runs showed two ways an agent can report on images it never saw correctly: a model without image support in Vibe (GLM) "checked" 21 photos by eye and described most of them wrongly, and phone screenshots taken with `--window-size=390` were really 500px layouts with the right side cut off. The agents and skills now check image support before any visual step, take phone screenshots through an iframe at the exact width, and the photo follow-up of `demo-project-setup` builds a numbered contact sheet and picks the hero block to match the brief.
+
 **Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` picks up the visual-check rules.
 
 ### Changed
