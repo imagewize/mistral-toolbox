@@ -58,9 +58,10 @@ build looks stale. In `~/code/aviendha`, delete any `sentinel-*.log.json` files 
 
 Agent: `wp-frontend-builder`
 
-**Model:** a fast coding model such as GLM is fine for the build. GLM has no image support in
-Vibe (no `supports_images = true` in `~/.vibe/config.toml`), so it checks the page by measuring,
-not by looking. Look at the result yourself, or let stage 2 do it.
+**Model:** Mistral Large 4, or another model whose `[[models]]` entry in `~/.vibe/config.toml` has
+`supports_images = true`, so the agent can look at its own screenshots. A text-only model such as
+GLM 5.3 checks the page by measuring, not by looking; then look at the result yourself, or let
+stage 2 do it.
 
 ```bash
 cd {{PROJECT_DIR}}
@@ -99,9 +100,9 @@ Result: _not run yet._
 Agent: `ux-designer`, with the `html-page-review` skill. It writes numbered notes to `REVIEW.md`
 and does not edit the page.
 
-**Model:** this stage is a look, so it needs image support. Start the agent, run
-`/model mistral-medium-3.5` (or another model with `supports_images = true`), then paste the
-prompt. Vibe asks to read `probe.html` and `frame.html` from the toolbox, outside this folder:
+**Model:** this stage is a look, so it needs image support: Mistral Large 4 or another model with
+`supports_images = true` (switch with `/model` if the session runs a text-only model), then paste
+the prompt. Vibe asks to read `probe.html` and `frame.html` from the toolbox, outside this folder:
 "Allow for remainder of this session" is fine. A good run measures with the probe and takes one
 screenshot per width through `frame.html`, and reports "Visual pass: done". "Not done" means the
 model could not see the screenshots: switch model and run it again. If it calls Chrome with
@@ -124,9 +125,8 @@ Result: _not run yet._
 
 Agent: `wp-frontend-builder`. Keep each run to a few notes, then compare and commit.
 
-**Model:** a fast coding model such as GLM for the edits. To check them by eye, run
-`/model mistral-medium-3.5` at the end of the session and ask for screenshots at 390 and 1440px
-through `html-page-review/frame.html`.
+**Model:** the model with image support from stage 1, so it can check the edits by eye: ask for
+screenshots at 390 and 1440px through `html-page-review/frame.html` at the end of the session.
 
 ```bash
 cd {{PROJECT_DIR}}
@@ -152,10 +152,10 @@ Result: _not run yet._
 
 Agent: `wp-frontend-builder`, with `html-to-block-theme`.
 
-**Model:** a fast coding model such as GLM for the conversion. Before you accept its report, run
-`/model mistral-medium-3.5` in the same session and ask it to compare the screenshots of
-`index.html` and the site section by section. Without that switch, "what still differs" comes from
-measurements only.
+**Model:** Mistral Large 4: a full conversion needs its 1M context, and its image support lets it
+compare the screenshots of `index.html` and the site section by section. Ask for that comparison
+before you accept the report. On a text-only model, "what still differs" comes from measurements
+only, however confident the report sounds: switch with `/model` for the comparison.
 
 Run it on a branch:
 
@@ -206,10 +206,10 @@ Result: _not run yet._
 
 Agent: `wp-frontend-builder`, with `html-to-block-theme`.
 
-**Model:** a fast coding model such as GLM for the conversion. Before you accept its report, run
-`/model mistral-medium-3.5` in the same session and ask it to compare the screenshots of
-`index.html` and the site section by section. Without that switch, "what still differs" comes from
-measurements only.
+**Model:** Mistral Large 4: a full conversion needs its 1M context, and its image support lets it
+compare the screenshots of `index.html` and the site section by section. Ask for that comparison
+before you accept the report. On a text-only model, "what still differs" comes from measurements
+only, however confident the report sounds: switch with `/model` for the comparison.
 
 Run it on a branch:
 
@@ -239,8 +239,8 @@ Agent: `wp-frontend-builder`, on the same branch as 4, so its diff shows only th
 Fill in the numbered list from the differences prompt 4 reported and from your own screenshots,
 one point per difference.
 
-**Model:** a fast coding model such as GLM for the fixes, then `/model mistral-medium-3.5` in the
-same session for the before and after comparison.
+**Model:** the model with image support from stage 4, for the fixes and the before and after
+comparison.
 
 ```bash
 cd {{PROJECT_DIR}}

@@ -109,10 +109,11 @@ vibe --agent wp-frontend-builder --smart-approve
    390px, a working mobile menu,
 5. when to stop and ask: only for a real decision, not for each step.
 
-**Which model for which step.** Build and fix on a fast coding model such as GLM; it has no image
-support in Vibe, so it measures instead of looking. For anything that needs eyes (the review,
-checking photos, comparing screenshots) switch the running session with `/model mistral-medium-3.5`,
-or another model whose `[[models]]` entry has `supports_images = true`, and switch back after. Phone
+**Which model.** One model with image support for every step: Mistral Large 4 (`mistral-large-4`,
+1M context) builds, fixes and looks, so there is no switching. Its `[[models]]` entry needs
+`supports_images = true`, or Vibe strips images before they reach it ([install.md](../docs/install.md)).
+GLM 5.3 (`zai-glm-5-3`) is text-only: on it the agent measures instead of looking, and anything that
+needs eyes (the review, checking photos, comparing screenshots) needs a `/model` switch. Phone
 screenshots go through `skills/html-page-review/frame.html` (an iframe at the exact width), because
 headless Chrome on macOS will not make a window narrower than 500px.
 

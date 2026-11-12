@@ -21,28 +21,31 @@ Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a sk
 </details>
 
 <details>
-<summary><strong>Faster model for coding runs (GLM) and a cheap approval classifier</strong></summary>
+<summary><strong>Model: Mistral Large 4 with image support, and a cheap approval classifier</strong></summary>
 
-**Model.** The author gets faster coding runs from GLM (`zai-glm-5-3`, served through the Mistral provider) than from `mistral-large-4`, for theme and pattern work like the [Kadewerk case study](workflow.md#case-study-an-html-design-to-a-block-theme). That is one developer's experience on one kind of task, not a benchmark, so try both on your own repo. Add a preset to `~/.vibe/config.toml` and make it the active model:
+**Model.** For theme work, use Mistral Large 4 (`mistral-large-4`). Mistral describes it as multimodal, with a vision encoder and a 1M-token context, so one model can build, fix and compare screenshots, and a long block-theme conversion fits in one session. Add `supports_images = true` to its entry. Vibe sends images only to models whose entry has it, whatever the model itself can do:
 
 ```toml
-active_model = "glm-5-3"
+active_model = "large-4"
 
 [[models]]
-name = "zai-glm-5-3"
-alias = "glm-5-3"
+name = "mistral-large-4"
+alias = "large-4"
 provider = "mistral"
 thinking = "high"
+supports_images = true
 ```
 
 Every `[[models]]` entry needs a `name`, a `provider` and an `alias`. An entry without them is not a usable preset.
 
-**GLM cannot look at images here.** Vibe sends images only to models whose entry has `supports_images = true`, and the GLM preset above has none (in the author's config only `mistral-medium-3.5` does). On GLM, an agent that takes a screenshot or opens a photo gets no image, or an error such as "too large to process", and may still describe it. That happened on a demo: a GLM session reported checking 21 photos by eye and described most of them wrongly. The agents and skills now check this before any visual step, but switch yourself for steps that need eyes, such as checking photos, screenshot comparisons and the `ux-designer` review: `/model mistral-medium-3.5` in the running session, then back.
+**Check that images arrive.** After setting it up, ask the agent to open one of your photos and describe it, and compare that with the photo. A model that receives no image can still write a confident description.
 
-**Pinning a model to one agent.** A profile can set its own model with `active_model = "glm-5-3"` as its first line, so only that agent runs on GLM. Keep such a variant out of this repository and generate it from the base profile, because a hand-edited fork stops receiving the toolbox's changes: the instructions, the skills list and the rules that came with each release. After every `git pull`, regenerate it, then `/reload`:
+**GLM 5.3 is text-only.** GLM 5.3 (`zai-glm-5-3`, served through the Mistral provider) gave the author fast coding runs on the [Kadewerk case study](workflow.md#case-study-an-html-design-to-a-block-theme), but it takes no images. On a demo, a GLM session reported checking 21 photos by eye and described most of them wrongly, and a later GLM run reported a section-by-section visual match for a block theme whose hero text was unreadable. If you use it, switch with `/model` to a model with `supports_images = true` for every step that needs eyes: checking photos, screenshot comparisons and the `ux-designer` review. Mistral lists GLM 5.3 Flash (`zai-glm-5-3-flash`) as multimodal; it has not been tried with this toolbox.
+
+**Pinning a model to one agent.** A profile can set its own model with `active_model = "large-4"` as its first line, so only that agent runs on it. Keep such a variant out of this repository and generate it from the base profile, because a hand-edited fork stops receiving the toolbox's changes: the instructions, the skills list and the rules that came with each release. After every `git pull`, regenerate it, then `/reload`:
 
 ```bash
-{ echo 'active_model = "glm-5-3"'; sed 's/^display_name = "WP Frontend Builder"$/display_name = "WP Frontend Builder (GLM)"/' ~/code/wp-vibe-toolbox/agents/wp-frontend-builder.toml; } > ~/.vibe/agents/wp-frontend-builder-glm.toml
+{ echo 'active_model = "large-4"'; sed 's/^display_name = "WP Frontend Builder"$/display_name = "WP Frontend Builder (Large 4)"/' ~/code/wp-vibe-toolbox/agents/wp-frontend-builder.toml; } > ~/.vibe/agents/wp-frontend-builder-large.toml
 ```
 
 Setting `active_model` in `~/.vibe/config.toml` instead (above) needs no copy and never goes stale.

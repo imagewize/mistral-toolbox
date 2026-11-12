@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -99,7 +99,7 @@ no image, or an error such as "too large to process", and can still write a conf
 So check before the visual pass: ask the user which model the session runs if you do not know, and
 read its entry in `~/.vibe/config.toml`. Without `supports_images = true`, the visual pass is "not
 done": never describe a screenshot you did not receive, and tell the user to switch with `/model`
-to a model that has it (for example `mistral-medium-3.5`) and run the review again.
+to a model that has it (for example Mistral Large 4 or Medium 3.5) and run the review again.
 
 ## Step 3: Judge
 

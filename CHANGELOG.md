@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Model advice: Mistral Large 4 with `supports_images = true` is now the recommended model for every stage, so one model builds, fixes and looks. `docs/install.md` shows the preset and how to check that images arrive, and says GLM 5.3 is text-only. `agents/README.md` ("Which model") and `demo-project-setup` (1.4.1) `assets/PROMPTS.template.md` drop the "GLM for code, `/model mistral-medium-3.5` for visual steps" split. `demo-project-setup`, `html-page-review` (1.3.1) and `wp-frontend-builder` name Large 4 or Medium 3.5 as examples of a model with image support, and the agent may not test image support by taking a screenshot. From the bakery demo, where a GLM 5.3 session reported a section-by-section visual match for a block theme whose hero text was unreadable.
 - `html-to-block-theme` (1.6.2), `references/composing-with-aludra.md`: a Contact Form 7 shortcode in a `core/shortcode` block inside a pattern that a template includes by slug prints as raw text, because the template runs `do_shortcode()` before `do_blocks()` expands the pattern. The note gives the two fixes (shortcode block in the template, or a `render_block` filter for `core/shortcode`). From the bakery demo, where the agent blamed a WordPress 7.1 change.
 
 ### Changed

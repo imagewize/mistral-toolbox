@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.4.0"
+  version: "1.4.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -316,7 +316,7 @@ photos it had not seen. Scrolling in slices may have added to it.
 user. Read its `[[models]]` entry in `~/.vibe/config.toml`. Without `supports_images = true`, do
 not build the sheet: write "uses by orientation only, not checked by eye" above the credits table,
 assign by orientation, and tell the user to run this step again after switching with `/model` to a
-model that has it (for example `mistral-medium-3.5`). A screenshot tool that returns an error or
+model that has it (for example Mistral Large 4 or Medium 3.5). A screenshot tool that returns an error or
 "too large to process" also means you did not see it.
 
 With image support, build the sheet so a photo cannot be mixed up with its neighbour:
