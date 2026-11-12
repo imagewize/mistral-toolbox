@@ -1,13 +1,13 @@
 ---
 name: demo-project-setup
-description: "Start a new WordPress theme project or demo the way the toolbox runs them: a project folder with the brief in README.md, an image credits table, a PROMPTS.md with one ready-to-paste Vibe prompt per stage (brief to HTML/CSS prototype, review, review notes, block-theme conversion in Mode A or Mode B with Aviendha + Aludra, design pass), a local Laravel Valet site with the required plugins, a first commit and optionally a private GitHub repository. Use when the user wants to start a new demo, client theme or HTML-to-block-theme project, asks for a PROMPTS.md or prompt plan, or asks to set up the folder, local site and repository before building."
+description: "Start a new WordPress theme project or demo the way the toolbox runs them: a project folder with the brief in README.md, an image credits table, a PROMPTS.md with one ready-to-paste Vibe prompt per stage (brief to HTML/CSS prototype, review, review notes, block-theme conversion in Mode A or Mode B with Aviendha + Aludra, design pass), a local Laravel Valet site with the required plugins, a first commit and optionally a private GitHub repository. After the user downloads the photos, a follow-up run resizes them, fills the credits from the Unsplash filenames and fits the prototype prompt to them. Use when the user wants to start a new demo, client theme or HTML-to-block-theme project, asks for a PROMPTS.md or prompt plan, or asks to set up the folder, local site and repository before building, or says the photos have been added."
 user-invocable: true
 allowed-tools:
   - read_file
   - write_file
   - bash
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -26,6 +26,7 @@ command and which prompt start stage 1.
 - A new demo or client theme: "set up a demo for a bakery", "start a new theme project".
 - The user wants a prompt plan (`PROMPTS.md`) for the stages from brief to block theme.
 - The user wants the folder, the Valet site and the repository set up before any building.
+- The photos have been downloaded into `images/` after the set-up: run step 7 only.
 
 Not for changing an existing theme or for running the build stages: those are separate runs with
 `wp-frontend-builder`, using the prompts this skill writes.
@@ -70,23 +71,21 @@ A reference URL alone is not enough: write down what to take from it (layout tra
 photo treatment) and that its name, logo, layout and copy are not copied. The build agent may not
 be able to fetch the site, and a JavaScript-heavy page often comes back almost empty.
 
-**Check the photos before writing anything.** When the visuals are photos, look at the folder
-first, even when the user says the photos are there:
+**Photos come after the set-up.** The usual order is: this run sets up the project, the user then
+downloads the photos into `images/`, and a short follow-up run (step 7) fills in the credits and
+fits prompt 1 to the photos. So an empty or missing `images/` folder is normal, not a problem.
+Still look before writing anything, because the user may have added photos already:
 
 ```bash
 ls <project-dir>/images
 ```
 
-If the folder is missing or empty, ask in the same question round which of these applies, and do
-not assume either:
-
-- **Photos come later.** Prompt 1 keeps the photo rule, `images/CREDITS.md` lists exactly which
-  photos are needed (how many, which orientation, for which section), and the report says that
-  stage 1 must wait until they are in `images/`.
-- **No photos.** Prompt 1 gets the drawings rule (inline SVG or CSS compositions) instead.
-
-If the user asked for minimal questions, take "photos come later" and say so at the top of the
-reply.
+- **Folder missing or empty, visuals are photos:** take "photos come later". Prompt 1 keeps the
+  photo rule, `images/CREDITS.md` lists exactly which photos are needed (how many, which
+  orientation, for which section), and the report gives the step 7 prompt.
+- **Photos already there:** handle them now as in step 7.
+- **No photos at all** (the user said drawings): prompt 1 gets the drawings rule (inline SVG or CSS
+  compositions), and there is no step 7.
 
 ## Step 2 — Create the folder and files
 
@@ -159,18 +158,8 @@ grep -n -e "{{" -e "<!--" <project-dir>/PROMPTS.md <project-dir>/README.md <proj
 
 It must print nothing.
 
-**Photos already in `images/`?** (If not, follow the choice made in step 1: list the photos still
-needed in `CREDITS.md` and skip this part.) List their sizes in one call:
-
-```bash
-file <project-dir>/images/*.jpg
-```
-
-A glob is fine here, it is not a loop. Each JPEG line shows its width x height (run it again with
-`*.png` or `*.webp` for other formats). Add one `CREDITS.md` row per photo
-with its orientation, and tell the user when an orientation the prompts need is missing (for
-example a landscape photo for a full-bleed hero or a wide strip). Adjust prompt 1 to the photos
-that are actually there instead of asking for ones that are not.
+**Photos already in `images/`?** Handle them as in step 7 before the first commit. Otherwise
+leave the credits table empty below its header, with the list of photos still needed above it.
 
 ## Step 3 — Local site (Laravel Valet)
 
@@ -247,18 +236,81 @@ licence of every image and keep `CREDITS.md` complete.
 
 - the folder, the files written and the commit
 - the local URL and the plugin list
-- the photos found and what is still missing (orientations, credits); when the photos come
-  later, say plainly that stage 1 waits until they are in `images/` and their rows are in
-  `CREDITS.md`
-- the command and the prompt for stage 1:
+- the photos found and what is still missing (orientations, credits)
+- what comes next:
+  - **Photos come later:** the list of photos to download (how many, orientation, section, about
+    1600px wide, Unsplash's own download names kept), then the step 7 run in a fresh session:
 
-  ```bash
-  cd <project-dir>
-  vibe --agent wp-frontend-builder --smart-approve
-  ```
+    ```bash
+    cd <project-dir>
+    vibe --agent wp-frontend-builder --smart-approve
+    ```
 
-  then paste prompt 1 from `PROMPTS.md`. Each stage is a fresh session with the agent its section
-  names; after each run, fill in its Result line and the table at the top.
+    ```
+    Load demo-project-setup. Photos added to images/: fill in CREDITS.md, fit prompt 1 to the photos and commit.
+    ```
+
+    Say plainly that stage 1 waits until that run is done.
+  - **Photos in place or no photos:** the same command, then paste prompt 1 from `PROMPTS.md`.
+    Each stage is a fresh session with the agent its section names; after each run, fill in its
+    Result line and the table at the top.
+
+## Step 7 — Photos added (follow-up run)
+
+Run when the user has downloaded the photos into `images/` after the set-up, or in step 2 when
+they were there already. Read `PROMPTS.md`, `README.md` and `images/CREDITS.md` first.
+
+**1. Resize**, if the project has the script:
+
+```bash
+<project-dir>/scripts/resize-images.sh
+```
+
+**2. List sizes** in one call per format (a glob is fine, it is not a loop):
+
+```bash
+file <project-dir>/images/*.jpg
+```
+
+Each JPEG line shows width x height; run it again with `*.png` or `*.webp` if those exist. Portrait
+is taller than wide, landscape wider than tall.
+
+**3. Credits from the filenames.** Unsplash names a download
+`<photographer-name>-<photo-id>-unsplash.jpg`. The photo ID is always the last 11 characters before
+`-unsplash` and may itself contain `-` or `_`: in `rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg`
+the ID is `AoL-mVxprmk` and the photographer is Rafaella Mendes Diniz. Write one row per photo:
+
+| File | Orientation | Use | Photographer | Unsplash URL |
+|------|-------------|-----|--------------|--------------|
+| `rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg` | portrait | featured models | Rafaella Mendes Diniz | https://unsplash.com/photos/AoL-mVxprmk |
+
+Capitalise the name from the filename; it may lose accents or a surname particle, so tell the user
+to check names that look odd. For a file that does not follow the Unsplash pattern, leave
+Photographer and URL empty and list it in the report: never guess a name or an ID. Remove the
+"photos still needed" list once every need is covered, or shorten it to what is still missing.
+
+**4. Assign a use** to each photo from its orientation and the sections in prompt 1 (landscape for
+the hero and wide strips, portrait for cards). If an orientation the sections need is missing, say
+which, and adjust prompt 1 instead of asking for photos that are not there (for example: build the
+campaign strip from portrait crops, or shorten it).
+
+**5. Fit prompt 1.** Name the hero file in it when one photo is clearly the hero. Check that no
+placeholder is left, as in step 2.
+
+**6. Commit:**
+
+Check `git -C <project-dir> status --short` first, then stage only the photos, the credits and the
+prompts (a folder argument, not `-A`, so nothing else slips in):
+
+```bash
+git -C <project-dir> add images PROMPTS.md
+git -C <project-dir> commit -m "chore: add photos and credits"
+```
+
+Push only if the project has a remote and the user asked for it.
+
+**7. Report** the credits table, the names to check, any missing orientation and how prompt 1
+changed, then the command and prompt 1 for stage 1.
 
 ## Files
 

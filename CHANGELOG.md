@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `wp-frontend-builder` (and its subagent copy) loads `demo-project-setup` for a new project, and ends that run with the stage 1 command and prompt instead of building
 - `agents/README.md`: prompt template 0 for a new project; `docs/workflow.md`: a set-up step before design
 
+### Changed
+
+- `demo-project-setup` (1.1.0): photos come after the set-up by default. The set-up run lists the photos still needed in `images/CREDITS.md` and ends with a follow-up prompt; after the user downloads the photos, that follow-up run (new step 7) resizes them, reads their sizes with `file`, fills the credits table from Unsplash's download names (photographer from the name, photo ID from the last 11 characters before `-unsplash`, so `https://unsplash.com/photos/<id>`; never a guessed name or ID for other files), assigns each photo a use by orientation, fits prompt 1 to what is there and commits only `images/` and `PROMPTS.md`. An empty `images/` folder is no longer a question in the brief round
+
 ### Fixed
 
 - `demo-project-setup` (1.0.1): checks `images/` with `ls` before writing anything, even when the prompt says the photos are there. On its first run the prompt said "Photos are in ~/code/bakery-demo/images", the folder did not exist, and the skill created it empty and only flagged that at the end. Now an empty or missing folder is a question in the brief round: photos come later (prompt 1 keeps the photo rule, `CREDITS.md` lists the photos still needed, and the report says stage 1 waits for them) or no photos (prompt 1 gets the drawings rule). With minimal questions it takes "photos come later" and says so
