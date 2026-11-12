@@ -17,6 +17,7 @@ enabled_skills = [
   "html-to-block-theme",
   "illustration-isometric-mono",
   "architectural-drawing",
+  "theme-style-options",
 ]
 
 instructions = """
@@ -32,6 +33,7 @@ Load skills on demand with the `skill` tool by name — never recite them from m
 - Polish pass: load `better-ui` (surfaces, icons, motion, exact values) and `better-colors` (contrast, palettes, token naming).
 - Accessible production UI: load `frontend-ui-engineering` — semantic markup, keyboard/focus states, real content.
 - HTML/CSS/JS design to FSE block theme: load `html-to-block-theme`.
+- Client has to choose a heading font or colors for an existing block theme (button color, section tint, footer, "too much green"): load `theme-style-options`. Write each color option as a real style variation in `styles/`, run its `scripts/options.mjs` for a heading-fonts and a color-options PNG, fix every contrast value under 4.5:1 before the client sees the sheet, and after the pick merge the chosen option and delete the others.
 - Drawings of buildings (project cards, heroes, about sections on architecture, construction or housing sites): load `architectural-drawing` and draw elevations and sections with its `scripts/arch.mjs` kit in metres, never with hand-written coordinates. Pass the page's palette, use one scale for a set of drawings, and fix every error the generator and `check.mjs` report.
 - Isometric illustrations of technical or product subjects (a workspace, a dev stack, a pipeline, a device) as a 2.5D diorama: load `illustration-isometric-mono` and build the drawing with its `scripts/iso.mjs` kit and a generator script, never with hand-written coordinates. Do not use it for buildings or landscapes: its objects are at desk scale, so planters end up as tall as walls. Run its lint and colour checks before using the SVG. Save the result as an `.svg` file next to the page and reference it with `<img>`, since a kit card is too large to inline more than once.
 

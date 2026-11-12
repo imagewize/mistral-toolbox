@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**Upgrading a local clone:** re-run the `agents/` sync (`rsync -a ~/code/wp-vibe-toolbox/agents/ ~/.vibe/agents/`) and `/reload`, so `wp-frontend-builder` can load `theme-style-options`. The skill itself needs no step.
+
 ### Added
 
+- `theme-style-options` (1.0.0): option sheets for a block theme that a client can pick from. `scripts/options.mjs colors` renders one mini page per style variation (theme.json merged with `styles/*.json` the way WordPress does it: objects merge, arrays such as the palette are replaced) with header, hero and buttons, a dark band, a tinted section, the footer, a palette strip and measured contrast for button, body, band and footer text, flagged red under 4.5:1. The band, tint and footer roles are detected from the parts and the slugs that patterns use, with `--roles` to override. `scripts/options.mjs fonts` compares Fontsource heading-font candidates (variable axes such as `SOFT=100+WONK=1` supported, licence shown per card) with the theme's current heading font. Both write a portable HTML file plus `fonts/` and take the PNG with Chrome headless, so no npm install is needed. The workflow writes every color option as a real style variation, so the client's pick is already theme code
+- `wp-frontend-builder` (and its subagent copy) loads `theme-style-options` when a client has to choose a heading font or colors for an existing block theme
 - `docs/install.md`: how to pin a model to one agent (`active_model` in the profile) without letting the fork go stale: generate it from the base profile after every `git pull`, or set `active_model` in `~/.vibe/config.toml` instead
 
 ## [1.15.0] - 2026-11-11

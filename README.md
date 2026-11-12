@@ -13,7 +13,7 @@ From an HTML design to a reviewed FSE block theme, a safe update round and SEO c
 [![Latest release](https://img.shields.io/github/v/release/imagewize/wp-vibe-toolbox?label=release&color=orange)](https://github.com/imagewize/wp-vibe-toolbox/releases/latest)
 [![License: MIT](https://img.shields.io/github/license/imagewize/wp-vibe-toolbox?color=blue)](LICENSE.md)
 [![Mistral Vibe](https://img.shields.io/badge/Mistral-Vibe-FA520F)](https://docs.mistral.ai/vibe/)
-[![Skills](https://img.shields.io/badge/skills-60-brightgreen)](docs/skills.md)
+[![Skills](https://img.shields.io/badge/skills-61-brightgreen)](docs/skills.md)
 [![Agents](https://img.shields.io/badge/agents-9-brightgreen)](docs/agents.md)
 [![Prompts](https://img.shields.io/badge/Le%20Chat%20prompts-2-brightgreen)](docs/le-chat-prompts.md)
 
@@ -74,11 +74,11 @@ Using Le Chat instead? Paste [`FRONTEND-DEV.md`](prompts/frontend-dev/FRONTEND-D
 
 | Kind | Count | |
 |------|:-----:|---|
-| [Vibe skills](docs/skills.md) | 60 | Slash commands that read your files, run git and linters, and report |
+| [Vibe skills](docs/skills.md) | 61 | Slash commands that read your files, run git and linters, and report |
 | [Vibe agents](docs/agents.md) | 9 | Role profiles for `vibe --agent NAME`, each with a spawnable subagent copy |
 | [Le Chat prompts](docs/le-chat-prompts.md) | 2 | System prompts for agents without shell access, with recorded runs |
 
-Skills by area: WordPress development (9) · Design & frontend (16) · Development workflow & quality (11) · DevOps & release (11) · SEO & content marketing (13).
+Skills by area: WordPress development (9) · Design & frontend (17) · Development workflow & quality (11) · DevOps & release (11) · SEO & content marketing (13).
 
 Why they behave the way they do: [design principles](docs/principles.md).
 
