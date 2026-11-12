@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `demo-project-setup` (1.4.0), `assets/PROMPTS.template.md`: every stage says which model to use. A fast coding model such as GLM builds and fixes; the review (stage 2) runs after `/model mistral-medium-3.5`, or another model with `supports_images = true`, with what a good run looks like and the permission prompt for the toolbox's `probe.html` and `frame.html`; stages 3–5 switch to that model in the same session for the screenshot comparison. The screenshot steps in prompts 4 and 5 (and the Mode A variant) take the 390px screenshot through `html-page-review/frame.html`, never `--window-size=390`. From the bakery demo, where the build ran on GLM without a visual check and the review needed Medium 3.5
+- `agents/README.md`, Running the agents: a "Which model for which step" paragraph, and prompt template 1 takes its 390px screenshot through `frame.html`
+
 ## [1.18.0] - 2026-11-12
 
 Visual checks got honest. The bakery demo's first runs showed two ways an agent can report confidently on images it never really saw: a model without image support in Vibe (GLM) "checked" 21 photos by eye and described most of them wrongly, and phone screenshots taken with `--window-size=390` were really 500px layouts with the right side cut off. The agents and skills now check image support before any visual step, take phone screenshots through an iframe at the exact width, and the photo follow-up of `demo-project-setup` builds a numbered contact sheet and picks the hero block to match the brief.

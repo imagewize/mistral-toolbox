@@ -109,6 +109,13 @@ vibe --agent wp-frontend-builder --smart-approve
    390px, a working mobile menu,
 5. when to stop and ask: only for a real decision, not for each step.
 
+**Which model for which step.** Build and fix on a fast coding model such as GLM; it has no image
+support in Vibe, so it measures instead of looking. For anything that needs eyes (the review,
+checking photos, comparing screenshots) switch the running session with `/model mistral-medium-3.5`,
+or another model whose `[[models]]` entry has `supports_images = true`, and switch back after. Phone
+screenshots go through `skills/html-page-review/frame.html` (an iframe at the exact width), because
+headless Chrome on macOS will not make a window narrower than 500px.
+
 ### Prompts for `wp-frontend-builder`
 
 Replace the `<…>` values. Each template is meant to finish a stage in one run; use the next one
@@ -127,7 +134,7 @@ stage 1 with the prompt from that `PROMPTS.md`.
 **1. Brief → HTML/CSS prototype**
 
 ```
-Load design-first-ui-prompting and frontend-design. Build <page> for <client> from this brief: <audience, offer, tone, language>. One index.html, one locked design system, one <section> per future block pattern, real copy in <language>. Include a header navigation that collapses into a hamburger below 1024px (see html-to-block-theme/references/mobile-navigation.md). Screenshot at 390, 800 and 1440px with headless Chrome and fix what you see. List the assumptions you made at the top of your reply.
+Load design-first-ui-prompting and frontend-design. Build <page> for <client> from this brief: <audience, offer, tone, language>. One index.html, one locked design system, one <section> per future block pattern, real copy in <language>. Include a header navigation that collapses into a hamburger below 1024px (see html-to-block-theme/references/mobile-navigation.md). Screenshot at 390, 800 and 1440px with headless Chrome, the 390px one through html-page-review/frame.html, and fix what you see. List the assumptions you made at the top of your reply.
 ```
 
 **2. Prototype → block theme, design layer included (Mode B)**
