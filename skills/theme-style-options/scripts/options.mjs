@@ -212,7 +212,7 @@ function usedSlugs(attr) {
 }
 function partColors(part) {
   const p = path.join(themeDir, 'parts', `${part}.html`);
-  if (!fs.existsSync(p)) return {};
+  if (!fs.existsSync(p)) return null;
   const txt = fs.readFileSync(p, 'utf8');
   return { bg: txt.match(/"backgroundColor":"([a-z0-9-]+)"/)?.[1], text: txt.match(/"textColor":"([a-z0-9-]+)"/)?.[1] };
 }
@@ -224,14 +224,16 @@ function detectRoles(settings) {
   const L = s => lum(pal[s]) ?? 0.5;
   const bgs = usedSlugs('backgroundColor').filter(has);
   const texts = usedSlugs('textColor').filter(has);
-  const header = partColors('header'), footer = partColors('footer');
+  // A part that exists but sets no color inherits the body colors in WordPress (null = inherit).
+  // Only a theme without the part at all gets a mock dark footer.
+  const header = partColors('header') || {}, footerPart = partColors('footer'), footer = footerPart || {};
   const light = ['base', 'white'].find(has) || Object.keys(pal).sort((a, b) => L(b) - L(a))[0];
   const darkest = Object.keys(pal).sort((a, b) => L(a) - L(b))[0];
   const roles = {
     header: has(header.bg) ? header.bg : null,
     'header-text': has(header.text) ? header.text : null,
-    footer: has(footer.bg) ? footer.bg : darkest,
-    'footer-text': has(footer.text) ? footer.text : light,
+    footer: has(footer.bg) ? footer.bg : footerPart ? null : darkest,
+    'footer-text': has(footer.text) ? footer.text : footerPart ? null : light,
     band: bgs.find(s => L(s) < 0.18 && s !== footer.bg) || bgs.find(s => L(s) < 0.18) || darkest,
     'band-text': light,
     tint: bgs.find(s => L(s) > 0.55 && s !== light) || ['tertiary', 'primary-accent'].find(has) || light,
@@ -364,13 +366,14 @@ function colorsSheet() {
     if (s.css) css += `${scope} .mini{${s.css}}\n`; // theme.json "css" string, scoped with native CSS nesting
 
     const R = slug => resolveVar(slug ? `var(--wp--preset--color--${slug})` : '', vars);
+    const bodyText = resolveVar(s.color?.text, vars), bodyBg = resolveVar(s.color?.background, vars);
     const btn = s.elements?.button?.color || {};
     const checks = [
       ['button', resolveVar(btn.text, vars), resolveVar(btn.background, vars)],
       ['body', resolveVar(s.color?.text, vars), resolveVar(s.color?.background, vars)],
       ['band', R(roles['band-text']), R(roles.band)],
       ['band accent', R(roles['band-accent']), R(roles.band)],
-      ['footer', R(roles['footer-text']), R(roles.footer)],
+      ['footer', roles['footer-text'] ? R(roles['footer-text']) : bodyText, roles.footer ? R(roles.footer) : bodyBg],
     ].map(([k, a, b]) => {
       const r = ratio(a, b);
       return r == null ? `${k} n/a` : r < 4.5 ? `<b class=bad>${k} ${r.toFixed(1)}:1</b>` : `${k} ${r.toFixed(1)}:1`;
@@ -382,7 +385,7 @@ function colorsSheet() {
 <div class=hero><h1>${esc(copy.heroTitle)}</h1><p>${esc(copy.heroText)}</p><span class=btn>${esc(copy.cta)}</span><a class=more href="#">${esc(copy.cta2)} →</a></div>
 <div class=band style="background:${cv(roles.band)};color:${cv(roles['band-text'])}"><h2>${esc(copy.bandTitle)}</h2><p style="color:${cv(roles['band-accent'])}">${esc(copy.bandText)}</p></div>
 <div class=tint style="background:${cv(roles.tint)}"><h3>${esc(copy.tintTitle)}</h3><span class=btn>${esc(copy.tintCta)}</span></div>
-<div class=ft style="background:${cv(roles.footer)};color:${cv(roles['footer-text'])}"><b>${esc(copy.siteName)}</b><span>${esc(copy.footer)}</span></div>
+<div class=ft style="${roles.footer ? `background:${cv(roles.footer)};` : ''}${roles['footer-text'] ? `color:${cv(roles['footer-text'])}` : ''}"><b>${esc(copy.siteName)}</b><span>${esc(copy.footer)}</span></div>
 </div>
 <div class=strip>${pal.map(p => `<i style="background:${esc(p.color)};color:${(lum(p.color) ?? 1) < 0.4 ? '#fff' : '#000'}" title="${esc(p.slug)} ${esc(p.color)}">${esc(p.slug)}</i>`).join('')}</div></div>\n`;
   });
@@ -392,7 +395,7 @@ function colorsSheet() {
   const width = PAD * 2 + cols * colW + (cols - 1) * GAP;
   const height = PAD * 2 + HEAD + rows * cardH + (rows - 1) * GAP;
   css += `.grid{grid-template-columns:repeat(${cols},${colW}px)}`;
-  const page = `<div class=sheet-title>${esc(copy.siteName)} · color options<small>${cards.length} options from theme.json and styles/ · roles: band ${esc(roles.band)}, tint ${esc(roles.tint)}, footer ${esc(roles.footer)}</small></div><div class=grid>${body}</div>`;
+  const page = `<div class=sheet-title>${esc(copy.siteName)} · color options<small>${cards.length} options from theme.json and styles/ · roles: band ${esc(roles.band)}, tint ${esc(roles.tint)}, footer ${esc(roles.footer ?? 'inherits body')}</small></div><div class=grid>${body}</div>`;
   writeSheet('color-options', `${copy.siteName} color options`, css, page, width, height);
 }
 
