@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/theme-style-options"
 ---
 
@@ -89,7 +89,8 @@ Without `--variations` it takes every `styles/*.json` and `styles/colors/*.json`
 styles that have `blockTypes`. The first card is the theme without a variation (`--no-current` drops
 it).
 
-The script prints the **roles** it detected: the header and footer colors from the parts, the dark
+The script prints the **roles** it detected: the header and footer colors from the parts (a part
+that sets no text or background color inherits the body colors, as in WordPress), the dark
 band and the tint as the most used dark and light `backgroundColor` slugs in patterns, and the band
 accent as the most used light `textColor`. If one is wrong, override it, for example
 `--roles band=secondary,band-accent=leaf-light`. The roles are slugs, so each variation shows its own
@@ -122,7 +123,9 @@ Never report a contrast value you did not read from the sheet or measure.
   shadow), body text and background, the theme.json `css` string (colors mode), the header and footer
   colors from the parts.
 - Doesn't show: font sizes and spacing (the mini page has its own scale), block-level styles, colors set
-  inside individual patterns other than the detected roles, hover states, and images. It's a
+  inside individual patterns other than the detected roles, hover states, and images. A variation's
+  `css` rules that target the theme's own classes (`footer.foot { … }`) don't reach the mock either,
+  so a contrast fix made that way still shows red on the sheet: confirm it on the real site. It's a
   comparison sheet, not a page preview. Screenshot the real site for that.
 
 ## Options
