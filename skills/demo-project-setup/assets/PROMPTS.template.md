@@ -27,8 +27,15 @@ Done with the `demo-project-setup` skill. To repeat it by hand:
 
 **Images.** {{IMAGE_INSTRUCTIONS}}
 Use only downloaded files, never made-up stock URLs: the agent invents photo IDs, which give broken
-images, and the theme needs local files anyway. Run `scripts/resize-images.sh` after adding photos
-and add one row per photo to `images/CREDITS.md`.
+images, and the theme needs local files anyway. Keep Unsplash's own download names: the follow-up
+run reads the photographer and photo ID from them. After adding the photos, start a fresh session
+and paste:
+
+```
+Load demo-project-setup. Photos added to images/: fill in CREDITS.md, fit prompt 1 to the photos and commit.
+```
+
+It resizes the photos, writes one `images/CREDITS.md` row per photo and fits prompt 1 to them.
 
 **Local site.** Laravel Valet{{SITE_PLUGINS}}:
 
