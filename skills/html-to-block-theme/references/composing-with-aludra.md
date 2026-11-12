@@ -122,7 +122,7 @@ rules have to be moved into the theme as well, in this order:
    `blogdescription` (`wp option update`), since the header shows the site title.
 5. **Plugin output the theme renders** (e.g. the Contact Form 7 form inside
    `aludra/contact-section`): its template must keep the source's visible labels. Placeholders
-   instead of labels are an accessibility regression. Three things to know about Contact Form 7:
+   instead of labels are an accessibility regression. Four things to know about Contact Form 7:
    - The form template lives in the database (`_form` post meta), not in the theme. Keep a copy in
      the theme (`assets/forms/contact-form-7-<name>.txt`) and document how to load it
      (`wp post meta update <form-id> _form "$(cat assets/forms/<file>.txt)"`), or a fresh install
@@ -134,6 +134,12 @@ rules have to be moved into the theme as well, in this order:
      flex), or the required star and the hint land on separate lines.
    - Check the rendered form: the field tops in one row must line up, and the submit button must
      not inherit Aludra's uppercase, arrow icon and `translateY` hover.
+   - A form outside `aludra/contact-section` goes in a `core/shortcode` block. If that block sits
+     in a pattern that a template includes with `<!-- wp:pattern {"slug":"…"} /-->`, the shortcode
+     prints as raw text: the template's `do_shortcode()` runs on its markup before `do_blocks()`
+     expands the pattern, and `render_block_core_pattern()` does not run it again. This is core
+     behaviour, not a version change. Put the shortcode block in the template itself, or add a
+     `render_block` filter to the theme that runs `do_shortcode()` on `core/shortcode` blocks only.
 6. **Theme CSS only for what is left**, in one block at the end of `style.css` headed
    `/* <Client> design layer */`, one comment per rule naming the section and why `theme.json` or a
    variation can't do it. Don't edit the starter's own rules in place. Override them in that block,
