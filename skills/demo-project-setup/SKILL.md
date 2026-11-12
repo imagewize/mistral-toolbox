@@ -1,13 +1,13 @@
 ---
 name: demo-project-setup
-description: "Start a new WordPress theme project or demo the way the toolbox runs them: a project folder with the brief in README.md, an image credits table, a PROMPTS.md with one ready-to-paste Vibe prompt per stage (brief to HTML/CSS prototype, review, review notes, block-theme conversion in Mode A or Mode B with Aviendha + Aludra, design pass), a local Laravel Valet site with the required plugins, a first commit and optionally a private GitHub repository. After the user downloads the photos, a follow-up run resizes them, fills the credits from the Unsplash filenames and fits the prototype prompt to them. Use when the user wants to start a new demo, client theme or HTML-to-block-theme project, asks for a PROMPTS.md or prompt plan, or asks to set up the folder, local site and repository before building, or says the photos have been added."
+description: "Start a new WordPress theme project or demo the way the toolbox runs them: a project folder with the brief in README.md, an image credits table, a PROMPTS.md with one ready-to-paste Vibe prompt per stage (brief to HTML/CSS prototype, review, review notes, block-theme conversion in Mode A or Mode B with Aviendha + Aludra, design pass), a local Laravel Valet site with the required plugins, a first commit and optionally a private GitHub repository. After the user downloads the photos, a follow-up run resizes them, checks them by eye on a contact sheet, fills the credits from the Unsplash filenames and fits the prototype prompt to them. Use when the user wants to start a new demo, client theme or HTML-to-block-theme project, asks for a PROMPTS.md or prompt plan, or asks to set up the folder, local site and repository before building, or says the photos have been added."
 user-invocable: true
 allowed-tools:
   - read_file
   - write_file
   - bash
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -150,6 +150,21 @@ aludra/<block> (see <pattern>.php)`, for example
 `html-to-block-theme/references/composing-with-aludra.md` for which block suits which section, and
 only name blocks and patterns that the `ls` shows.
 
+Match the layout the brief and the references ask for, not only the section name. The hero is the
+usual trap:
+
+| The brief asks for | Use | Not |
+|--------------------|-----|-----|
+| Heading and text beside a photo or drawing | `aludra/hero-split` (`section-hero-split.php`) | |
+| A full-bleed photo with text over it | `core/cover`, listed as a gap; or, for several rotating photos, `aludra/carousel` with `aludra/slide` + `core/cover` (`carousel-hero-carousel.php`) | `aludra/hero-split` (the photo sits beside the text) or `aludra/hero-banner` (text only, no image) |
+| Text only, no image | `aludra/hero-banner` (`section-hero-banner.php`) | |
+
+Check a block's own description before relying on it for an image:
+
+```bash
+grep -n "description" ~/code/aludra/blocks/<block>/src/block.json
+```
+
 Then check that no placeholder or template comment is left:
 
 ```bash
@@ -289,18 +304,54 @@ to check names that look odd. For a file that does not follow the Unsplash patte
 Photographer and URL empty and list it in the report: never guess a name or an ID. Remove the
 "photos still needed" list once every need is covered, or shorten it to what is still missing.
 
-**4. Assign a use** to each photo from its orientation and the sections in prompt 1 (landscape for
-the hero and wide strips, portrait for cards). If an orientation the sections need is missing, say
-which, and adjust prompt 1 instead of asking for photos that are not there (for example: build the
-campaign strip from portrait crops, or shorten it).
+**4. Look at the photos.** Orientation alone is not enough: a landscape photo of a man with a phone
+is not a bakery hero. And looking is easy to get wrong: on the first real run the agent scrolled a
+contact sheet in four slices, reported that it had checked every photo, and still described most of
+them wrongly (it called a row of cupcakes "bread and butter on a work table" and made it the hero).
+So build the sheet so a photo cannot be mixed up with its neighbour:
 
-**5. Fit prompt 1.** Name the hero file in it when one photo is clearly the hero. Check that no
+- Write `<project-dir>/contact-sheet.html` with `write_file`: a grid of 4 columns, one `<figure>`
+  per photo, `<img src="images/<file>">` 300px wide and 220px high with `object-fit: contain`, and
+  a large tile number (1, 2, 3 …) plus the filename as `<figcaption>` directly under each image.
+- Below the grid, a numbered list: tile number, filename.
+- Take **one** screenshot of the whole sheet, not slices. Each row of 4 is about 210px high, so set
+  the window height to about 210 × rows + 200 (2400 fits 32 photos). Absolute paths; on Linux the
+  binary is `google-chrome` or `chromium`:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars --window-size=1400,2400 --screenshot=<project-dir>/contact-sheet.png file://<project-dir>/contact-sheet.html
+```
+
+Open the PNG with `read_file` if the session shows images, or open the HTML with browser tools if
+they are connected (the `real-browser-control` skill). Describe each tile by its number first, then
+look the filename up in the list; never describe a filename from memory. Before writing the
+credits, look again at every photo you are about to name as a primary (hero, first card, workshop,
+about, shop front) and confirm its description matches. Then delete both files:
+
+```bash
+rm <project-dir>/contact-sheet.html <project-dir>/contact-sheet.png
+```
+
+If neither way shows you the images, say so plainly: write "uses by orientation only, not checked
+by eye" above the credits table, and ask the user to look at the photos before stage 1. Never
+describe a photo you have not seen; an Unsplash URL slug is a hint, not a check.
+
+**5. Assign a use** to each photo from what it shows, its orientation and the sections in prompt 1
+(landscape for the hero and wide strips, portrait for cards). Put the subject in the Use column
+("cake card — layered cream cake"). Name one primary photo per section and the rest as alternates;
+mark a photo that fits no section as "spare — <why>" so the build skips it. If an orientation or a
+subject the sections need is missing, say which, and adjust prompt 1 instead of asking for photos
+that are not there (for example: build the campaign strip from portrait crops, or shorten it).
+
+**6. Fit prompt 1.** Name the hero file and the primary photo per section in it. Check the hero
+block in prompt 4 against the hero photo: a full-bleed photo needs `core/cover` or the hero
+carousel, not `aludra/hero-split` (see the table in step 2), so fix that line too. Check that no
 placeholder is left, as in step 2.
 
-**6. Commit:**
+**7. Commit:**
 
-Check `git -C <project-dir> status --short` first, then stage only the photos, the credits and the
-prompts (a folder argument, not `-A`, so nothing else slips in):
+Check `git -C <project-dir> status --short` first (the contact sheet must be gone), then stage only
+the photos, the credits and the prompts (a folder argument, not `-A`, so nothing else slips in):
 
 ```bash
 git -C <project-dir> add images PROMPTS.md
@@ -309,8 +360,10 @@ git -C <project-dir> commit -m "chore: add photos and credits"
 
 Push only if the project has a remote and the user asked for it.
 
-**7. Report** the credits table, the names to check, any missing orientation and how prompt 1
-changed, then the command and prompt 1 for stage 1.
+**8. Report** the primary photo per section, the spares and why, whether the photos were checked by
+eye, the names to check, any missing orientation or subject, and how prompts 1 and 4 changed, then
+the command and prompt 1 for stage 1. Ask the user to open the primaries before stage 1: the build
+writes alt text and picks crops from these descriptions, so a wrong one ends up on the page.
 
 ## Files
 
