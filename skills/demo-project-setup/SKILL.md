@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.4.1"
+  version: "1.4.2"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -258,7 +258,7 @@ licence of every image and keep `CREDITS.md` complete.
 
     ```bash
     cd <project-dir>
-    vibe --agent wp-frontend-builder --smart-approve
+    vibe --agent wp-frontend-builder
     ```
 
     ```

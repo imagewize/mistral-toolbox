@@ -14,7 +14,29 @@ The skill's generic checks are the same everywhere; what catches most regression
 <details>
 <summary><strong>Fewer approval prompts</strong></summary>
 
-**Quickest:** start Vibe with `vibe --agent wp-frontend-builder --smart-approve`. It classifies each tool call and only prompts for risky ones. `--auto-approve` (alias `--yolo`) skips every prompt, so use it only on a throwaway site. Commands that chain with `&&`, `;` or `|`, use shell variables, or touch paths outside the working directory (for example `~/code/aludra` or the local site's folder) prompt every time even when each command is on the allowlist; in the approval dialog choose "Allow for remainder of this session".
+**Quickest:** put the read-only commands on the allowlist, grant the folders the agent reads outside the project (next paragraph) and start with `vibe --agent wp-frontend-builder`. `--smart-approve` does nothing next to a custom agent (see **Smart approve** below). `--auto-approve` (alias `--yolo`) skips every prompt, so use it only on a throwaway site. Vibe 3.1.2 splits a chain on `|`, `;` and `&&` and checks each command against the allowlist, so `grep … | head -5` runs without a prompt when both commands are allowed. Shell variables (`$X`) and redirects (`>`) always prompt. When a prompt does come, choose "Allow for remainder of this session".
+
+**Paths outside the project.** A command that names a path outside the working directory prompts for that path, even when the command is on the allowlist: another theme, `~/code/aludra`, the WordPress core files of a local site, a screenshot on the Desktop. The `grep` pattern in `grep -o '/Users/you/Desktop/shot.png'` counts too, because Vibe checks every argument that looks like a path. Grant whole folders in `~/.vibe/config.toml`, in both the shell and the `read_file` allowlist, with absolute paths:
+
+```toml
+[tools.bash]
+allowlist = [
+    "vibe-path:directory_recursive:/Users/you/code",
+    "vibe-path:directory_recursive:/Users/you/.config/valet/Sites",
+    "vibe-path:directory_recursive:/Users/you/Desktop",
+    "sed -n",
+    # … the other commands
+]
+
+[tools.read_file]
+allowlist = [
+    "vibe-path:directory_recursive:/Users/you/code",
+    "vibe-path:directory_recursive:/Users/you/.config/valet/Sites",
+    "vibe-path:directory_recursive:/Users/you/Desktop",
+]
+```
+
+A grant only clears the path check. The command still needs its own allowlist entry, and an allowed command may then do anything it can in that folder. So allow `sed -n`, not `sed`, or `sed -i` edits any file in a granted folder without asking. For a single session, `vibe --add-dir DIR` makes the folder part of the working directory instead. `[tools.grep]` takes no allowlist: the agent searches through the shell.
 
 Approvals come from the `[tools.bash] allowlist` in Vibe's config, not from a skill's `allowed-tools`. Put the commands the skill runs in the project's `.vibe/config.toml` so everyone on the project gets the same approvals. A project allowlist **replaces** the one in `~/.vibe/config.toml`, so include the read-only basics too — the **Setup** section of [code-review's SKILL.md](../skills/code-review/SKILL.md) has a starting list.
 
@@ -62,7 +84,7 @@ provider = "mistral"
 alias = "classifier"
 ```
 
-`smart_approve` must be the `alias` of one of your `[[models]]` presets (or `active` for the session model). To make smart approve the default, set `default_agent = "smart-approve"`. That applies when you start `vibe` without `--agent`. Whether a custom profile such as `wp-frontend-builder` can also run in smart-approve mode is not documented on that page, so check with a short test run before relying on it.
+`smart_approve` must be the `alias` of one of your `[[models]]` presets (or `active` for the session model). To make smart approve the default, set `default_agent = "smart-approve"`. That applies when you start `vibe` without `--agent`. Smart approve is an agent of its own: Vibe runs the classifier only while the active agent is `smart-approve`. `vibe --agent wp-frontend-builder --smart-approve` runs `wp-frontend-builder` with ordinary prompts (checked with Vibe 3.1.2), so the toolbox agents need the allowlist and path grants above.
 
 </details>
 
