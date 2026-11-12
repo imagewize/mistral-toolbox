@@ -1,0 +1,42 @@
+<!doctype html>
+<!--
+  html-page-review screenshot frame.
+
+  Shows a target page in an iframe at an exact width, so a headless Chrome
+  screenshot shows the page as a phone of that width would. Needed because
+  headless Chrome on macOS will not make its window narrower than 500px:
+  with --window-size=390,… the page is laid out at 500px and the screenshot
+  cuts off its right side, so the hamburger, the end of the headline and the
+  second button disappear and look like bugs.
+
+    frame.html?target=file:///abs/path/index.html&w=390&h=5000
+
+  Screenshot it with a window at least 500px wide and as tall as h:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new
+      --hide-scrollbars --allow-file-access-from-files --virtual-time-budget=6000
+      --window-size=600,5000 --screenshot=/tmp/page-390.png
+      "file:///abs/skill/dir/frame.html?target=file:///abs/path/index.html&w=390&h=5000"
+
+  The page fills the left w pixels; the rest of the image is white.
+  `vh` units resolve against h, so judge full-screen heroes from the probe.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>html-page-review frame</title>
+<style>html,body{margin:0;background:#fff}iframe{border:0;display:block}</style>
+</head>
+<body>
+<iframe id="page" title="Page under review"></iframe>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var frame = document.getElementById('page');
+  frame.style.width = parseInt(params.get('w') || '390', 10) + 'px';
+  frame.style.height = parseInt(params.get('h') || '5000', 10) + 'px';
+  frame.src = params.get('target') || 'about:blank';
+}());
+</script>
+</body>
+</html>
