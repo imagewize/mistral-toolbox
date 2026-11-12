@@ -1,0 +1,4 @@
+node_modules/
+vendor/
+sentinel-*.log.json
+.DS_Store

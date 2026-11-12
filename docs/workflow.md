@@ -4,6 +4,7 @@ The skills and agents are built to chain, from a design to a live, maintained si
 
 | Step | Use | What you get |
 |------|-----|--------------|
+| 0. Set up | [`wp-frontend-builder`](../agents/wp-frontend-builder.toml) with [`/demo-project-setup`](../skills/demo-project-setup/SKILL.md) | A project folder with the brief, a `PROMPTS.md` holding the prompt for every stage, a local Valet site with the plugins, and a first commit |
 | 1. Design | [`wp-frontend-builder`](../agents/wp-frontend-builder.toml) with `/design-first-ui-prompting`, `/frontend-design`, `/no-ai-design-slop` | A locked design system and an anchored HTML/CSS prototype, one section per future block pattern |
 | 2. Build | [`/html-to-block-theme`](../skills/html-to-block-theme/SKILL.md) | The HTML/CSS/JS design as a production FSE block theme with `theme.json` v3, patterns and parts |
 | 3. Review | [`wp-reviewer`](../agents/wp-reviewer.toml), [`/code-review`](../skills/code-review/SKILL.md) | The diff reviewed against WordPress coding standards, every finding labelled CONFIRMED or PLAUSIBLE with a failure scenario |
