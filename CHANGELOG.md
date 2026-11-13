@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `theme-style-options` (1.0.2), `scripts/options.mjs fonts`: `--body NAME` without a weight loaded the 700 heading default, so body text in every card rendered bold (seen with `--body Poppins`, a static family). Body fonts now default to 400; `--body Name:weight` still picks another weight.
+
 ## [1.19.1] - 2026-11-12
 
 ### Fixed
