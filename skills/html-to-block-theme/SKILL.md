@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.6.4"
+  version: "1.7.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -171,6 +171,22 @@ footer, form submit, focus rings. A `theme.json` hover that is missing from the 
 not apply. Do not write a DevTools-protocol script or install a websocket library to hover in a
 browser, and do not use `node` or `python3` for it; list anything only a real hover can confirm
 for the user to check by hand.
+
+Port colours by value, never by name: a source that already uses `--wp--preset--color--*` names
+can mean another colour by the same slug than the theme does. Write the mapping at the top of the
+design layer and check every colour variable against it (`references/composing-with-aludra.md`,
+steps 3 and 5). End the conversion with the report in `conversion-report.md`.
+
+**After the conversion: the design pass.** Run it in two kinds of rounds, never mixed:
+
+1. **Compare, no edits.** Screenshots of the source and the site at 1440px and 390px (open mobile
+   menu included), then a numbered list of differences per section: width, what the source shows,
+   what the site shows, and the file it likely comes from. Sorted by how visible, unsure ones
+   marked. The user picks the numbers to fix.
+2. **Apply the chosen numbers**, edits first, then the checks. Nothing else.
+
+In the report, a layout value you did not measure after the edit is a prediction: write
+"expected: 340px wide", not "is 340px wide". The user measures it in a browser before accepting.
 
 **Before proceeding, explicitly state:**
 

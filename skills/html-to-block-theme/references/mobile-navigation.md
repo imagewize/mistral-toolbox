@@ -83,8 +83,11 @@ Check the same three widths again on the converted theme. `html-page-review` car
   overlay if it stays.
 - `.site-nav ul { display: flex }` rules apply only to the closed state:
   `.site-nav .wp-block-navigation__responsive-container:not(.is-menu-open) ul`.
-- After a CSS change, hard-reload before judging it: the browser keeps the old stylesheet and the
-  old layout looks like a bug in the new one.
+- After a CSS change, the browser keeps the old stylesheet while its URL stays the same, and the
+  old layout looks like a bug in the new one. A starter that enqueues `style.css` with the theme
+  version (`wp_get_theme()->get( 'Version' )`) never changes that URL during development: version it
+  with `(string) filemtime( get_template_directory() . '/style.css' )`, paired with
+  `get_template_directory_uri()` in the same call (see `references/forking-a-starter-theme.md`).
 
 ## 4. Style the overlay
 
@@ -100,12 +103,23 @@ scoped to `.<prefix>-header .wp-block-navigation__responsive-container.is-menu-o
   (from the nav's "justify right"), so `text-align: left` on the list and a full-width link do
   nothing: the link stays shrink-wrapped against the right edge. Set `align-items: stretch` on the
   `ul` and on `.wp-block-navigation-item`, and `justify-content: flex-start` on the link.
+- **Side gutter.** Once the links are left-aligned they touch the screen edge (x = 0). Give the open
+  list the prototype's panel padding (`.is-menu-open .wp-block-navigation__container`). The close
+  button is a sibling of the list, so it stays in its corner.
 - **Numbers without markup.** `counter-reset` on the `ul`, `counter-increment` and
   `content: counter(n, decimal-leading-zero)` in `a::before`. Exclude the CTA item with `:not(.nav-cta)`.
 - **A CTA the header lost on phones.** Add one more `core/navigation-link` with
   `"className":"nav-cta"` (label, URL of the header button). Hide it by default
   (`.header .nav-cta { display: none }`) and show it only inside `.is-menu-open`, styled as a button.
+  The item is a flex box aligned by the nav's justification, so the link shrinks and sits on the
+  right: give the item `justify-content: flex-start` and the link `flex: 1 1 auto`,
+  `align-items: center` and `justify-content: center`. Give the link `box-sizing: border-box` too:
+  core's link is `content-box`, so `width: 100%` plus button padding overflows the panel (340px
+  became 396px in the bakery demo) and `min-height` plus padding makes it too tall (62px became 96px).
 - **The close button** takes the panel's text colour (`.wp-block-navigation__responsive-container-close`),
   or it vanishes on a dark panel. The first link shows a focus ring when the menu opens: that is
   core moving focus into the dialog, so keep it.
 - Check it open at 390px: panel colour, left edge of the links, one folio per link, the CTA last.
+  Measure, don't estimate: the left and right edge and the height of the first link and of the
+  CTA, and that the page has no horizontal scroll. In the bakery demo the agent reported "fills
+  20–360px, 62px tall" twice before the browser agreed.

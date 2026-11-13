@@ -96,6 +96,20 @@ same value and say which in the report (for example `main` = `contrast` for a tw
 Don't keep a second set of slugs named after the source design (`paper`, `ink`, …) next to them.
 That gives the Site Editor two names for one colour.
 
+**Write the mapping down, and port colours by value, never by name.** A source design that already
+uses `--wp--preset--color--*` names will share some of them with Aludra's slugs while meaning
+another colour. In the bakery demo the source's `secondary` was a light cream (`#f5ebd9`) and its
+`tertiary` the berry red, while the theme's `secondary` became the muted brown and `tertiary` the
+cream. A design-layer rule copied as `var(--wp--preset--color--secondary)` painted the mobile menu
+brown, with menu text at 2.35:1. So:
+
+1. Put the mapping at the top of the design-layer block in `style.css`, one line per source token:
+   `source --wp--preset--color--secondary #f5ebd9 → theme tertiary`. Mark every name that exists
+   in both with a different value.
+2. When a design-layer rule needs a source colour, look the token up in that table and write the
+   theme slug it maps to. Never copy a `var(--wp--preset--color--*)` from the source as it is.
+3. Check it before reporting (step 5).
+
 ## 4. Port the design layer. Colours are not enough.
 
 Aludra blocks and the Aviendha fork bring their own look: pill buttons, rounded cards, shadows,
@@ -236,7 +250,20 @@ Run each as one command, from the fork's own directory:
    and shadow. List per section what still differs. Passing sentinel and the block checks says nothing
    about the look. If you can't view images, say so in the report and ask the user to compare.
 
+6. **Colours by value.** List every colour variable the design layer uses with
+   `grep -n "var(--wp--preset--color--" style.css` (from the design-layer line on), and for each
+   one name the source rule it ports and the source value. Each must resolve, through
+   `theme.json`, to that same value. A mismatch is a name copied from the source.
+7. **Hover and focus states.** Screenshots do not show them. Every `:hover` and `:focus` rule in the
+   source (`grep -n -e ':hover' -e ':focus' index.html`) must have a counterpart in the CSS
+   WordPress generates (`curl -s https://<site>.test/ | grep -o ':hover[^}]*}'`) or in the design
+   layer (`grep -n -e ':hover' -e ':focus' style.css`). A `theme.json` hover that is missing from
+   the curl output did not apply: colours go under `color`, also inside `:hover` (step 4.3).
+
 ## 6. Report
+
+Write the report to `conversion-report.md` in the project root as well as in your reply, so it
+survives the session; the next run (the design pass) starts from it.
 
 End with:
 
@@ -244,7 +271,9 @@ End with:
   pattern copied, and the style variation.
 - The gaps: what the source design has that no Aludra block covers, and how it was built instead.
   These are candidates for a new Aludra block or variation. Don't build one unless asked.
-- The palette mapping, including slugs mapped to the same value.
+- The palette mapping, including slugs mapped to the same value, and every source token name
+  that means a different colour in the theme.
 - The design layer: the source's design rules from step 4.1, where each one landed (variation,
   `theme.json` path, or design-layer CSS rule), and the design-layer line count.
+- The hover and focus states from check 7, one line per source rule: where it landed, or missing.
 - Per section, what still differs from the source after the screenshot comparison.

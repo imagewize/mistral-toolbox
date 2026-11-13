@@ -67,6 +67,14 @@ they should still name Aviendha as the theme's lineage. But reset the version to
   design's locked tokens
 - Add a `patterns/` directory if the conversion needs patterns — then validate every pattern
   with the wp-pattern-sentinel harness already wired in `package.json` (step 5 below)
+- Version `style.css` by file time, not theme version: in `functions.php`, the `wp_enqueue_style()`
+  for `get_template_directory_uri() . '/style.css'` takes
+  `(string) filemtime( get_template_directory() . '/style.css' )` as its version. With the theme
+  version the URL never changes while you work, the browser keeps the old file, and a correct fix
+  looks broken. (Aviendha's `woocommerce.css` enqueue already does this.)
+- When the fork lives in a subfolder of a demo or project repository, its `.github/workflows/` do
+  not run: GitHub only reads workflows from the repository root. Run phpcs and sentinel locally and
+  say so in the PR, or copy the workflows to the root with `working-directory` set to the fork.
 
 ## 5. Validate every pattern with wp-pattern-sentinel (already in `package.json`)
 

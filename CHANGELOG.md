@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `html-to-block-theme` (1.7.0), Mode B conversion, from the bakery demo design pass, where five rounds went into things the conversion had baked in:
+  - Colours port by value, never by name (`SKILL.md`, `references/composing-with-aludra.md` step 3): a source that already uses `--wp--preset--color--*` names can mean another colour by the same slug. The mapping goes at the top of the design layer, with every name that differs marked. A design-layer rule copied as `var(--wp--preset--color--secondary)` painted the mobile menu brown instead of cream (menu text 2.35:1).
+  - Two new checks in step 5: every colour variable in the design layer resolves to the source value, and every source `:hover`/`:focus` rule has a counterpart in the generated CSS or the design layer.
+  - The report also goes to `conversion-report.md` in the project root, with the differing token names and the state check, so the design pass starts from it. The stage 4 report was lost with its session.
+  - The design pass after the conversion runs in two kinds of rounds, never mixed: compare with a numbered list and no edits, then apply the numbers the user picks. A layout value not measured after the edit is reported as "expected".
+  - `references/mobile-navigation.md`: a side gutter for the left-aligned overlay links, and a CTA in the panel needs `justify-content: flex-start` on the item, `flex: 1 1 auto` and centring on the link, and `box-sizing: border-box`. Core's link is `content-box`, so a full-width button grew from 340px to 396px wide and from 62px to 96px tall. Measure the open menu instead of estimating. The hard-reload note now points to versioning `style.css` by file time.
+  - `references/forking-a-starter-theme.md`: version `style.css` with `filemtime( get_template_directory() … )` rather than the theme version, which never changes the URL while you work. Also: a fork in a subfolder of a project repository has workflows that GitHub does not run.
+
 ### Fixed
 
 - Hover and focus checks: `html-to-block-theme` (1.6.4) and `wp-frontend-builder` (and its generated `-subagent` copy) compare `:hover` and `:focus` rules from the CSS: the source's with `grep` on `index.html`, the theme's with `curl -s https://<site>/ | grep -o ':hover[^}]*}'` (inline styles generated from `theme.json`) and `grep` on `style.css`. They forbid a DevTools-protocol or websocket script, and `node` or `python3`, to hover in a browser. `references/composing-with-aludra.md` says that hover colours in `styles.elements` go under `color`: a `"background"` key directly under `:hover` is ignored. From the bakery demo, where primary buttons kept their colour on hover for that reason, and the stage 5 agent, unable to hover with the browser extension, probed `node` and Python websocket libraries for its own DevTools script (approval for `node *`).
