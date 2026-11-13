@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `wp-frontend-builder` (and its generated `-subagent` copy): two rules at the top of its shell instructions. Todo list: one todo per point at the start, each marked done as soon as that point is finished and measured. Bakery round 6c left the list at its first item until the user asked twice, while it completed eight points. JSON: read, pretty-print and validate it with the allowlisted `jq` (`jq . file`, `jq '.settings.typography' theme.json`, `jq empty theme.json`), never `php -r` with `json_decode`, `python3 -c` or `node -e`. Rounds 6b and 6c used `php -r` to check `theme.json` and to read a sentinel log, and each asked for approval (`php *`). `docs/install.md` adds `jq` to the example allowlist.
+
 ## [1.20.0] - 2026-11-13
 
 ### Added
