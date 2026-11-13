@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -169,8 +169,8 @@ rules with `grep -n -e ':hover' -e ':focus' index.html`, the theme's with
 layer), and match them element by element: buttons, navigation, links in cards, contact and
 footer, form submit, focus rings. A `theme.json` hover that is missing from the curl output did
 not apply. Do not write a DevTools-protocol script or install a websocket library to hover in a
-browser, and do not use `node` or `python3` for it; list anything only a real hover can confirm
-for the user to check by hand.
+browser, and do not use `node -e`, your own script or `python3` for it. To confirm a hover in a real
+browser, run `html-page-review/measure.mjs --hover <selector>` and read the computed colour.
 
 Port colours by value, never by name: a source that already uses `--wp--preset--color--*` names
 can mean another colour by the same slug than the theme does. Write the mapping at the top of the
@@ -185,8 +185,10 @@ steps 3 and 5). End the conversion with the report in `conversion-report.md`.
    marked. The user picks the numbers to fix.
 2. **Apply the chosen numbers**, edits first, then the checks. Nothing else.
 
-In the report, a layout value you did not measure after the edit is a prediction: write
-"expected: 340px wide", not "is 340px wide". The user measures it in a browser before accepting.
+Measure with `html-page-review/measure.mjs` (boxes and computed styles on the live site at an
+exact width, after a click or a hover), on both the source and the site, before and after each
+edit. In the report, a layout value you did not measure after the edit is a prediction: write
+"expected: 340px wide", not "is 340px wide".
 
 **Before proceeding, explicitly state:**
 

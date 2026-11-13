@@ -121,5 +121,7 @@ scoped to `.<prefix>-header .wp-block-navigation__responsive-container.is-menu-o
   core moving focus into the dialog, so keep it.
 - Check it open at 390px: panel colour, left edge of the links, one folio per link, the CTA last.
   Measure, don't estimate: the left and right edge and the height of the first link and of the
-  CTA, and that the page has no horizontal scroll. In the bakery demo the agent reported "fills
+  CTA, and that the page has no horizontal scroll. `html-page-review/measure.mjs` does it in one
+  command, on the prototype (`--click '.nav-toggle summary'`) and on the site
+  (`--click '.wp-block-navigation__responsive-container-open'`), so the two can be compared. In the bakery demo the agent reported "fills
   20–360px, 62px tall" twice before the browser agreed.

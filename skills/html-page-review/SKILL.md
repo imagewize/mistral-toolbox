@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.3.2"
+  version: "1.4.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -48,6 +48,31 @@ One command per width, for 390 (phone), 768 (tablet) and 1440 (desktop):
 The output is a small HTML document whose `<pre id="result">` holds the JSON: `findings`, each
 with `kind`, `where` (section and heading) and `detail`, plus `page_height` and a `sections` map.
 `--allow-file-access-from-files` is required; without it the probe reports an error with a hint.
+
+The probe only reads `file://` pages: a live site (`https://…`) in its iframe is cross-origin, so
+the probe cannot look inside it. For a live site, an element after a click (an open mobile menu)
+or a hover colour, use `measure.mjs` below.
+
+### Measuring a live site, a click or a hover: `measure.mjs`
+
+`measure.mjs` in this skill's directory starts its own headless Chrome (throwaway profile, deleted
+on exit), sets the exact viewport width (390px works, no 500px floor), loads the page with the
+cache off, optionally clicks or hovers an element, and prints JSON per selector: the box (`x`, `y`,
+`w`, `h`, `right`, `bottom`), whether it is visible and hovered, its classes, and computed styles.
+It also reports `scrollWidth` and `horizontalScroll`. Node 22 or later, no npm packages; it only
+reads the page. Run it as one command, with the absolute path:
+
+```
+node /ABS/SKILL/DIR/measure.mjs https://site.test/ --width 390 --click '.wp-block-navigation__responsive-container-open' --select '.is-menu-open .wp-block-navigation-item__content' --all --props background-color,box-sizing,padding
+node /ABS/SKILL/DIR/measure.mjs https://site.test/ --width 1440 --hover 'header .wp-block-button__link' --select 'header .wp-block-button__link' --props background-color,transition
+node /ABS/SKILL/DIR/measure.mjs file:///ABS/PROJECT/index.html --width 390 --click '.nav-toggle summary' --select '.nav-toggle .site-nav a' --all
+```
+
+`--select` repeats; `--all` reports every match instead of the first; `--props` replaces the
+default style list; `--wait` sets the pause after a click (600ms). Run the same command on the
+source `index.html` and on the site, and compare the numbers: that is the evidence for "matches"
+or "differs". Use it, never a DevTools script of your own, `node -e` or `python3`. The user
+allowlists this one script by its path, so it runs without a prompt.
 
 What the finding kinds mean, and how far to trust them:
 
