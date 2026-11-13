@@ -458,7 +458,7 @@ async function fontsSheet() {
   const buttonFollowsHeading = s.elements?.button?.typography?.fontFamily && s.elements.button.typography.fontFamily === s.elements?.heading?.typography?.fontFamily;
   let bodyStack = bodyFam?.fontFamily || 'system-ui, sans-serif';
   if (opts.body) {
-    const b = await fontsourceFont(opts.body);
+    const b = await fontsourceFont(opts.body.includes(':') ? opts.body : `${opts.body}:400`); // body text defaults to regular, not the 700 heading default
     css += `@font-face{font-family:'${b.family}';src:url(fonts/${b.file});font-weight:${b.range || b.weight}}\n`;
     bodyStack = `'${b.family}', system-ui, sans-serif`;
   }
