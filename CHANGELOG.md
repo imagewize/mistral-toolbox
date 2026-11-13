@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `html-page-review` (1.5.0): `measure.mjs --screenshot FILE.png [--full]` saves a PNG at exactly `--width`, optionally after `--click`/`--hover`, for `file://` and `https://` alike. Before measuring or capturing, the script now scrolls through the page in viewport steps so lazy images load, decodes them, and waits for web fonts. Step 2 makes it the preferred way to take screenshots; `frame.html` becomes the fallback for machines without Node 22. `html-to-block-theme` (1.8.2) and `wp-frontend-builder` (and its generated `-subagent` copy) take their screenshots this way. From the bakery demo: `frame.html` screenshots of the live site came out without any text (fonts missed the virtual-time budget), and the prototype's lazy photos below the fold stayed blank, while one jump to the bottom of the page still skipped the middle ones. Tested at 390 and 1440 on the bakery site and prototype: full height (6918, 9076, 8818px), fonts rendered, all four cake photos present, the open mobile menu captured after `--click`. About 3.7s per run.
+- `demo-project-setup` (1.5.0), step 3: preview the prototype over HTTP with `python3 -m http.server 8765 --bind 127.0.0.1 --directory <project-dir>`, allowlisted as that exact command (`docs/install.md`), because Playwright's browser tools refuse `file://`.
+
 ### Fixed
 
 - `wp-frontend-builder` (and its generated `-subagent` copy): two rules at the top of its shell instructions. Todo list: one todo per point at the start, each marked done as soon as that point is finished and measured. Bakery round 6c left the list at its first item until the user asked twice, while it completed eight points. JSON: read, pretty-print and validate it with the allowlisted `jq` (`jq . file`, `jq '.settings.typography' theme.json`, `jq empty theme.json`), never `php -r` with `json_decode`, `python3 -c` or `node -e`. Rounds 6b and 6c used `php -r` to check `theme.json` and to read a sentinel log, and each asked for approval (`php *`). `docs/install.md` adds `jq` to the example allowlist.

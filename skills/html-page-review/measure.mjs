@@ -12,7 +12,8 @@
 //
 // Usage:
 //   node measure.mjs <url> [--width 390] [--height 844] [--click SEL] [--hover SEL]
-//                          [--wait 600] [--props a,b,c] [--all] --select SEL [--select SEL …]
+//                          [--wait 600] [--props a,b,c] [--all] [--select SEL …]
+//                          [--screenshot FILE.png [--full]]
 //
 // Example (open the mobile menu, measure its links and its CTA):
 //   node measure.mjs https://example.test/ --width 390 \
@@ -28,10 +29,14 @@
 //            background-color, font-size, font-weight, padding, margin, border-radius,
 //            justify-content, align-items, transition).
 // --width    Viewport width in CSS pixels; any width works, phones included (no 500px floor).
+// --screenshot  Save a PNG of the page after the click/hover, at exactly --width CSS pixels,
+//            with web fonts loaded and lazy images forced to load. --full captures the whole
+//            page height instead of the viewport. Works for https:// and file:// alike, so no
+//            frame.html is needed. Combine with --select to get numbers and a picture in one run.
 // CHROME     Environment variable with the Chrome binary, if it is not in the default place.
 
 import { spawn } from 'node:child_process';
-import { mkdtempSync, rmSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, rmSync, readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -41,7 +46,7 @@ const DEFAULT_PROPS = [
 ];
 
 function parseArgs(argv) {
-  const o = { url: null, width: 1440, height: 900, click: null, hover: null, wait: 600, props: DEFAULT_PROPS, all: false, select: [] };
+  const o = { url: null, width: 1440, height: 900, click: null, hover: null, wait: 600, props: DEFAULT_PROPS, all: false, select: [], screenshot: null, full: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => { const v = argv[++i]; if (v === undefined) fail(`${a} needs a value`); return v; };
@@ -53,18 +58,21 @@ function parseArgs(argv) {
     else if (a === '--props') o.props = next().split(',').map((s) => s.trim()).filter(Boolean);
     else if (a === '--select') o.select.push(next());
     else if (a === '--all') o.all = true;
+    else if (a === '--screenshot') o.screenshot = next();
+    else if (a === '--full') o.full = true;
     else if (a === '-h' || a === '--help') { usage(); process.exit(0); }
     else if (a.startsWith('--')) fail(`unknown option ${a}`);
     else if (!o.url) o.url = a;
     else fail(`unexpected argument ${a}`);
   }
   if (!o.url) fail('missing <url>');
-  if (!o.select.length) fail('give at least one --select');
+  if (!o.select.length && !o.screenshot) fail('give at least one --select, or --screenshot');
+  if (o.full && !o.screenshot) fail('--full needs --screenshot');
   return o;
 }
 
 function usage() {
-  console.log('node measure.mjs <url> [--width N] [--height N] [--click SEL] [--hover SEL] [--wait MS] [--props a,b] [--all] --select SEL [--select SEL ...]');
+  console.log('node measure.mjs <url> [--width N] [--height N] [--click SEL] [--hover SEL] [--wait MS] [--props a,b] [--all] [--select SEL ...] [--screenshot FILE.png [--full]]');
 }
 
 function fail(msg) {
@@ -204,7 +212,24 @@ async function main() {
     const nav = await client.send('Page.navigate', { url: o.url });
     if (nav.errorText) throw new Error(`navigation failed: ${nav.errorText}`);
     await loaded;
-    await sleep(800); // fonts, Interactivity API hydration
+    // Load what a real visitor would see: lazy images (they never enter a headless viewport)
+    // and web fonts, then back to the top so the layout is the initial one.
+    await client.send('Runtime.evaluate', {
+      expression: `(async () => {
+        document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager'; });
+        // Scroll through in viewport steps: Chrome starts a lazy image only near the viewport,
+        // and a single jump to the bottom skips the ones in between.
+        for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 120));
+        }
+        window.scrollTo(0, 0);
+        await Promise.all(Array.from(document.images).map((i) => (i.decode ? i.decode().catch(() => {}) : Promise.resolve())));
+        if (document.fonts) await document.fonts.ready;
+      })()`,
+      awaitPromise: true,
+    });
+    await sleep(800); // Interactivity API hydration
     if (o.click) {
       const c = await centreOf(client, o.click);
       for (const type of ['mousePressed', 'mouseReleased']) {
@@ -224,6 +249,17 @@ async function main() {
     if (res.exceptionDetails) throw new Error(res.exceptionDetails.text);
     const data = res.result.value;
     data.actions = { click: o.click, hover: o.hover };
+    if (o.screenshot) {
+      const shot = { format: 'png', captureBeyondViewport: o.full };
+      if (o.full) {
+        const m = await client.send('Page.getLayoutMetrics');
+        const h = Math.ceil((m.cssContentSize || m.contentSize).height);
+        shot.clip = { x: 0, y: 0, width: o.width, height: h, scale: 1 };
+      }
+      const img = await client.send('Page.captureScreenshot', shot);
+      writeFileSync(o.screenshot, Buffer.from(img.data, 'base64'));
+      data.screenshot = { file: o.screenshot, full: o.full };
+    }
     console.log(JSON.stringify(data, null, 1));
   } finally {
     try { client && client.close(); } catch (e) { /* ignore */ }
