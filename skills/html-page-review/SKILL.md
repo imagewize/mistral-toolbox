@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.5.0"
+  version: "1.5.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -31,6 +31,11 @@ You review. You do not fix. Never edit the page under review.
   points are now fixed and do not repeat them.
 
 ## Step 1: Measure with the probe
+
+`/ABS/SKILL/DIR` below is this skill's folder, written as an absolute path: the `skill_paths` entry
+in `~/.vibe/config.toml` plus `/html-page-review` (for example
+`/Users/you/code/wp-vibe-toolbox/skills/html-page-review`). Read it there; never search the home
+folder for `probe.html` or `measure.mjs`.
 
 `probe.html` in this skill's directory loads the page in an iframe at a given width, measures it
 and prints JSON. Run it once per width with headless Chrome. Use absolute `file://` paths.
