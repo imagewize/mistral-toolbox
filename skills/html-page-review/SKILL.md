@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.4.0"
+  version: "1.4.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -115,7 +115,10 @@ blank. With the flag, a drawing that respects reduced motion shows complete. Kee
 drawings show half-drawn. A tall window also stretches elements sized in `vh` (full-screen
 heroes). Judge those from the probe numbers, not from the screenshot.
 
-To view a tall screenshot section by section, slice it with one `magick` command per screenshot.
+To view a tall screenshot section by section, slice it with one `magick` command per screenshot,
+and one command per call: chained in one call, the slices of four 9,000px screenshots took longer
+than Vibe's default 30-second shell timeout and were killed. Write each path in full; a `C=/tmp/…`
+shortcut and `$C` ask for approval every time.
 A crop with a size and no offset cuts the whole image into numbered tiles, and the `.jpg` name
 converts them in the same step, so no loop or second pass is needed. `-resize 1100x` scales the
 desktop tiles down in the same command: in Mistral Vibe a 1440px-wide image does not come through
