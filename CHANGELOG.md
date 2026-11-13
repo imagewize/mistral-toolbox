@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.21.0] - 2026-11-13
+
 ### Added
 
 - `html-page-review` (1.5.0): `measure.mjs --screenshot FILE.png [--full]` saves a PNG at exactly `--width`, optionally after `--click`/`--hover`, for `file://` and `https://` alike. Before measuring or capturing, the script now scrolls through the page in viewport steps so lazy images load, decodes them, and waits for web fonts. Step 2 makes it the preferred way to take screenshots; `frame.html` becomes the fallback for machines without Node 22. `html-to-block-theme` (1.8.2) and `wp-frontend-builder` (and its generated `-subagent` copy) take their screenshots this way. From the bakery demo: `frame.html` screenshots of the live site came out without any text (fonts missed the virtual-time budget), and the prototype's lazy photos below the fold stayed blank, while one jump to the bottom of the page still skipped the middle ones. Tested at 390 and 1440 on the bakery site and prototype: full height (6918, 9076, 8818px), fonts rendered, all four cake photos present, the open mobile menu captured after `--click`. About 3.7s per run.
