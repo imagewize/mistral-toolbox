@@ -235,28 +235,42 @@ Result: _not run yet._
 
 ## 5. Design pass against `index.html`
 
-Agent: `wp-frontend-builder`, on the same branch as 4, so its diff shows only the design changes.
-Fill in the numbered list from the differences prompt 4 reported and from your own screenshots,
-one point per difference.
+Agent: `wp-frontend-builder`, on a branch per round, so each diff shows only that round's changes.
+Two kinds of rounds, never mixed: first a compare round that only reports, then apply rounds with
+the numbers you pick from the report, one point per difference. Start each round in a fresh
+session.
 
 **Model:** the model with image support from stage 4, for the fixes and the before and after
 comparison.
 
 ```bash
 cd {{PROJECT_DIR}}
-git switch feat/block-theme
+git switch -c feat/design-compare
 vibe --agent wp-frontend-builder
 ```
 
-Then paste this prompt:
+Compare round, paste this prompt:
 
 ```
-Load html-to-block-theme. theme-{{THEME_SLUG}}/ does not yet match index.html. Do a design pass so https://{{SITE}}.test matches index.html, without changing which blocks are used except where noted. Screenshot index.html and the site at 1440px and 390px with headless Chrome before and after (390px through html-page-review/frame.html, which shows the page in an iframe at the exact width; never --window-size=390, headless Chrome on macOS stops at 500px).
+Load html-to-block-theme and html-page-review. Compare https://{{SITE}}.test with index.html section by section and report the differences. Do not edit any file in this run.
 
-1. <difference and the fix you want>
+Measure with html-page-review/measure.mjs (its folder is in skill_paths in ~/.vibe/config.toml) on file://{{PROJECT_DIR}}/index.html and the site at 1440 and 390: boxes, font sizes, colours, spacing, and the open mobile menu with --click. Take --screenshot --full of both at both widths. Compare the tokens WordPress serves (curl the site, grep the --wp--preset-- definitions) with index.html's :root.
+
+Per section, one numbered line per difference: width, what index.html shows, what the site shows, and the file it likely comes from. Look first for causes several differences share (a token, a theme.json setting). End with the list sorted by how visible each difference is, unsure ones marked.
+```
+
+Apply round (new branch, fresh session), paste this prompt with the numbers you picked:
+
+```
+Apply round, edits first, then checks. After each point, mark its todo done before you start the next. No shell variables (write every path in full), one heavy command per call, JSON with jq, `cd <dir> && git …` (never git -C). Measure each point with html-page-review/measure.mjs on index.html and the site at 1440 and 390, before and after; a value you did not measure is "expected".
+
+1. <difference, the numbers on both sides, and the fix you want>
 2. ...
 
-Fix each point with a block style variation or theme.json first; use the design-layer block in style.css only for what is left, with one comment per rule. Run the checks from prompt 4 after every pattern or part change, then re-screenshot and list per point what you changed and what still differs.
+Fix each point with a block style variation or theme.json first; use the design-layer block in style.css only for what is left, with one comment per rule. Checks: jq empty theme.json (if changed), phpcs, sentinel with --url/--user/--pass, then one table per point: index vs site, before and after.
 ```
+
+The todo instruction belongs in the prompt: in the bakery demo the same rule in the agent profile
+was skipped in two rounds out of three.
 
 Result: _not run yet._

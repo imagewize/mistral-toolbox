@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.5.0"
+  version: "1.5.1"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
