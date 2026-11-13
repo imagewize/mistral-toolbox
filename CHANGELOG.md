@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `wp-frontend-builder` (and its generated `-subagent` copy) and `html-page-review` (1.5.1): `<toolbox>` and `/ABS/SKILL/DIR` are read from `skill_paths` in `~/.vibe/config.toml`, never found by searching the home folder. `docs/install.md` adds a `vibe-path:exact:` grant for that one file to the shell and `read_file` allowlists. From the bakery demo round 6d, where the agent ran `find /Users/<you>/code /Users/<you> -maxdepth 4 -name measure.mjs`, which was slow and asked for approval outside the granted folders.
 - `wp-frontend-builder` (and its generated `-subagent` copy): two rules at the top of its shell instructions. Todo list: one todo per point at the start, each marked done as soon as that point is finished and measured. Bakery round 6c left the list at its first item until the user asked twice, while it completed eight points. JSON: read, pretty-print and validate it with the allowlisted `jq` (`jq . file`, `jq '.settings.typography' theme.json`, `jq empty theme.json`), never `php -r` with `json_decode`, `python3 -c` or `node -e`. Rounds 6b and 6c used `php -r` to check `theme.json` and to read a sentinel log, and each asked for approval (`php *`). `docs/install.md` adds `jq` to the example allowlist.
 
 ## [1.20.0] - 2026-11-13
