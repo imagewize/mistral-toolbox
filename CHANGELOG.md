@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `html-page-review` (1.4.0): `measure.mjs`, a script that measures a live site (`https://` or `file://`) at an exact viewport width in its own headless Chrome. It can click or hover first (an open mobile menu, a hover colour) and prints JSON per selector: box, visibility, hover state, classes and computed styles, plus `scrollWidth`. Node 22+ (built-in `fetch` and `WebSocket`), no npm packages, a throwaway Chrome profile deleted on exit, and it only reads the page. `probe.html` cannot do this for a live site: an `https://` page in its `file://` iframe is cross-origin. `html-to-block-theme` (1.7.1), `references/mobile-navigation.md` and `wp-frontend-builder` (and its generated `-subagent` copy) use it to measure the source and the site before and after an edit and to confirm hovers. `docs/install.md` allowlists the script by its full path, not `node`. Tested on the bakery demo against browser measurements: open-menu panel `rgb(245, 235, 217)`, links at x = 20, CTA x 20–360.3 and 62px tall, `border-box`, no horizontal scroll; the header button hovered `rgb(227, 210, 172)` with a 0.15s transition. On the prototype it found three differences no one had caught by eye: menu links 48px tall (theme 64px), rows 56px apart (theme about 88px), and a 48px CTA reaching x = 370 (theme 62px, to 360). Before this, the agent in that run wrote its own DevTools script (approval for `node *`) and reported layout values it had not measured, and the user measured every fix by hand.
+
 ### Changed
 
 - `html-to-block-theme` (1.7.0), Mode B conversion, from the bakery demo design pass, where five rounds went into things the conversion had baked in:
