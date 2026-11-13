@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.3.1"
+  version: "1.3.2"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -89,6 +89,22 @@ blank. With the flag, a drawing that respects reduced motion shows complete. Kee
 `--virtual-time-budget`: without it Chrome captures before entrance animations finish, and
 drawings show half-drawn. A tall window also stretches elements sized in `vh` (full-screen
 heroes). Judge those from the probe numbers, not from the screenshot.
+
+To view a tall screenshot section by section, slice it with one `magick` command per screenshot.
+A crop with a size and no offset cuts the whole image into numbered tiles, and the `.jpg` name
+converts them in the same step, so no loop or second pass is needed. `-resize 1100x` scales the
+desktop tiles down in the same command: in Mistral Vibe a 1440px-wide image does not come through
+inline, so the model sees nothing. Create the folder first with
+`mkdir -p`. For a 390px shot through `frame.html`, first crop to the page's `w` pixels to drop the
+white margin:
+
+```
+magick /tmp/html-page-review/page-1440.png -crop 1440x900 +repage -resize 1100x -quality 82 /tmp/html-page-review/seg/page-1440-%02d.jpg
+magick /tmp/html-page-review/page-390.png -crop 390x+0+0 +repage -crop 390x844 +repage -quality 82 /tmp/html-page-review/seg/page-390-%02d.jpg
+```
+
+Use `magick`, not `convert` (the ImageMagick 6 name, which an allowlist for `magick` does not
+cover), and no `python3`/PIL or shell loop for image work: each of those asks for approval.
 
 If you can view images, open each screenshot and do the visual pass below. If you cannot, say so
 in the review, rely on the probe, and list the screenshot paths so a human can do the visual pass.

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Screenshot slicing: `html-page-review` (1.3.2, step 2), `html-to-block-theme` (1.6.3) and `wp-frontend-builder` (and its generated `-subagent` copy) now name one `magick … -crop WxH +repage -quality 82 …-%02d.jpg` command that cuts a full-page screenshot into numbered JPG tiles (desktop tiles scaled with `-resize 1100x`, because a 1440px-wide image does not come through inline in Vibe), with a first `-crop 390x+0+0 +repage` to drop the white margin of a `frame.html` phone shot. They say to use `magick`, not `convert`, `python3`/PIL or a shell loop, which all prompt. From the bakery demo stage 5 run (Mistral Large 4, Vibe 3.1.2), where no skill named a crop command, so the agent probed `python3 -c "import PIL"` (approval for `python3 *`) and then converted the slices with a `for` loop and `convert` (approval for the loop and parameter expansion), then scaled them down with a second loop, although `magick` was on the allowlist.
 - `theme-style-options` (1.0.2), `scripts/options.mjs fonts`: `--body NAME` without a weight loaded the 700 heading default, so body text in every card rendered bold (seen with `--body Poppins`, a static family). Body fonts now default to 400; `--body Name:weight` still picks another weight.
 
 ## [1.19.1] - 2026-11-12
