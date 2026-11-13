@@ -112,7 +112,10 @@ rules have to be moved into the theme as well, in this order:
 3. **`theme.json`** for everything it can express:
    - `settings.border.radiusSizes` and `settings.shadow.presets`: replace the starter's values
      (Aviendha's `pill` radius, its shadows) with the source's, e.g. `0` and none
-   - `styles.elements`: `button` (shape, colours, `:hover`), `link`, `heading`, `h1`–`h6`
+   - `styles.elements`: `button` (shape, colours, `:hover`), `link`, `heading`, `h1`–`h6`.
+     Colours go under `color`, also inside `:hover` and `:focus`:
+     `":hover": {"color": {"background": "…", "text": "…"}}`. A `"background"` key directly under
+     `:hover` is valid JSON, but WordPress ignores it, so the button keeps its colour on hover
    - `styles.blocks["aludra/<name>"]`: colours, spacing, typography and border per Aludra block
    - `settings.typography.fontFamilies`: only the source's families. Remove the starter's (e.g. a
      mono family) **and** every reference to them, or eyebrows keep a monospace fallback

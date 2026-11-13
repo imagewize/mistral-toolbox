@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.6.3"
+  version: "1.6.4"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -161,6 +161,16 @@ dark default sections, the starter's header). Port the design layer
 site before reporting. Take them through `html-page-review/frame.html` and slice them into
 sections with one `magick … -crop` command each, as `html-page-review` step 2 shows; no
 `python3`, `convert` or shell loops for image work.
+
+A screenshot shows no hover or focus state, so compare those from the CSS. List the source's
+rules with `grep -n -e ':hover' -e ':focus' index.html`, the theme's with
+`curl -s https://<site>/ | grep -o ':hover[^}]*}'` (the inline styles WordPress generates from
+`theme.json` and block supports) and `grep -n -e ':hover' -e ':focus' <theme>/style.css` (the design
+layer), and match them element by element: buttons, navigation, links in cards, contact and
+footer, form submit, focus rings. A `theme.json` hover that is missing from the curl output did
+not apply. Do not write a DevTools-protocol script or install a websocket library to hover in a
+browser, and do not use `node` or `python3` for it; list anything only a real hover can confirm
+for the user to check by hand.
 
 **Before proceeding, explicitly state:**
 
