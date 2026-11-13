@@ -27,6 +27,7 @@ allowlist = [
     "vibe-path:directory_recursive:/private/tmp",
     "sed -n",
     "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new",
+    "node /Users/you/code/wp-vibe-toolbox/skills/html-page-review/measure.mjs",
     "wp option get",
     "wp option list",
     "wp post list",
@@ -45,6 +46,8 @@ allowlist = [
     "vibe-path:directory_recursive:/private/tmp",
 ]
 ```
+
+The `measure.mjs` entry allows that one script by its full path, not `node` in general: `node -e …` and any other script still prompt. It starts its own headless Chrome with a throwaway profile, only reads the page and prints measurements, so it is safe to allow. Write the path out in full; Vibe matches the start of the command.
 
 The `/private/tmp` grant is for screenshots: `wp-frontend-builder` and `html-page-review` write them to `/tmp`, and the agent reads every one back with `read_file`, so without the grant each visual check prompts. On macOS `/tmp` is a link to `/private/tmp` and Vibe follows links before it compares, so the grant has to name `/private/tmp`; it then covers `/tmp/…` paths too. An older `"/private/tmp/*"` entry covers the files in the folder but not the folder itself, so `cd /tmp` still prompts. On Linux, where `/tmp` is a real folder, grant `/tmp`.
 
