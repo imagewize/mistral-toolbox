@@ -26,6 +26,7 @@ allowlist = [
     "vibe-path:directory_recursive:/Users/you/Desktop",
     "vibe-path:directory_recursive:/private/tmp",
     "sed -n",
+    "jq",
     "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new",
     "node /Users/you/code/wp-vibe-toolbox/skills/html-page-review/measure.mjs",
     "wp option get",
