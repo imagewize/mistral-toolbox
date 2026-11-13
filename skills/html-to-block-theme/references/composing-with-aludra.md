@@ -128,6 +128,19 @@ made every padding and gap 25–33% tighter and body text 20px instead of 17px:
   `theme.json`, wrong in the browser. When the source uses fixed sizes, set
   `settings.typography.fluid: false`, or `"fluid": false` on each fixed size; a size that is already
   a `clamp()` in the source keeps it.
+- **Core's default font sizes win over the theme's.** `fluid: false` alone still served
+  `large: 36px` and `medium: 20px` in the bakery demo: WordPress keeps its own default sizes
+  (`small`, `medium`, `large`, `x-large`) while `settings.typography.defaultFontSizes` is true,
+  its default, and those overrode the theme's sizes with the same slugs.
+  `wp eval 'print_r( wp_get_global_settings( array( "typography", "fontSizes" ) ) );'` shows both sets.
+  Set `"defaultFontSizes": false` and define every size the design uses in the theme.
+- **`blockGap: "0"` on a container does not always remove the gap.** Top-level blocks in a flow
+  layout get `margin-block-start` from the block gap, which gives each homepage section a
+  32px top margin when `styles.spacing.blockGap` is set. Setting the template's `main` group to
+  `"blockGap": "0"` emits `--wp--style--block-gap: 0` on it, but the core flow rule
+  (`:root :where(.is-layout-flow) > *`) read the global preset, not that variable. Add a class to
+  the `main` group and, in the design layer, `margin-block-start: 0` on that group and on its direct
+  children. Measure the second section's top margin; it must be 0 where the source's sections touch.
 
 Compare what WordPress serves, not what `theme.json` says (step 5, check 6).
 
