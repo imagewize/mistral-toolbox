@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.8.0"
+  version: "1.8.1"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -176,7 +176,8 @@ Port every design token by value, never by name: colours, spacing and font sizes
 already uses `--wp--preset--*` names can mean another value by the same slug than the theme does,
 a numbered spacing slug the theme does not define gets WordPress's default value, and fluid type
 turns a fixed font size into a range. Write the colour mapping at the top of the design layer,
-define the source's spacing slugs with its values, turn fluid type off for fixed sizes, and compare
+define the source's spacing slugs with its values, turn fluid type and core's default font sizes off for fixed sizes (`fluid: false`,
+`defaultFontSizes: false`), remove the block gap between sections that touch in the source, and compare
 the values WordPress serves with the source's `:root` (`references/composing-with-aludra.md`,
 steps 3 and 5). End the conversion with the report in `conversion-report.md`.
 
