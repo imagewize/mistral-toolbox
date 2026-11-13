@@ -110,6 +110,27 @@ brown, with menu text at 2.35:1. So:
    theme slug it maps to. Never copy a `var(--wp--preset--color--*)` from the source as it is.
 3. Check it before reporting (step 5).
 
+**The same goes for every `--wp--preset--*` token, not only colours.** A prototype built for the
+conversion locks its spacing and type as `--wp--preset--spacing--*` and `--wp--preset--font-size--*`
+too, and the design layer copies those names. Two traps, both from the bakery demo, where they
+made every padding and gap 25–33% tighter and body text 20px instead of 17px:
+
+- **Spacing slugs the theme does not define.** The source used `spacing--20` to `--80`
+  (0.5–6rem); the fork kept the starter's named sizes (`x-small` … `x-large`). WordPress then fills
+  the numbered names from its default spacing scale, with other values (0.44, 0.67, 1, 1.5, 2.25,
+  3.38, 5.06rem), so `var(--wp--preset--spacing--60)` silently means 2.25rem instead of 3rem.
+  Define every spacing slug the source uses in `settings.spacing.spacingSizes`, with the source's
+  exact values (next to the starter's named sizes if its patterns use them). A theme slug with the
+  same name replaces the generated one. `"spacingScale": { "steps": 0 }` stops WordPress
+  generating its own scale at all.
+- **Fluid type turns fixed sizes into ranges.** With `settings.typography.fluid: true`, WordPress
+  outputs a `fontSizes` entry of `1.0625rem` (17px) as `clamp(14px, …, 20px)`: right in
+  `theme.json`, wrong in the browser. When the source uses fixed sizes, set
+  `settings.typography.fluid: false`, or `"fluid": false` on each fixed size; a size that is already
+  a `clamp()` in the source keeps it.
+
+Compare what WordPress serves, not what `theme.json` says (step 5, check 6).
+
 ## 4. Port the design layer. Colours are not enough.
 
 Aludra blocks and the Aviendha fork bring their own look: pill buttons, rounded cards, shadows,
@@ -250,10 +271,15 @@ Run each as one command, from the fork's own directory:
    and shadow. List per section what still differs. Passing sentinel and the block checks says nothing
    about the look. If you can't view images, say so in the report and ask the user to compare.
 
-6. **Colours by value.** List every colour variable the design layer uses with
-   `grep -n "var(--wp--preset--color--" style.css` (from the design-layer line on), and for each
-   one name the source rule it ports and the source value. Each must resolve, through
-   `theme.json`, to that same value. A mismatch is a name copied from the source.
+6. **Tokens by value.** List the preset tokens the design layer uses with
+   `grep -o "var(--wp--preset--[a-z-]*--[a-z0-9-]*" style.css | sort -u` (from the design-layer line
+   on), and the values WordPress serves for them with
+   `curl -s https://<site>.test/ | grep -o -e "--wp--preset--spacing--[a-z0-9-]*: [^;]*" -e "--wp--preset--font-size--[a-z0-9-]*: [^;]*" -e "--wp--preset--color--[a-z0-9-]*: [^;]*" | sort -u`
+   (the `: ` matches the definitions only, not the `var(…, fallback)` uses in block CSS).
+   Each must equal the value in the source's `:root` (`grep -n -- "--wp--preset--" index.html`), or
+   the source value the mapping table names for a colour. A mismatch is a token copied by name, a
+   slug the theme does not define, or fluid type. Check that `theme.json` is valid JSON with
+   `jq empty theme.json` (allowlisted; `php -r` with `json_decode` asks for approval).
 7. **Hover and focus states.** Screenshots do not show them. Every `:hover` and `:focus` rule in the
    source (`grep -n -e ':hover' -e ':focus' index.html`) must have a counterpart in the CSS
    WordPress generates (`curl -s https://<site>.test/ | grep -o ':hover[^}]*}'`) or in the design
