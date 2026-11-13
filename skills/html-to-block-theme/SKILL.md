@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.7.1"
+  version: "1.8.0"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -172,9 +172,12 @@ not apply. Do not write a DevTools-protocol script or install a websocket librar
 browser, and do not use `node -e`, your own script or `python3` for it. To confirm a hover in a real
 browser, run `html-page-review/measure.mjs --hover <selector>` and read the computed colour.
 
-Port colours by value, never by name: a source that already uses `--wp--preset--color--*` names
-can mean another colour by the same slug than the theme does. Write the mapping at the top of the
-design layer and check every colour variable against it (`references/composing-with-aludra.md`,
+Port every design token by value, never by name: colours, spacing and font sizes. A source that
+already uses `--wp--preset--*` names can mean another value by the same slug than the theme does,
+a numbered spacing slug the theme does not define gets WordPress's default value, and fluid type
+turns a fixed font size into a range. Write the colour mapping at the top of the design layer,
+define the source's spacing slugs with its values, turn fluid type off for fixed sizes, and compare
+the values WordPress serves with the source's `:root` (`references/composing-with-aludra.md`,
 steps 3 and 5). End the conversion with the report in `conversion-report.md`.
 
 **After the conversion: the design pass.** Run it in two kinds of rounds, never mixed:
