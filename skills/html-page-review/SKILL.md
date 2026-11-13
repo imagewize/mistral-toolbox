@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.4.1"
+  version: "1.5.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/html-page-review"
 ---
 
@@ -94,7 +94,22 @@ deliberate and consistent with the rest of the page.
 
 ## Step 2: Look at the page
 
-Take a screenshot per width through `frame.html` in this skill's directory, which shows the page
+**Preferred: `measure.mjs --screenshot`.** One command per width gives a PNG at exactly that width,
+after web fonts have loaded and lazy images have been scrolled into view and decoded, for a
+`file://` prototype and a live `https://` site alike, and optionally after a click (an open menu):
+
+```
+node /ABS/SKILL/DIR/measure.mjs file:///ABS/PROJECT/index.html --width 390 --screenshot /tmp/html-page-review/page-390.png --full
+node /ABS/SKILL/DIR/measure.mjs https://site.test/ --width 1440 --screenshot /tmp/html-page-review/site-1440.png --full
+node /ABS/SKILL/DIR/measure.mjs https://site.test/ --width 390 --click '.wp-block-navigation__responsive-container-open' --screenshot /tmp/html-page-review/site-390-menu.png
+```
+
+`--full` captures the whole page height. Add `--select` to get the numbers from the same run. A
+`frame.html` screenshot of a live site can come out without any text (the web fonts miss Chrome's
+virtual-time budget) and leaves lazy images below the fold blank; `measure.mjs` does not. Slice the
+PNG as described below.
+
+**Fallback, when `node` 22+ is not available:** take a screenshot per width through `frame.html` in this skill's directory, which shows the page
 in an iframe at the exact width. Do not set the width with `--window-size` alone: headless Chrome
 on macOS will not make its window narrower than 500px, so `--window-size=390,…` lays the page out
 at 500px and the screenshot cuts off its right side. The hamburger, the end of a headline and a

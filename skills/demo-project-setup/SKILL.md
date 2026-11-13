@@ -7,7 +7,7 @@ allowed-tools:
   - write_file
   - bash
 metadata:
-  version: "1.4.2"
+  version: "1.5.0"
   source: "github.com/imagewize/wp-vibe-toolbox skills/demo-project-setup"
 ---
 
@@ -225,6 +225,19 @@ wp plugin list --path=<parent-dir>/<site> --fields=name,status,version
 ```
 
 The first must print `200`. Fix a `404` (missing link) before going on.
+
+**Preview the prototype over HTTP, not `file://`.** Some tools refuse `file://` (Playwright's
+browser tools block it), and a page opened from disk behaves differently from a served one. Serve
+the project folder on a local port while you work on `index.html`:
+
+```bash
+python3 -m http.server 8765 --bind 127.0.0.1 --directory <project-dir>
+```
+
+Then open `http://127.0.0.1:8765/index.html`. Run it in the background and stop it when you are
+done; `--bind 127.0.0.1` keeps it off the network. Tell the user to allowlist that exact command
+(`"python3 -m http.server 8765 --bind 127.0.0.1"`), not `python3`. For screenshots and
+measurements `html-page-review/measure.mjs` takes `file://` directly and needs no server.
 
 ## Step 4 — First commit
 

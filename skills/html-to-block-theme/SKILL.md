@@ -4,7 +4,7 @@ description: "Convert HTML/CSS/JS designs into production-ready WordPress block 
 user-invocable: true
 license: MIT
 metadata:
-  version: "1.8.1"
+  version: "1.8.2"
   source: "github.com/siddik-web/wp-block-theme-converter @ 0347e8237f0d68a05abf3715d7cd8e271d23598f (MIT, LICENSE copied alongside; references/ included, commands/ templates/ scripts/ not imported)"
 ---
 
@@ -158,7 +158,8 @@ core blocks and list it in the report as a gap. Don't hide it.
 So is a Mode B page that has the client's colours but the starter's look (pill buttons, shadows,
 dark default sections, the starter's header). Port the design layer
 (`references/composing-with-aludra.md`, step 4) and compare screenshots of the source and the
-site before reporting. Take them through `html-page-review/frame.html` and slice them into
+site before reporting. Take them with `html-page-review/measure.mjs --screenshot … --full` (fonts and
+lazy images loaded, exact width, `file://` and `https://` alike; `frame.html` is the fallback) and slice them into
 sections with one `magick … -crop` command each, as `html-page-review` step 2 shows; no
 `python3`, `convert` or shell loops for image work.
 

@@ -29,6 +29,7 @@ allowlist = [
     "jq",
     "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new",
     "node /Users/you/code/wp-vibe-toolbox/skills/html-page-review/measure.mjs",
+    "python3 -m http.server 8765 --bind 127.0.0.1",
     "wp option get",
     "wp option list",
     "wp post list",
